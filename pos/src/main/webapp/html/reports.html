@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="snippets.html :: name_head"></head>
+<body>
+<nav th:replace="snippets.html :: name_app_navbar"></nav>
+<div class="container">
+    <h3>Reports</h3>
+    <div class="row">
+        <div class="col-12">
+            <div class="jumbotron">
+                <h1 class="display-4">Reports Page</h1>
+                <hr class="my-4">
+                <a class="btn btn-primary btn-lg" th:href="@{/ui/report/brand}" role="button">Brand Report</a>
+                <a class="btn btn-primary btn-lg" th:href="@{/ui/report/day-on-day}" role="button">Day on Day Sales Report</a>
+                <a class="btn btn-primary btn-lg" th:href="@{/ui/report/inventory}" role="button">Inventory Report</a>
+                <a class="btn btn-primary btn-lg" th:href="@{/ui/report/sales}" role="button">Sales Report</a>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Blank Row -->
+    <div class="row">
+        &nbsp;
+    </div>
+
+
+
+</div>
+<footer th:replace="snippets.html :: name_footer"></footer>
+<script th:src="@{/static/order.js}"/></script>
+</body>
+</html>

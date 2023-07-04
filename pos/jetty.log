@@ -1,0 +1,32 @@
+2023-06-27 10:06:34 WARN  SqlExceptionHelper:137 - SQL Error: 1054, SQLState: 42S22
+2023-06-27 10:06:34 ERROR SqlExceptionHelper:142 - Unknown column 'status' in 'where clause'
+2023-06-27 10:07:42 WARN  SqlExceptionHelper:137 - SQL Error: 1054, SQLState: 42S22
+2023-06-27 10:07:42 ERROR SqlExceptionHelper:142 - Unknown column 'status' in 'where clause'
+2023-07-03 10:40:00 WARN  SqlExceptionHelper:137 - SQL Error: 1305, SQLState: 42000
+2023-07-03 10:40:00 ERROR SqlExceptionHelper:142 - FUNCTION pos.DATE_TRUNC does not exist
+2023-07-03 10:43:13 WARN  SqlExceptionHelper:137 - SQL Error: 1305, SQLState: 42000
+2023-07-03 10:43:13 ERROR SqlExceptionHelper:142 - FUNCTION pos.TRUNC does not exist
+2023-07-03 10:44:11 WARN  SqlExceptionHelper:137 - SQL Error: 1305, SQLState: 42000
+2023-07-03 10:44:11 ERROR SqlExceptionHelper:142 - FUNCTION pos.TRUNC does not exist
+2023-07-03 10:46:18 WARN  TemplateRenderer:104 - HHH000174: Function template anticipated 3 arguments, but 2 arguments encountered
+2023-07-03 10:46:18 WARN  TemplateRenderer:104 - HHH000174: Function template anticipated 3 arguments, but 2 arguments encountered
+2023-07-03 10:46:18 WARN  TemplateRenderer:104 - HHH000174: Function template anticipated 3 arguments, but 2 arguments encountered
+2023-07-03 10:46:18 WARN  TemplateRenderer:104 - HHH000174: Function template anticipated 3 arguments, but 2 arguments encountered
+2023-07-03 10:46:18 WARN  SqlExceptionHelper:137 - SQL Error: 1064, SQLState: 42000
+2023-07-03 10:46:18 ERROR SqlExceptionHelper:142 - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''DAY' orderpojo0_.updatedAt)>=extract('DAY' '2023-07-02') and extract('DAY' orde' at line 1
+2023-07-04 10:13:07 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 10:13:51 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 10:15:10 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 10:18:12 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 10:20:49 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 10:28:04 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 10:32:36 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 10:34:35 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 10:58:00 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 11:00:02 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 11:26:57 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 11:36:11 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 11:39:06 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 11:40:22 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 11:41:35 INFO  SecurityConfig:33 - Configuration complete
+2023-07-04 11:50:17 INFO  SecurityConfig:33 - Configuration complete

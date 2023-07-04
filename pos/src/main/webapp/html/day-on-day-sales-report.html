@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="snippets.html :: name_head"></head>
+<body>
+<nav th:replace="snippets.html :: name_app_navbar"></nav>
+<div class="container">
+    <h3>Daily-Sales</h3>
+
+
+    <!-- Blank Row -->
+    <div class="row">
+        &nbsp;
+    </div>
+
+    <div>
+        <button class="btn btn-info" id="download-report">Download Report</button>
+    </div>
+<!--    <div class="row">-->
+
+<!--        <div class="col-12">-->
+<!--            <table class="table table-striped" id="daily-sales-table">-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <th scope="col">S.No</th>-->
+<!--                    <th scope="col">Date</th>-->
+<!--                    <th scope="col">Invoiced Items Count</th>-->
+<!--                    <th scope="col">Invoiced Orders</th>-->
+<!--                    <th scope="col">Total Revenue</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+
+<!--                </tbody>-->
+<!--            </table>-->
+
+<!--        </div>-->
+<!--    </div>-->
+
+
+</div>
+<footer th:replace="snippets.html :: name_footer"></footer>
+<script th:src="@{/static/day-on-day-report.js}"/></script>
+</body>
+</html>

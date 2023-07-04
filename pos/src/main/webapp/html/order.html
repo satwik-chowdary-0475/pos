@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="snippets.html :: name_head"></head>
+<body>
+<nav th:replace="snippets.html :: name_app_navbar"></nav>
+<div class="container">
+    <h3>Orders</h3>
+    <div class="row">
+        <div class="col-12">
+            <form class="form-inline" style="text-align:justify;" id="order-form">
+                <div class="form-group my-3">
+                    <label for="inputCustomerName" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="customerName" id="inputCustomerName" placeholder="Enter Customer Name" required>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary" id="create-order">Create Order</button>
+                &nbsp;
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Blank Row -->
+    <div class="row">
+        &nbsp;
+    </div>
+
+    <div class="row">
+
+        <div class="col-12">
+            <table class="table table-striped" id="order-table">
+                <thead>
+                <tr>
+                    <th scope="col" >S.No</th>
+                    <th scope="col" >Customer Name</th>
+                    <th scope="col" >Order Status</th>
+                    <th scope="col" >Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+
+</div>
+<footer th:replace="snippets.html :: name_footer"></footer>
+<script th:src="@{/static/order.js}"/></script>
+</body>
+</html>

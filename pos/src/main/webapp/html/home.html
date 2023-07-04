@@ -1,0 +1,32 @@
+<!doctype html>
+
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="snippets.html :: name_head"></head>
+
+<body>
+<nav th:replace="snippets.html :: name_app_navbar"></nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="jumbotron">
+                <h1 class="display-4">You are logged in!</h1>
+                <hr class="my-4">
+                <!--                <p>This application teaches you Spring concepts and creating awesome web applications</p>-->
+                <a class="btn btn-primary btn-lg" th:href="@{/ui/brand}" role="button">Brand Page</a>
+                <a class="btn btn-primary btn-lg" th:href="@{/ui/product}" role="button">Product Page</a>
+                <a class="btn btn-primary btn-lg" th:href="@{/ui/inventory}" role="button">Inventory Page</a>
+                <a class="btn btn-primary btn-lg" th:href="@{/ui/order}" role="button">Order Page</a>
+                <a class="btn btn-primary btn-lg" th:href="@{/ui/report}" role="button">Reports Page</a>
+            </div>
+        </div>
+    </div>
+</div> <!--Container-->
+
+<footer th:replace="snippets.html :: name_footer"></footer>
+
+
+</body>
+
+</html>
