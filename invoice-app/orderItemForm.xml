@@ -4,16 +4,16 @@
     <Heading>
         <Logo src="/Users/satwikchowdary/Desktop/pos-app/invoice-app/src/main/resources"/>
         <Address>Address</Address>
-        <CustomerName>fasfasfd</CustomerName>
-        <InvoicedTime>2023/07/03</InvoicedTime>
-        <OrderId>56</OrderId>
+        <CustomerName>astel</CustomerName>
+        <InvoicedTime>2023/07/05</InvoicedTime>
+        <OrderId>200</OrderId>
     </Heading>
     <OrderItem>
         <Barcode>bc1</Barcode>
         <ProductName>p1</ProductName>
-        <Quantity>12</Quantity>
-        <SellingPrice>12.0</SellingPrice>
-        <TotalPrice>144.0</TotalPrice>
+        <Quantity>50</Quantity>
+        <SellingPrice>50.0</SellingPrice>
+        <TotalPrice>2500.0</TotalPrice>
     </OrderItem>
-    <TotalOrderPrice>144.0</TotalOrderPrice>
+    <TotalOrderPrice>2500.0</TotalOrderPrice>
 </Order>

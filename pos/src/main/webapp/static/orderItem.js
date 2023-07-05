@@ -16,7 +16,6 @@ function handleButtons(status){
         $('#orderItem-form').hide();
     }
 
-
 }
 
 function getPdfUrl(){
@@ -214,15 +213,14 @@ function printInvoice(){
          'Content-Type': 'application/json'
         },
          success : function(data){
-
+            if(data.orderItems.length == 0){
+               $.notify("Add order items!!")
+            }
+            else{
              setOrderStatus(data,function(){
-                if(data.orderItems.length == 0){
-                   $.notify("Add order items!!")
-                }
-                else{
                     generatePdf(data);
-                }
              });
+            }
          },
          error: handleAjaxError
      });

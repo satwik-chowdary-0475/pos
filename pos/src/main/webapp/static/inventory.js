@@ -1,3 +1,9 @@
+var userRole;
+
+function getRoleOfUser(callback){
+    userRole = $("meta[name=role]").attr("content");
+    callback(userRole);
+}
 
 function addInventory(event){
 	//Set the values to update
@@ -17,7 +23,12 @@ function addInventory(event){
 	   		$('#inventory-form input[name=quantity]').val('');
 	   		$.notify("Added product in inventory successfully","success");
    },
-	   error:handleAjaxError
+	   error: function(response){
+	        if(response.status == 403){
+                $.notify("You cannot add the data",{className:"error",autoHideDelay: 20000});
+            }
+            handleAjaxError(response);
+	   }
 	});
 
 	return false;
@@ -41,7 +52,7 @@ function displayEditInventory(id){
 	   url: url,
 	   type: 'GET',
 	   success: function(data) {
-	   		displayInventory(data);
+	        displayInventory(data);
 	   },
 	   error: handleAjaxError
 	});
@@ -59,7 +70,8 @@ function displayInventoryList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button class="btn btn-primary" onclick="displayEditInventory('+e.id+')">Edit</button>';
+		var buttonHtml = '<button class="btn btn-primary" onclick="displayEditInventory('+e.id+') "';
+		buttonHtml += ((userRole=='operator')?' disabled':'')+'>Edit</button>';
 		i = parseInt(i) + 1;
 		var row = '<tr>'
 		+ '<td>' + i + '</td>'
@@ -148,6 +160,11 @@ function uploadRows(){
 	   		row.error=response.responseText
 	   		errorData.push(row);
 	   		uploadRows();
+            if(response.status == 403){
+                $.notify("You cannot upload the data",{className:"error",autoHideDelay: 20000});
+            }
+            handleAjaxError(response);
+
 	   }
 	});
 
@@ -174,8 +191,15 @@ function updateInventory(event){
 	   success: function(response) {
 	   		getInventoryList();
 	   		$('#edit-inventory-modal').modal('toggle');
+	   		$.notify("Product updated successfully","success")
+
 	   },
-	   error: handleAjaxError
+	   error: function(response){
+            if(response.status == 403){
+                  $.notify("You cannot add the data",{className:"error",autoHideDelay: 20000});
+              }
+              handleAjaxError(response);
+       }
 	});
 
 	return false;
@@ -200,6 +224,9 @@ $('#download-errors').click(downloadErrors);
 $('#inventoryFile').on('change', updateFileName)
 }
 
-$(document).ready(init);
-$(document).ready(getInventoryList);
-
+$(document).ready(function() {
+    getRoleOfUser(function(role) {
+        init();
+        getInventoryList();
+    });
+});

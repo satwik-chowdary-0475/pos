@@ -6,7 +6,8 @@
 <div class="container">
     <h3>Products</h3>
     <div class="row">
-        <div class="col-12">
+
+        <div class="col-12" th:if="${info.getRole()!='operator'}">
             <form class="form-inline" style="text-align:justify;" id="product-form">
                 <div class="form-group my-3">
                     <label for="inputProduct" class="col-sm-2 col-form-label">Product</label>

@@ -19,12 +19,12 @@ public class SignupController extends AbstractUiController {
     @Autowired
     private UserDto userDto;
     @Autowired
-    private InfoData info;
+    private InfoData infoData;
 
     @ApiOperation(value = "Initializes application")
     @RequestMapping(path = "/site/signup", method = RequestMethod.GET)
     public ModelAndView showPage(UserForm form) throws ApiException {
-        info.setMessage("");
+        infoData.setMessage("");
         return mav("signup.html");
     }
 
@@ -32,7 +32,7 @@ public class SignupController extends AbstractUiController {
     @RequestMapping(path = "/site/signup", method = RequestMethod.POST)
     public ModelAndView signupSite(UserForm userForm) throws ApiException {
         userDto.add(userForm);
-        info.setMessage("User added successfully!");
+        infoData.setMessage("User added successfully!");
         return mav("login.html");
     }
 

@@ -22,6 +22,7 @@ function deleteOrder(orderCode){
 
 }
 function generatePdf(data){
+    console.log("DATAn 25  ",data)
     var url = getPdfUrl();
     var customerName = data.customerName;
     var json = {
@@ -39,6 +40,7 @@ function generatePdf(data){
         'Content-Type': 'application/json'
        },
         success : function(data){
+//            console.log("DATA ",data);
             convertBase64ToPDF(data,customerName);
             $.notify("PDF for "+customerName+" generated successfully","success");
         },
@@ -47,6 +49,7 @@ function generatePdf(data){
 }
 
 function printInvoice(orderCode){
+    console.log("Ordercode  ",orderCode);
     var url = getOrderUrl() + '/' + orderCode;
      $.ajax({
              url:url,
@@ -86,6 +89,7 @@ function displayOrderList(data){
     	$tbody.empty();
     	for(var i in data){
     		var e = data[i];
+    		console.log('e   ', e);
     		var status = e.status;
     		var deleteHtml = (e.status != 'ACTIVE')?'':'<button class="btn btn-danger" onclick="deleteOrder('+e.orderCode+')">Delete</button>'
     		var buttonHtml = '<a class="btn btn-info" href="/pos/ui/order/'+e.orderCode+'/order-items">'

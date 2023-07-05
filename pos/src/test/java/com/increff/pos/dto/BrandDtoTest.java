@@ -111,6 +111,7 @@ public class BrandDtoTest extends AbstractUnitTest {
 
     @Test
     public void testSelectAll() throws ApiException{
+
         List<BrandData> actualBrandDataList = new ArrayList<BrandData>();
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
         int id = brandDto.insertBrand(brandForm);

@@ -6,7 +6,7 @@
 <div class="container">
   <h3>Inventory</h3>
   <div class="row">
-    <div class="col-12">
+    <div class="col-12" th:if="${info.getRole()!='operator'}">
       <form class="form-inline" style="text-align:justify;" id="inventory-form">
         <div class="form-group my-3">
           <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>

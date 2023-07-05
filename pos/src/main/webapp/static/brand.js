@@ -1,6 +1,12 @@
+var userRole;
 function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brand";
+}
+
+function getRoleOfUser(callback){
+    userRole = $("meta[name=role]").attr("content");
+    callback(userRole);
 }
 
 function addBrand(event){
@@ -22,7 +28,13 @@ function addBrand(event){
 	   		$.notify("Added brand successfully","success");
 
    },
-	   error:handleAjaxError
+	   error:function(error){
+	         if(error.status == 403){
+	             $.notify("You cannot add brand",{className:"error",autoHideDelay: 20000});
+	         }
+	         console.log("error" , error);
+	        handleAjaxError(error);
+	   }
 	});
 
 	return false;
@@ -64,8 +76,8 @@ function displayBrandList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-
-		var buttonHtml = '<button class="btn btn-primary" onclick="displayEditBrand('+e.id+')">Edit</button>';
+		var buttonHtml = '<button class="btn btn-primary" onclick="displayEditBrand('+e.id+')" ';
+		 buttonHtml += ((userRole == 'operator')?'disabled ' : ' ') + '>Edit</button>';
 		i = parseInt(i)+1;
 		var row = '<tr>'
        	+ '<td>' + i + '</td>'
@@ -147,9 +159,13 @@ function uploadRows(){
 	   		uploadRows();
 	   },
 	   error: function(response){
+	   		if(response.status == 403){
+	   		     $.notify("You cannot upload brand",{className:"error",autoHideDelay: 20000});
+	   		}
 	   		row.error=response.responseText
 	   		errorData.push(row);
 	   		uploadRows();
+
 	   }
 	});
 
@@ -176,8 +192,14 @@ function updateBrand(event){
 	   success: function(response) {
 	   		getBrandList();
 	   		$('#edit-brand-modal').modal('toggle');
+	        $.notify("Updated brand successfully","success");
 	   },
-	   error: handleAjaxError
+	   error: function(response){
+	        if(response.status == 403){
+	         $.notify("You cannot update brand",{className:"error",autoHideDelay: 20000});
+	        }
+	        handleAjaxError(response);
+	   }
 	});
 
 	return false;
@@ -202,6 +224,9 @@ $('#download-errors').click(downloadErrors);
 $('#brandFile').on('change', updateFileName)
 }
 
-$(document).ready(init);
-$(document).ready(getBrandList);
-
+$(document).ready(function() {
+    getRoleOfUser(function(role) {
+        init();
+        getBrandList();
+    });
+});

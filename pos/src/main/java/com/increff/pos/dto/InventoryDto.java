@@ -40,34 +40,37 @@ public class InventoryDto {
         InventoryPojo inventoryPojo = HelperDto.convert(inventoryForm, productPojo.getId());
         return inventoryService.insert(inventoryPojo);
     }
+
     @Transactional(rollbackOn = ApiException.class)
     public void update(int id, InventoryForm inventoryForm) throws ApiException {
         ProductPojo productPojo = productService.select(id);
         HelperDto.validate(inventoryForm);
-        validateProduct(id,inventoryForm.getBarcode());
+        validateProduct(id, inventoryForm.getBarcode());
         InventoryPojo inventoryPojo = HelperDto.convert(inventoryForm, productPojo.getId());
         inventoryService.update(inventoryPojo);
     }
+
     @Transactional(rollbackOn = ApiException.class)
     public InventoryData getProduct(int id) throws ApiException {
         InventoryPojo inventoryPojo = inventoryService.select(id);
         ProductPojo productPojo = productService.select(inventoryPojo.getId());
-        return HelperDto.convert(inventoryPojo, productPojo.getBarcode(),productPojo.getName());
+        return HelperDto.convert(inventoryPojo, productPojo.getBarcode(), productPojo.getName());
     }
+
     @Transactional(rollbackOn = ApiException.class)
     public List<InventoryData> getAllProducts() throws ApiException {
         List<InventoryPojo> inventoryPojoList = inventoryService.selectAll();
         List<InventoryData> inventoryDataList = new ArrayList<InventoryData>();
         for (InventoryPojo inventoryPojo : inventoryPojoList) {
             ProductPojo productPojo = productService.select(inventoryPojo.getId());
-            inventoryDataList.add(HelperDto.convert(inventoryPojo, productPojo.getBarcode(),productPojo.getName()));
+            inventoryDataList.add(HelperDto.convert(inventoryPojo, productPojo.getBarcode(), productPojo.getName()));
         }
         return inventoryDataList;
     }
 
-    private void validateProduct(int id,String barcode) throws ApiException {
+    private void validateProduct(int id, String barcode) throws ApiException {
         ProductPojo productPojo = productService.select(id);
-        if(!productPojo.getBarcode().equals(barcode)){
+        if (!productPojo.getBarcode().equals(barcode)) {
             throw new ApiException("Product id and barcode doesn't belong to same product!!");
         }
     }

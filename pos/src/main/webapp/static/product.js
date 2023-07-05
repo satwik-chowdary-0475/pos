@@ -1,7 +1,20 @@
+var userRole;
 function getProductUrl(){
     var baseUrl = $("meta[name=baseUrl]").attr("content")
     return baseUrl + "/api/product";
 }
+
+function getRoleOfUser(callback){
+    userRole = $("meta[name=role]").attr("content");
+    callback(userRole);
+}
+
+function handleForm(role){
+    if(role == 'operator'){
+        $("#product-form").hide();
+    }
+}
+
 function addProduct(event){
     var $form = $("#product-form");
     	var json = toJson($form);
@@ -23,7 +36,12 @@ function addProduct(event){
                 $.notify("Added product successfully","success");
 
        },
-    	   error: handleAjaxError
+    	   error: function(response){
+    	        if(response.status == 403){
+    	            $.notify("You cannot add product",{className:"error",autoHideDelay: 20000})
+    	        }
+    	        handleAjaxError(response);
+    	   }
     	});
 
     	return false;
@@ -78,7 +96,8 @@ function displayProductList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button class="btn btn-primary" onclick="displayEditProduct('+e.id+')">Edit</button>'
+		var buttonHtml = '<button class="btn btn-primary" onclick="displayEditProduct('+e.id+')" ';
+		buttonHtml += ((userRole == 'operator')?'disabled ':' ') +'>Edit</button>';
         i = parseInt(i)+1;
 		var row = '<tr>'
 		+ '<td>' + i + '</td>'
@@ -125,6 +144,9 @@ function uploadRows(){
 	   		row.error=response.responseText
 	   		errorData.push(row);
 	   		uploadRows();
+	   		if(response.status == 403){
+	   		    $.notify("You cannot upload the data",{className:"error",autoHideDelay: 20000});
+	   		}
 	   }
 	});
 
@@ -171,7 +193,7 @@ function downloadErrors(){
 }
 
 function updateProduct(event){
-	$('#edit-product-modal').modal('toggle');
+
 	//Get the ID
 	var id = $("#product-edit-form input[name=id]").val();
 	var url = getProductUrl() + "/" + id;
@@ -188,8 +210,15 @@ function updateProduct(event){
        },
 	   success: function(response) {
 	   		getProductList();
+	   		$('#edit-product-modal').modal('toggle');
+	   		$.notify("Product updated successfully","success")
 	   },
-	   error: handleAjaxError
+	   error: function(response){
+	        if(response.status == 403){
+                $.notify("You cannot upload the data",{className:"error",autoHideDelay: 20000});
+            }
+	        handleAjaxError(response);
+	   }
 	});
 
 	return false;
@@ -205,5 +234,10 @@ function init(){
     $('#productFile').on('change', updateFileName);
 }
 
-$(document).ready(init);
-$(document).ready(getProductList)
+
+$(document).ready(function() {
+    getRoleOfUser(function(role) {
+        init();
+        getProductList();
+    });
+});

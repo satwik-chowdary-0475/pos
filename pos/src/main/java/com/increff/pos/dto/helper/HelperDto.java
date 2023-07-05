@@ -4,9 +4,11 @@ import com.increff.pos.model.data.*;
 import com.increff.pos.model.form.*;
 import com.increff.pos.pojo.*;
 import com.increff.pos.service.ApiException;
+import com.increff.pos.util.AdminUtil;
 import com.increff.pos.util.RandomStrGenerator;
 import com.increff.pos.util.RoundUtil;
 import com.increff.pos.util.StringUtil;
+import lombok.Value;
 
 import java.util.List;
 import java.util.Objects;
@@ -192,8 +194,12 @@ public class HelperDto {
     public static UserPojo convert(UserForm userForm) {
         UserPojo userPojo = new UserPojo();
         userPojo.setEmail(userForm.getEmail());
-        userPojo.setRole("standard");
         userPojo.setPassword(userForm.getPassword());
+        if (AdminUtil.checkAdmin(userForm.getEmail())) {
+            userPojo.setRole("supervisor");
+        } else {
+            userPojo.setRole("operator");
+        }
         return userPojo;
     }
 
