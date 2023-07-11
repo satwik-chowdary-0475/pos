@@ -37,7 +37,7 @@ public class LoginController {
     @RequestMapping(path = "/session/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ModelAndView login(HttpServletRequest req, LoginForm loginForm) throws ApiException {
         UserPojo userPojo = userService.select(loginForm.getEmail());
-        boolean authenticated = (userPojo != null && Objects.equals(userPojo.getPassword(), loginForm.getPassword()));
+        boolean authenticated = (Objects.nonNull(userPojo) && Objects.equals(userPojo.getPassword(), loginForm.getPassword()));
         if (!authenticated) {
             info.setMessage("Invalid username or password");
             return new ModelAndView("redirect:/site/login");

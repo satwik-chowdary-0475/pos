@@ -6,6 +6,7 @@ import com.increff.pos.model.data.*;
 import com.increff.pos.model.form.SalesForm;
 import com.increff.pos.pojo.*;
 import com.increff.pos.service.*;
+import io.swagger.models.auth.In;
 import javafx.util.Pair;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import javax.transaction.Transactional;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j
@@ -34,55 +36,6 @@ public class ReportDto {
     private OrderService orderService;
 
     @Transactional(rollbackOn = ApiException.class)
-    public List<InventoryReportData> getInventoryReport() throws ApiException {
-        List<BrandPojo> brandPojoList = brandService.getAllBrands();
-        HashMap<Integer, Integer> inventoryMap = getInventoryMap();
-        HashMap<Integer, Integer> brandCategoryMap = getBrandCategoryMap(inventoryMap);
-        List<InventoryReportData> inventoryReportDataList = new ArrayList<>();
-        for (BrandPojo brandPojo : brandPojoList) {
-            int brandId = brandPojo.getId();
-            Integer quantity = (brandCategoryMap.containsKey(brandId)) ? brandCategoryMap.get(brandId) : 0;
-            inventoryReportDataList.add(ReportHelperDto.convert(brandPojo.getBrand(), brandPojo.getCategory(), quantity));
-        }
-        return inventoryReportDataList;
-    }
-
-    private HashMap<Integer, Integer> getInventoryMap() {
-        HashMap<Integer, Integer> inventoryMap = new HashMap<>();
-        List<InventoryPojo> inventoryPojoList = inventoryService.getAllProductsInInventory();
-        for (InventoryPojo inventoryPojo : inventoryPojoList) {
-            inventoryMap.put(inventoryPojo.getProductId(), inventoryPojo.getQuantity());
-        }
-        return inventoryMap;
-    }
-
-    private HashMap<Integer, Integer> getBrandCategoryMap(HashMap<Integer, Integer> inventoryMap) {
-        List<ProductPojo> productPojoList = productService.getAllProducts();
-        HashMap<Integer, Integer> brandCategoryMap = new HashMap<>();
-        for (ProductPojo productPojo : productPojoList) {
-            if (inventoryMap.containsKey(productPojo.getId())) {
-                int brandId = productPojo.getBrandCategory();
-                if (brandCategoryMap.containsKey(productPojo.getBrandCategory())) {
-                    brandCategoryMap.put(brandId, brandCategoryMap.get(brandId) + inventoryMap.get(productPojo.getId()));
-                } else {
-                    brandCategoryMap.put(brandId, inventoryMap.get(productPojo.getId()));
-                }
-            }
-        }
-        return brandCategoryMap;
-    }
-
-    @Transactional(rollbackOn = ApiException.class)
-    public List<DailySalesData> getDailySalesReport() {
-        List<DailySalesReportPojo> dailySalesReportPojoList = dailySalesReportService.selectAll();
-        List<DailySalesData> dailySalesData = new ArrayList<DailySalesData>();
-        for (DailySalesReportPojo dailySalesReportPojo : dailySalesReportPojoList) {
-            dailySalesData.add(ReportHelperDto.convert(dailySalesReportPojo));
-        }
-        return dailySalesData;
-    }
-
-    @Transactional(rollbackOn = ApiException.class)
     public List<BrandData> getBrandCategoryReport() {
         List<BrandPojo> brandPojoList = brandService.getAllBrands();
         List<BrandData> brandDataList = new ArrayList<BrandData>();
@@ -91,6 +44,94 @@ public class ReportDto {
         }
         return brandDataList;
     }
+
+    @Transactional(rollbackOn = ApiException.class)
+    public List<DailySalesData> getDailySalesReport() {
+        List<DailySalesReportPojo> dailySalesReportPojoList = dailySalesReportService.getAllDailySalesReport();
+        List<DailySalesData> dailySalesData = new ArrayList<DailySalesData>();
+        for (DailySalesReportPojo dailySalesReportPojo : dailySalesReportPojoList) {
+            dailySalesData.add(ReportHelperDto.convert(dailySalesReportPojo));
+        }
+        return dailySalesData;
+    }
+
+    @Transactional(rollbackOn = ApiException.class)
+    public void insertDailySalesReport() {
+        dailySalesReportService.insertDailySalesReport();
+    }
+
+    //total db calls -> 1(brands) + 1(inventory) + x(no.of products in inventory)
+    @Transactional(rollbackOn = ApiException.class)
+    public List<InventoryReportData> getInventoryReport() throws ApiException {
+        List<BrandPojo> brandPojoList = brandService.getAllBrands();
+        List<InventoryPojo> inventoryPojoList = inventoryService.getAllProductsInInventory();
+        Map<Integer, Integer> brandCategoryMap = getBrandCategoryMap(inventoryPojoList);
+        List<InventoryReportData> inventoryReportDataList = brandPojoList.stream()
+                .map(brandPojo -> {
+                    int brandId = brandPojo.getId();
+                    Integer quantity = brandCategoryMap.getOrDefault(brandId, 0);
+                    return ReportHelperDto.convert(brandPojo.getBrand(), brandPojo.getCategory(), quantity);
+                })
+                .collect(Collectors.toList());
+
+        return inventoryReportDataList;
+
+    }
+
+    private HashMap<Integer, Integer> getBrandCategoryMap(List<InventoryPojo> inventoryPojoList) throws ApiException {
+        HashMap<Integer, Integer> brandCategoryMap = new HashMap<>();
+        for (InventoryPojo inventoryPojo : inventoryPojoList) {
+            ProductPojo productPojo = productService.getProductById(inventoryPojo.getProductId());
+            int brandCategoryId = productPojo.getBrandCategory();
+            if (brandCategoryMap.containsKey(brandCategoryId)) {
+                brandCategoryMap.put(brandCategoryId, brandCategoryMap.get(brandCategoryId) + inventoryPojo.getQuantity());
+            } else {
+                brandCategoryMap.put(brandCategoryId, inventoryPojo.getQuantity());
+            }
+        }
+        return brandCategoryMap;
+    }
+
+//    private HashMap<Integer, Integer> getBrandCategoryMap(List<InventoryPojo> inventoryPojoList) throws ApiException {
+//        return inventoryPojoList.stream()
+//                .collect(Collectors.toMap(
+//                        inventoryPojo -> {
+//                            try {
+//                                ProductPojo productPojo = productService.getProductById(inventoryPojo.getProductId());
+//                                return productPojo.getBrandCategory();
+//                            } catch (ApiException e) {
+//                                return null;
+//                            }
+//                        },
+//                        InventoryPojo::getQuantity,
+//                        Integer::sum,
+//                        HashMap::new
+//                ));
+//    }
+
+//    private HashMap<Integer, Integer> getInventoryMap(List<InventoryPojo>inventoryPojoList) {
+//        HashMap<Integer, Integer> inventoryMap = new HashMap<>();
+//        for (InventoryPojo inventoryPojo : inventoryPojoList) {
+//            inventoryMap.put(inventoryPojo.getProductId(), inventoryPojo.getQuantity());
+//        }
+//        return inventoryMap;
+//    }
+
+//    private HashMap<Integer, Integer> getBrandCategoryMap(HashMap<Integer, Integer> inventoryMap) {
+//        List<ProductPojo> productPojoList = productService.getAllProducts();
+//        HashMap<Integer, Integer> brandCategoryMap = new HashMap<>();
+//        for (ProductPojo productPojo : productPojoList) {
+//            if (inventoryMap.containsKey(productPojo.getId())) {
+//                int brandId = productPojo.getBrandCategory();
+//                if (brandCategoryMap.containsKey(productPojo.getBrandCategory())) {
+//                    brandCategoryMap.put(brandId, brandCategoryMap.get(brandId) + inventoryMap.get(productPojo.getId()));
+//                } else {
+//                    brandCategoryMap.put(brandId, inventoryMap.get(productPojo.getId()));
+//                }
+//            }
+//        }
+//        return brandCategoryMap;
+//    }
 
 
     //TODO: WROTE BRUTE FORCE n^2 need to optimise. Can we use Pair??
@@ -143,11 +184,5 @@ public class ReportDto {
         return productOrderItemMap;
     }
 
-
-    // TODO: added just for testing daily sales
-    @Transactional(rollbackOn = ApiException.class)
-    public void insertDailyReport() {
-        dailySalesReportService.insert();
-    }
 
 }

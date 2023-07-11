@@ -14,6 +14,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Log4j
@@ -27,23 +28,17 @@ public class DailySalesReportService {
     private DailySalesReportDao dailySalesReportDao;
 
     @Transactional
-    public void insert(){
-        Double totalRevenue = 0.0;
-        Integer totalInvoicedItems = 0;
+    public void insertDailySalesReport(){
         LocalDate currentDate = LocalDate.now();
         Date currentDay = Date.valueOf(currentDate);
         LocalDate previousDate = currentDate.minusDays(1);
         Date previousDay = Date.valueOf(previousDate);
         List<OrderPojo> orderPojoList = orderDao.getOrderByDate(previousDay,currentDay);
-        for(OrderPojo orderPojo:orderPojoList){
-            Object[] orderItemReport = orderItemDao.getOrderItemsReport(orderPojo.getId());
-            Double revenue = (Double) orderItemReport[1];
-            Long invoicedItems = (Long) orderItemReport[0];
-            totalInvoicedItems += invoicedItems.intValue();
-            totalRevenue += revenue.doubleValue();
-        }
+        Object[] dailySalesReport = orderItemDao.getOrderItemsReport(orderPojoList);
+        Integer totalInvoicedItems =  ((Long) dailySalesReport[0]).intValue();
+        Double totalRevenue = ((Double) dailySalesReport[1]);
         DailySalesReportPojo dailySalesReportPojo = setDailySalesReport(totalInvoicedItems,totalRevenue,orderPojoList.size());
-        dailySalesReportDao.insert(dailySalesReportPojo);
+        dailySalesReportDao.insertDailySalesReport(dailySalesReportPojo);
     }
 
     public DailySalesReportPojo setDailySalesReport(Integer totalInvoicedItems,Double totalRevenue, int ordersCount){
@@ -55,7 +50,7 @@ public class DailySalesReportService {
         return dailySalesReportPojo;
     }
 
-    public List<DailySalesReportPojo> selectAll() {
-        return dailySalesReportDao.selectAll();
+    public List<DailySalesReportPojo> getAllDailySalesReport() {
+        return dailySalesReportDao.getAllDailySalesReport();
     }
 }

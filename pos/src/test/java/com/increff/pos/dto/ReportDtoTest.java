@@ -46,9 +46,9 @@ public class ReportDtoTest extends AbstractUnitTest {
     public void init() throws ApiException {
         BrandForm brandForm = Helper.createBrandForm("brand 1", "category 1");
         brandDto.insertBrand(brandForm);
-        BrandForm brandForm1 = Helper.createBrandForm("brand 2","category 1");
+        BrandForm brandForm1 = Helper.createBrandForm("brand 2", "category 1");
         brandDto.insertBrand(brandForm1);
-        BrandForm brandForm2 = Helper.createBrandForm("brand 1","category 2");
+        BrandForm brandForm2 = Helper.createBrandForm("brand 1", "category 2");
         brandDto.insertBrand(brandForm2);
         ProductForm productForm = Helper.createProductForm("barcode 1", "brand 1", "category 1", "product 1", 120.12);
         productDto.insertProduct(productForm);
@@ -65,66 +65,60 @@ public class ReportDtoTest extends AbstractUnitTest {
     }
 
     @Test
-    public void TestBrandCategoryReport() throws ApiException{
+    public void TestBrandCategoryReport() throws ApiException {
         List<BrandData> brandDataList = reportDto.getBrandCategoryReport();
-        assertEquals(brandDataList.size() , 3);
+        assertEquals(brandDataList.size(), 3);
     }
 
     @Test
-    public void TestInventoryReport() throws ApiException{
-        List<InventoryReportData>inventoryReportDataList = reportDto.getInventoryReport();
-        assertEquals(inventoryReportDataList.size(),3);
+    public void TestInventoryReport() throws ApiException {
+        List<InventoryReportData> inventoryReportDataList = reportDto.getInventoryReport();
+        assertEquals(inventoryReportDataList.size(), 3);
     }
 
 
-    //TODO: Not working should look into this
-//    @Ignore
     @Test
-    public void TestDailyReport() throws ApiException{
-        reportDto.insertDailyReport();
-        List<DailySalesData>dailySalesData = reportDto.getDailySalesReport();
-        assertEquals(dailySalesData.size(),1);
+    public void TestDailyReport() throws ApiException {
+        reportDto.insertDailySalesReport();
+        List<DailySalesData> dailySalesData = reportDto.getDailySalesReport();
+        assertEquals(dailySalesData.size(), 1);
     }
 
     @Test
-    public void TestGetSalesReport() throws ApiException{
+    public void TestGetSalesReport() throws ApiException {
         ZonedDateTime startTime = ZonedDateTime.parse("2022-06-22T10:15:30+01:00[Asia/Kolkata]");
         ZonedDateTime endTime = ZonedDateTime.parse("2022-06-30T10:15:30+01:00[Asia/Kolkata]");
-        SalesForm salesForm = Helper.createSalesForm("brand 1","category 1",startTime,endTime);
-        List<SalesData>salesDataList = reportDto.getSalesReport(salesForm);
-        assertEquals(salesDataList.size(),1);
+        SalesForm salesForm = Helper.createSalesForm("brand 1", "category 1", startTime, endTime);
+        List<SalesData> salesDataList = reportDto.getSalesReport(salesForm);
+        assertEquals(salesDataList.size(), 1);
     }
 
     @Test
-    public void TestGetSalesReportEmptyBrand() throws ApiException{
+    public void TestGetSalesReportEmptyBrand() throws ApiException {
         ZonedDateTime startTime = ZonedDateTime.parse("2022-06-22T10:15:30+01:00[Asia/Kolkata]");
         ZonedDateTime endTime = ZonedDateTime.parse("2022-06-30T10:15:30+01:00[Asia/Kolkata]");
-        SalesForm salesForm = Helper.createSalesForm("","category 1",startTime,endTime);
-        List<SalesData>salesDataList = reportDto.getSalesReport(salesForm);
-        assertEquals(salesDataList.size(),2);
+        SalesForm salesForm = Helper.createSalesForm("", "category 1", startTime, endTime);
+        List<SalesData> salesDataList = reportDto.getSalesReport(salesForm);
+        assertEquals(salesDataList.size(), 2);
     }
 
     @Test
-    public void TestGetSalesReportEmptyCategory() throws ApiException{
+    public void TestGetSalesReportEmptyCategory() throws ApiException {
         ZonedDateTime startTime = ZonedDateTime.parse("2022-06-22T10:15:30+01:00[Asia/Kolkata]");
         ZonedDateTime endTime = ZonedDateTime.parse("2022-06-30T10:15:30+01:00[Asia/Kolkata]");
-        SalesForm salesForm = Helper.createSalesForm("brand 1","",startTime,endTime);
-        List<SalesData>salesDataList = reportDto.getSalesReport(salesForm);
-        assertEquals(salesDataList.size(),2);
+        SalesForm salesForm = Helper.createSalesForm("brand 1", "", startTime, endTime);
+        List<SalesData> salesDataList = reportDto.getSalesReport(salesForm);
+        assertEquals(salesDataList.size(), 2);
     }
 
     @Test
-    public void TestGetSalesReportBothEmpty() throws ApiException{
+    public void TestGetSalesReportBothEmpty() throws ApiException {
         ZonedDateTime startTime = ZonedDateTime.parse("2022-06-22T10:15:30+01:00[Asia/Kolkata]");
         ZonedDateTime endTime = ZonedDateTime.parse("2022-06-30T10:15:30+01:00[Asia/Kolkata]");
-        SalesForm salesForm = Helper.createSalesForm("","",startTime,endTime);
-        List<SalesData>salesDataList = reportDto.getSalesReport(salesForm);
-        assertEquals(salesDataList.size(),3);
+        SalesForm salesForm = Helper.createSalesForm("", "", startTime, endTime);
+        List<SalesData> salesDataList = reportDto.getSalesReport(salesForm);
+        assertEquals(salesDataList.size(), 3);
     }
-
-
-
-
 
 
 }

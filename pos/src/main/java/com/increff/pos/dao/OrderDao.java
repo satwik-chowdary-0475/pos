@@ -18,7 +18,8 @@ public class OrderDao extends AbstractDao {
     private static String DELETE_BY_ORDERCODE = "delete from OrderPojo p where orderCode=:orderCode and status=:status";
     private static String SELECT_BY_ORDERCODE = "select p from OrderPojo p where orderCode=:orderCode";
     private static String SELECT_ALL = "select p from OrderPojo p ORDER BY p.id DESC";
-    private static String SELECT_BY_DATE = "select p from OrderPojo p where p.status =:status and DAY(p.updatedAt) >= DAY(:startTime) and DAY(p.updatedAt) < DAY(:endTime)";
+    //TODO: remove <= to <
+    private static String SELECT_BY_DATE = "select p from OrderPojo p where p.status =:status and DAY(p.updatedAt) >= DAY(:startTime) and DAY(p.updatedAt) <= DAY(:endTime)";
 
 
     @Transactional

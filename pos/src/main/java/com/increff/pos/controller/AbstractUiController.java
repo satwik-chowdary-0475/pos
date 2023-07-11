@@ -29,7 +29,7 @@ public abstract class AbstractUiController {
     protected ModelAndView mav(String page) {
         // Get current user
         UserPrincipal principal = SecurityUtil.getPrincipal();
-        infoData.setEmail(principal == null ? "" : principal.getEmail());
+        infoData.setEmail(Objects.isNull(principal) ? "" : principal.getEmail());
         infoData.setRole(getRole().toLowerCase());
 
         // Set info
@@ -43,7 +43,7 @@ public abstract class AbstractUiController {
         // Get current user
         UserPrincipal principal = SecurityUtil.getPrincipal();
 
-        infoData.setEmail(principal == null ? "" : principal.getEmail());
+        infoData.setEmail(Objects.isNull(principal) ? "" : principal.getEmail());
         infoData.setRole(getRole().toLowerCase());
 
         // Set info

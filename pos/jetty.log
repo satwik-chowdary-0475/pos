@@ -417,3 +417,37 @@
 2023-07-11 13:52:12 INFO  SecurityConfig:44 - Configuration complete
 2023-07-11 13:54:11 INFO  SecurityConfig:44 - Configuration complete
 2023-07-11 14:15:44 INFO  SecurityConfig:44 - Configuration complete
+2023-07-11 14:43:44 INFO  SecurityConfig:44 - Configuration complete
+2023-07-11 14:46:03 INFO  SecurityConfig:44 - Configuration complete
+2023-07-11 15:11:23 INFO  SecurityConfig:44 - Configuration complete
+2023-07-11 15:12:08 INFO  SecurityConfig:44 - Configuration complete
+2023-07-11 15:13:09 WARN  SqlExceptionHelper:137 - SQL Error: 1064, SQLState: 42000
+2023-07-11 15:13:09 ERROR SqlExceptionHelper:142 - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+2023-07-11 15:14:33 WARN  SqlExceptionHelper:137 - SQL Error: 1064, SQLState: 42000
+2023-07-11 15:14:33 ERROR SqlExceptionHelper:142 - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+2023-07-11 15:16:52 INFO  SecurityConfig:44 - Configuration complete
+2023-07-11 15:17:33 WARN  SqlExceptionHelper:137 - SQL Error: 1064, SQLState: 42000
+2023-07-11 15:17:33 ERROR SqlExceptionHelper:142 - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+2023-07-11 15:17:38 WARN  SqlExceptionHelper:137 - SQL Error: 1064, SQLState: 42000
+2023-07-11 15:17:38 ERROR SqlExceptionHelper:142 - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+2023-07-11 15:18:09 INFO  SecurityConfig:44 - Configuration complete
+2023-07-11 15:19:00 WARN  SqlExceptionHelper:137 - SQL Error: 1064, SQLState: 42000
+2023-07-11 15:19:00 ERROR SqlExceptionHelper:142 - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+2023-07-11 15:20:15 WARN  SqlExceptionHelper:137 - SQL Error: 1064, SQLState: 42000
+2023-07-11 15:20:15 ERROR SqlExceptionHelper:142 - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+2023-07-11 15:20:35 INFO  SecurityConfig:44 - Configuration complete
+2023-07-11 15:20:54 WARN  SqlExceptionHelper:137 - SQL Error: 1064, SQLState: 42000
+2023-07-11 15:20:55 ERROR SqlExceptionHelper:142 - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+2023-07-11 15:30:52 WARN  SqlExceptionHelper:137 - SQL Error: 1064, SQLState: 42000
+2023-07-11 15:30:52 ERROR SqlExceptionHelper:142 - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+2023-07-11 15:31:13 INFO  SecurityConfig:44 - Configuration complete
+2023-07-11 15:33:05 WARN  SqlExceptionHelper:137 - SQL Error: 1064, SQLState: 42000
+2023-07-11 15:33:05 ERROR SqlExceptionHelper:142 - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+2023-07-11 15:34:23 INFO  SecurityConfig:43 - Configuration complete
+2023-07-11 15:34:37 WARN  SqlExceptionHelper:137 - SQL Error: 1064, SQLState: 42000
+2023-07-11 15:34:37 ERROR SqlExceptionHelper:142 - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+2023-07-11 15:37:42 WARN  SqlExceptionHelper:137 - SQL Error: 1064, SQLState: 42000
+2023-07-11 15:37:42 ERROR SqlExceptionHelper:142 - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+2023-07-11 15:37:59 INFO  SecurityConfig:43 - Configuration complete
+2023-07-11 15:39:49 INFO  SecurityConfig:43 - Configuration complete
+2023-07-11 15:54:09 INFO  SecurityConfig:43 - Configuration complete

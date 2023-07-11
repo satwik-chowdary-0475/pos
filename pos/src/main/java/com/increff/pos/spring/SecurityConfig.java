@@ -16,7 +16,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static Logger logger = Logger.getLogger(SecurityConfig.class);
 
-    //TODO: add UI authorities commented for now
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 

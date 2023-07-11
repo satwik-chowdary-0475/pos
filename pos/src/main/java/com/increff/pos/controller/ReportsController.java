@@ -50,5 +50,10 @@ public class ReportsController {
         return reportDto.getInventoryReport();
     }
 
+    @ApiOperation(value = "insert daily sales report")
+    @PostMapping(path = "/day-on-day")
+    public void insertDailySaleReport(){
+        reportDto.insertDailySalesReport();
+    }
 
 }
