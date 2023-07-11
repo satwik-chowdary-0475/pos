@@ -8,7 +8,8 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter
 public class DailySalesData {
-    private ZonedDateTime date;
+    //TODO: String or zonedDatetime?? zonedDatetime returning epochs
+    private String date;
     private Integer invoicedOrdersCount;
     private Integer invoicedItemsCount;
     private Double totalRevenue;

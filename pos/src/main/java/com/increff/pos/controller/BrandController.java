@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/brand")
+@RequestMapping("/api/brands")
 public class BrandController {
     @Autowired
     private BrandDto brandDto;
+
     @ApiOperation(value = "Inserts a brand")
     @PostMapping(path = "")
     public void insertBrand(@RequestBody BrandForm form) throws ApiException {
@@ -24,22 +25,26 @@ public class BrandController {
 
     @ApiOperation(value = "Updates a brand details")
     @PutMapping(path = "/{id}")
-    public void updateBrand(@PathVariable int id, @RequestBody BrandForm brandForm) throws ApiException{
-        brandDto.updateBrand(id,brandForm);
+    public void updateBrand(@PathVariable int id, @RequestBody BrandForm brandForm) throws ApiException {
+        brandDto.updateBrand(id, brandForm);
     }
 
     @ApiOperation(value = "Get list of all brands")
     @GetMapping(path = "")
-    public List<BrandData> getAllBrand(){
-        return brandDto.getAllBrand();
+    public List<BrandData> getAllBrand() {
+        return brandDto.getAllBrandDataList();
     }
 
     @ApiOperation(value = "Get a brand details")
     @GetMapping(path = "/{id}")
     public BrandData getBrand(@PathVariable int id) throws ApiException {
-        return brandDto.getBrand(id);
+        return brandDto.getBrandData(id);
     }
 
-
+    @ApiOperation(value = "Add list of brand data")
+    @PostMapping(path = "/bulk")
+    public void insertBrandList(@RequestBody List<BrandForm> brandFormList) throws ApiException {
+        brandDto.insertBrandList(brandFormList);
+    }
 
 }

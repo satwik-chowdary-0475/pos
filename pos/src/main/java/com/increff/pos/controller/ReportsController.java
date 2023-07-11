@@ -17,7 +17,7 @@ import java.util.List;
 
 @Api
 @RestController
-@RequestMapping("/api/report")
+@RequestMapping("/api/reports")
 public class ReportsController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class ReportsController {
 
     @ApiOperation(value = "Get daily sales reports")
     @GetMapping(path = "/day-on-day")
-    public List<DailySalesData> getDailySalesReport(){
+    public List<DailySalesData> getDailySalesReport() {
         return reportDto.getDailySalesReport();
     }
 
@@ -38,27 +38,17 @@ public class ReportsController {
         return reportDto.getSalesReport(salesForm);
     }
 
-
-
     @ApiOperation(value = "Get brand reports")
     @GetMapping(path = "/brand-report")
-    public List<BrandData> getBrandReport(){
+    public List<BrandData> getBrandReport() {
         return reportDto.getBrandCategoryReport();
     }
 
     @ApiOperation(value = "Get inventory reports")
     @GetMapping(path = "/inventory-report")
-    public List<InventoryReportData> getInventoryReport() throws ApiException{
+    public List<InventoryReportData> getInventoryReport() throws ApiException {
         return reportDto.getInventoryReport();
     }
-
-    // TODO: added just for testing daily sales report
-    @ApiOperation(value = "Add Daily reports")
-    @PostMapping(path = "/day-on-day")
-    public void addDailyReport(){
-        reportDto.insertDailyReport();
-    }
-
 
 
 }

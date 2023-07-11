@@ -8,7 +8,7 @@ import java.util.Base64;
 public class ConvertToBase64EncodedString {
 
     public static String convertPdf(){
-        File pdffile = new File("out/Invoiced.pdf"); // Path to the generated PDF file
+        File pdffile = new File("out/Invoiced1.pdf"); // Path to the generated PDF file
         try {
             // Read PDF file into a byte array
             byte[] pdfBytes = Files.readAllBytes(pdffile.toPath());

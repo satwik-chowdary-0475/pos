@@ -1,10 +1,15 @@
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+
 html {
 	position: relative;
 	min-height: 100%;
 }
 
 body {
-	margin-bottom: 60px; /* Margin bottom by footer height */
+    font-family: 'Montserrat', sans-serif;
+	margin-bottom: 60px;
 }
 
 table td, th {
@@ -23,6 +28,7 @@ table{
 table tr {
 	height: 40px;
 }
+
 
 table th {
 	background-color: #324960;
@@ -44,5 +50,15 @@ table th {
 
 .fas{
     font-size: 4rem;
+}
+
+.card-button{
+  border: 0;
+  border-radius: 15px;
+  padding: 12px 30px;
+  margin-top: 15px;
+  cursor: pointer;
+  color: #FFF;
+  background-color: #FF4B2B;
 }
 

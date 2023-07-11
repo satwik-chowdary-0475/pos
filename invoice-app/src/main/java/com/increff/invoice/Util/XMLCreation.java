@@ -24,16 +24,13 @@ import org.w3c.dom.Element;
 @Log4j
 public class XMLCreation {
     public static void createOrderXml(OrderForm orderForm) throws ApiException {
-        log.warn("CAME HERE!!");
         try{
-            log.warn("orderForm time " + orderForm.getInvoicedTime());
             Instant instant = Instant.ofEpochSecond(Long.parseLong(String.valueOf(orderForm.getInvoicedTime())));
             ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
 
             // Format ZonedDateTime to desired string format
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z");
             String formattedDate = zonedDateTime.format(formatter);
-
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.newDocument();

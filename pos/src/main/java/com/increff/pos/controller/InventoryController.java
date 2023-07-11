@@ -19,16 +19,17 @@ public class InventoryController {
 
     @Autowired
     private InventoryDto inventoryDto;
+
     @ApiOperation(value = "Inserts product to inventory")
     @PostMapping(path = "")
-    public void add(@RequestBody InventoryForm inventoryForm) throws ApiException {
-        inventoryDto.insert(inventoryForm);
+    public void insertProductInInventory(@RequestBody InventoryForm inventoryForm) throws ApiException {
+        inventoryDto.insertProductInInventory(inventoryForm);
     }
 
     @ApiOperation(value = "Updates a product in inventory")
     @PutMapping(path = "/{id}")
-    public void update(@PathVariable int id,@RequestBody InventoryForm inventoryForm) throws ApiException{
-        inventoryDto.update(id,inventoryForm);
+    public void updateProductInInventory(@PathVariable int id, @RequestBody InventoryForm inventoryForm) throws ApiException {
+        inventoryDto.updateProductInInventory(id, inventoryForm);
     }
 
     @ApiOperation(value = "Get list of all products in inventory")
@@ -43,6 +44,10 @@ public class InventoryController {
         return inventoryDto.getProduct(id);
     }
 
-
+    @ApiOperation(value = "Add list of inventory")
+    @PostMapping(path = "/bulk")
+    public void insertInventoryList(@RequestBody List<InventoryForm> inventoryFormList) throws ApiException {
+        inventoryDto.insertInventoryList(inventoryFormList);
+    }
 
 }

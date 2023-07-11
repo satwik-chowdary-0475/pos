@@ -3,26 +3,88 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head th:replace="snippets.html :: name_head"></head>
-
+<link rel="stylesheet" th:href="@{/static/css/app.css}">
 <body>
 <nav th:replace="snippets.html :: name_app_navbar"></nav>
 
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <div class="jumbotron">
-                <h1 class="display-4">You are logged in!</h1>
-                <hr class="my-4">
-                <!--                <p>This application teaches you Spring concepts and creating awesome web applications</p>-->
-                <a class="btn btn-primary btn-lg" th:href="@{/ui/brand}" role="button">Brand Page</a>
-                <a class="btn btn-primary btn-lg" th:href="@{/ui/product}" role="button">Product Page</a>
-                <a class="btn btn-primary btn-lg" th:href="@{/ui/inventory}" role="button">Inventory Page</a>
-                <a class="btn btn-primary btn-lg" th:href="@{/ui/order}" role="button">Order Page</a>
-                <a class="btn btn-primary btn-lg" th:href="@{/ui/report}" role="button">Reports Page</a>
+
+<div class="container my-3">
+    <div class="card-group">
+        <div class="card mb-4">
+            <img class="card-img-top" th:src="@{/static/images/brand.jpg}" alt="Brand image">
+            <div class="card-body">
+                <h5 class="card-title">Brand</h5>
+                <p class="card-text">Visit the Brand Master to effortlessly add and manage brand details with
+                    ease.</p>
+            </div>
+            <div class="card-footer">
+                <a th:href="@{/ui/brands}" style="text-decoration: none;">
+                    <button class="card-button">Go there
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <img class="card-img-top" th:src="@{/static/images/product.jpg}" alt="Product image">
+            <div class="card-body">
+                <h5 class="card-title">Product</h5>
+                <p class="card-text">Visit the Product Master to effortlessly add and manage product details with
+                    ease.</p>
+
+            </div>
+            <div class="card-footer">
+                <a th:href="@{/ui/products}" style="text-decoration: none;">
+                    <button class="card-button">Go there
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <img class="card-img-top" th:src="@{/static/images/inventory.jpg}" alt="Inventory image">
+            <div class="card-body">
+                <h5 class="card-title">Inventory</h5>
+                <p class="card-text">Visit the Inventory Master to effortlessly add and manage inventory details with
+                    ease.</p>
+
+            </div>
+            <div class="card-footer">
+                <a th:href="@{/ui/inventory}" style="text-decoration: none;">
+                    <button class="card-button">Go there
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <img class="card-img-top" th:src="@{/static/images/order.jpg}" alt="Order image">
+            <div class="card-body">
+                <h5 class="card-title">Order</h5>
+                <p class="card-text">Effortlessly create orders and boost sales with ease.</p>
+
+            </div>
+            <div class="card-footer">
+                <a th:href="@{/ui/orders}" style="text-decoration: none;">
+                    <button class="card-button">Go there
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="card mb-4" th:if="${info.getRole()!='operator'}">
+            <img class="card-img-top" th:src="@{/static/images/report.jpg}" alt="Report image">
+            <div class="card-body">
+                <h5 class="card-title">Report</h5>
+                <p class="card-text">Access comprehensive report details and gain valuable insights at your fingertips.</p>
+
+            </div>
+            <div class="card-footer">
+                <a th:href="@{/ui/reports}" style="text-decoration: none;">
+                    <button class="card-button">Go there
+                    </button>
+                </a>
             </div>
         </div>
     </div>
-</div> <!--Container-->
+</div>
+
 
 <footer th:replace="snippets.html :: name_footer"></footer>
 

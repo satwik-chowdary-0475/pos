@@ -6,8 +6,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class BrandForm {
-
     private String brand;
     private String category;
-
 }

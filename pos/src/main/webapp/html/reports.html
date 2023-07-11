@@ -1,33 +1,117 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="snippets.html :: name_head"></head>
+<link rel="stylesheet" th:href="@{/static/css/app.css}">
 <body>
 <nav th:replace="snippets.html :: name_app_navbar"></nav>
 <div class="container">
     <h3>Reports</h3>
-    <div class="row">
-        <div class="col-12">
-            <div class="jumbotron">
-                <h1 class="display-4">Reports Page</h1>
-                <hr class="my-4">
-                <a class="btn btn-primary btn-lg" th:href="@{/ui/report/brand}" role="button">Brand Report</a>
-                <a class="btn btn-primary btn-lg" th:href="@{/ui/report/day-on-day}" role="button">Day on Day Sales Report</a>
-                <a class="btn btn-primary btn-lg" th:href="@{/ui/report/inventory}" role="button">Inventory Report</a>
-                <a class="btn btn-primary btn-lg" th:href="@{/ui/report/sales}" role="button">Sales Report</a>
 
+</div>
+<div class="container my-3">
+    <div class="card-group">
+        <div class="card mb-4">
+            <img class="card-img-top" th:src="@{/static/images/brand-report.jpg}" alt="Product image">
+            <div class="card-body">
+                <h5 class="card-title">Brand Report</h5>
+
+            </div>
+            <div class="card-footer" th:if="${info.getRole()!='operator'}">
+                <button class="card-button" id = "download-brand-report">Download Report
+                </button>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <img class="card-img-top" th:src="@{/static/images/inventory-report.jpg}" alt="Inventory image">
+            <div class="card-body">
+                <h5 class="card-title">Inventory Report</h5>
+            </div>
+            <div class="card-footer" th:if="${info.getRole()!='operator'}">
+                <button class="card-button" id="download-inventory-report">Download Report
+                </button>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <img class="card-img-top" th:src="@{/static/images/day-on-day.jpg}" alt="day on day image">
+            <div class="card-body">
+                <h5 class="card-title">Daily Sales Report</h5>
+            </div>
+            <div class="card-footer" th:if="${info.getRole()!='operator'}">
+                <button class="card-button" id="download-daily-sales-report">Download Report
+                </button>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <img class="card-img-top" th:src="@{/static/images/sales.jpg}" alt="Report image">
+            <div class="card-body">
+                <h5 class="card-title">Sales Report</h5>
+            </div>
+            <div class="card-footer" th:if="${info.getRole()!='operator'}">
+                <button class="card-button" id="show-filters">
+                    Show filters
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Blank Row -->
-    <div class="row">
-        &nbsp;
+    <div class="modal" tabindex="-1" role="dialog" id="sales-report-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sales Report</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form" id="sales-form">
+                        <div class="form-group my-3">
+                            <label for="inputStartTime" class="col-sm-4 col-form-label">Start Time</label>
+                            <div class="col-sm-10">
+                                <input type="date" class="form-control" name="startTime" id="inputStartTime" placeholder="Enter Start Date" required>
+                            </div>
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="inputEndTime" class="col-sm-4 col-form-label">End Time</label>
+                            <div class="col-sm-10">
+                                <input type="date" class="form-control" name="endTime" id="inputEndTime" placeholder="Enter End Date" required>
+                            </div>
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="inputBrand" class="col-sm-4 col-form-label">Brand</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="brand" id="inputBrand" placeholder="Enter Brand" required>
+                            </div>
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="inputCategory" class="col-sm-4 col-form-label">Category</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="category" id="inputCategory" placeholder="Enter Category" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                        <div class="d-flex gap-2 align-items-center">
+                            <i class="fas fa-times" style="font-size: 15px; margin-right: 10px;"></i>
+                            Cancel
+                        </div>
+                    </button>
+                    <button type="button" class="btn btn-info" id="download-sales-report">
+                        <div class="d-flex gap-2 align-items-center">
+                            <i class="fas fa-file-alt" style="font-size: 15px; margin-right: 10px;"></i>
+                            Download Report
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
-
-
 </div>
+
 <footer th:replace="snippets.html :: name_footer"></footer>
-<script th:src="@{/static/order.js}"/></script>
+<script th:src="@{/static/report.js}"/></script>
 </body>
 </html>

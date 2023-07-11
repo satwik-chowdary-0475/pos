@@ -4,19 +4,15 @@ import com.increff.pos.dao.DailySalesReportDao;
 import com.increff.pos.dao.OrderDao;
 import com.increff.pos.dao.OrderItemDao;
 import com.increff.pos.pojo.DailySalesReportPojo;
-import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -38,9 +34,9 @@ public class DailySalesReportService {
         Date currentDay = Date.valueOf(currentDate);
         LocalDate previousDate = currentDate.minusDays(1);
         Date previousDay = Date.valueOf(previousDate);
-        List<OrderPojo> orderPojoList = orderDao.selectByDate(previousDay,currentDay);
+        List<OrderPojo> orderPojoList = orderDao.getOrderByDate(previousDay,currentDay);
         for(OrderPojo orderPojo:orderPojoList){
-            Object[] orderItemReport = orderItemDao.selectAllReport(orderPojo.getId());
+            Object[] orderItemReport = orderItemDao.getOrderItemsReport(orderPojo.getId());
             Double revenue = (Double) orderItemReport[1];
             Long invoicedItems = (Long) orderItemReport[0];
             totalInvoicedItems += invoicedItems.intValue();

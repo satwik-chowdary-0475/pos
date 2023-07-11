@@ -10,15 +10,14 @@ import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.*;
-import io.swagger.annotations.ApiOperation;
+import com.increff.pos.pojo.OrderStatus;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Log4j
 @Service
@@ -34,53 +33,52 @@ public class OrderDto {
     private ProductService productService;
 
     @Transactional(rollbackOn = ApiException.class)
-    public String insert(OrderForm orderForm) throws ApiException {
+    public String createOrder(OrderForm orderForm) throws ApiException {
         HelperDto.normalise(orderForm);
         OrderPojo orderPojo = HelperDto.convert(orderForm);
-        orderService.insert(orderPojo);
+        orderService.createOrder(orderPojo);
         return orderPojo.getOrderCode();
     }
 
     @Transactional
-    public List<OrderData>getAllOrders(){
-        List<OrderData>orderDataList = new ArrayList<OrderData>();
-        List<OrderPojo>orderPojoList = orderService.selectAll();
-        for(OrderPojo orderPojo:orderPojoList){
-            orderDataList.add(HelperDto.convert(orderPojo));
-        }
+    public List<OrderData> getAllOrders() {
+        List<OrderPojo> orderPojoList = orderService.getAllOrders();
+        List<OrderData> orderDataList = orderPojoList.stream()
+                .map(HelperDto::convert)
+                .collect(Collectors.toList());
         return orderDataList;
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void delete(String orderCode) throws ApiException{
-        Integer orderId = orderService.delete(orderCode);
-        List<OrderItemPojo>orderItemPojoList = orderItemService.selectAll(orderId);
-        for(OrderItemPojo orderItemPojo : orderItemPojoList){
-            InventoryPojo inventoryPojo = inventoryService.select(orderItemPojo.getProductId());
+    public void deleteOrder(String orderCode) throws ApiException {
+        Integer orderId = orderService.deleteOrder(orderCode);
+        List<OrderItemPojo> orderItemPojoList = orderItemService.getAllOrderItems(orderId);
+        for (OrderItemPojo orderItemPojo : orderItemPojoList) {
+            InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId());
             int updatedQuantity = inventoryPojo.getQuantity() + orderItemPojo.getQuantity();
-            inventoryService.update(inventoryPojo,updatedQuantity);
+            inventoryService.updateProductInInventory(inventoryPojo, updatedQuantity);
         }
-        orderItemService.deleteByOrder(orderId);
+        orderItemService.deleteOrderItemsByOrder(orderId);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void changeStatus(String orderCode) throws ApiException{
-        OrderPojo orderPojo = orderService.select(orderCode);
-        if(orderPojo.getStatus().equals("ACTIVE")){
+    public void changeOrderStatus(String orderCode) throws ApiException {
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
+        if (orderPojo.getStatus().equals(OrderStatus.CREATED)) {
             orderService.changeStatus(orderCode);
         }
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public OrderDetailsData getAllDetails(String orderCode) throws ApiException {
-        OrderPojo orderPojo = orderService.select(orderCode);
-        List<OrderItemPojo>orderItemPojoList = orderItemService.selectAll(orderPojo.getId());
-        List<OrderItemData>orderItemDataList = new ArrayList<OrderItemData>();
-        for(OrderItemPojo orderItemPojo: orderItemPojoList){
-            ProductPojo productPojo = productService.select(orderItemPojo.getProductId());
-            orderItemDataList.add(HelperDto.convert(orderItemPojo,productPojo.getBarcode(),productPojo.getName()));
+    public OrderDetailsData getAllOrderDetails(String orderCode) throws ApiException {
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
+        List<OrderItemPojo> orderItemPojoList = orderItemService.getAllOrderItems(orderPojo.getId());
+        List<OrderItemData> orderItemDataList = new ArrayList<OrderItemData>();
+        for (OrderItemPojo orderItemPojo : orderItemPojoList) {
+            ProductPojo productPojo = productService.getProductById(orderItemPojo.getProductId());
+            orderItemDataList.add(HelperDto.convert(orderItemPojo, productPojo.getBarcode(), productPojo.getName()));
         }
-        return HelperDto.convert(orderPojo,orderItemDataList);
+        return HelperDto.convert(orderPojo, orderItemDataList);
     }
 
 

@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(
-        name="inventory"
+        name = "inventory"
 )
 public class InventoryPojo extends AbstractPojo {
     @Id

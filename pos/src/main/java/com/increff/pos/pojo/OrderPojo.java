@@ -4,10 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 
-// ENUM STRING
 @Setter
 @Getter
 @Entity
@@ -21,6 +19,7 @@ public class OrderPojo extends AbstractPojo {
     @Column(name = "customer_name", nullable = false)
     private String customerName;
     @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
     private ZonedDateTime time;
 }

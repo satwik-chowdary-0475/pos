@@ -1,9 +1,8 @@
 package com.increff.pos.dto;
 
-import com.google.protobuf.Api;
 import com.increff.pos.Helper;
+import com.increff.pos.model.data.ErrorData;
 import com.increff.pos.model.data.InventoryData;
-import com.increff.pos.model.data.ProductData;
 import com.increff.pos.model.form.BrandForm;
 import com.increff.pos.model.form.InventoryForm;
 import com.increff.pos.model.form.ProductForm;
@@ -12,7 +11,6 @@ import com.increff.pos.service.ApiException;
 import com.increff.pos.service.InventoryService;
 import com.increff.pos.service.ProductService;
 import com.increff.pos.spring.AbstractUnitTest;
-import io.swagger.models.auth.In;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,9 +44,9 @@ public class InventoryDtoTest extends AbstractUnitTest {
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
         brandDto.insertBrand(brandForm);
         ProductForm productForm = Helper.createProductForm("barcode 1","brand 1","category 1","product 1",120.12);
-        productDto.insert(productForm);
+        productDto.insertProduct(productForm);
         ProductForm productForm1 = Helper.createProductForm("barcode 3","brand 1","category 1","product 3",120.12);
-        productDto.insert(productForm1);
+        productDto.insertProduct(productForm1);
 
     }
 
@@ -56,8 +54,8 @@ public class InventoryDtoTest extends AbstractUnitTest {
     @Test
     public void TestInsert() throws ApiException {
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1",100);
-        int id = inventoryDto.insert(inventoryForm);
-        InventoryPojo inventoryPojo = inventoryService.select(id);
+        int id = inventoryDto.insertProductInInventory(inventoryForm);
+        InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(id);
         assertEquals(inventoryPojo.getQuantity().intValue(),100);
         assertEquals(inventoryPojo.getId().intValue(),id);
     }
@@ -67,52 +65,52 @@ public class InventoryDtoTest extends AbstractUnitTest {
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 2",100);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Product with given barcode doesn't exist!!");
-        inventoryDto.insert(inventoryForm);
+        inventoryDto.insertProductInInventory(inventoryForm);
     }
 
     @Test
     public void TestInsertExistingItem() throws ApiException{
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1",100);
-        inventoryDto.insert(inventoryForm);
+        inventoryDto.insertProductInInventory(inventoryForm);
         InventoryForm newInventoryForm = Helper.createInventoryForm("barcode 1",200);
-        int id = inventoryDto.insert(newInventoryForm);
-        assertEquals(Optional.ofNullable(inventoryService.select(id).getQuantity()),Optional.ofNullable(300));
+        int id = inventoryDto.insertProductInInventory(newInventoryForm);
+        assertEquals(Optional.ofNullable(inventoryService.getProductInventoryByProductId(id).getQuantity()),Optional.ofNullable(300));
     }
 
     @Test
     public void TestUpdate() throws ApiException{
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1",100);
-        int id = inventoryDto.insert(inventoryForm);
+        int id = inventoryDto.insertProductInInventory(inventoryForm);
         InventoryForm updatedInventoryForm = Helper.createInventoryForm("barcode 1",200);
-        inventoryDto.update(id,updatedInventoryForm);
-        InventoryPojo inventoryPojo = inventoryService.select(id);
+        inventoryDto.updateProductInInventory(id,updatedInventoryForm);
+        InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(id);
         assertEquals(inventoryPojo.getQuantity().intValue(),200);
     }
 
     @Test
     public void TestUpdateNotExistsBarcode() throws ApiException{
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1",100);
-        int id = inventoryDto.insert(inventoryForm);
+        int id = inventoryDto.insertProductInInventory(inventoryForm);
         InventoryForm updatedInventoryForm = Helper.createInventoryForm("barcode 2",200);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Product id and barcode doesn't belong to same product!!");
-        inventoryDto.update(id,updatedInventoryForm);
+        inventoryDto.updateProductInInventory(id,updatedInventoryForm);
     }
 
     @Test
     public void TestUpdateNotExistsProduct() throws ApiException{
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1",100);
-        int id = inventoryDto.insert(inventoryForm);
+        int id = inventoryDto.insertProductInInventory(inventoryForm);
         InventoryForm updatedInventoryForm = Helper.createInventoryForm("barcode 3",200);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Product with id not present in inventory!!");
-        inventoryDto.update(id+1,updatedInventoryForm);
+        inventoryDto.updateProductInInventory(id+1,updatedInventoryForm);
     }
 
     @Test
     public void TestGetProduct() throws ApiException{
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1",100);
-        int id = inventoryDto.insert(inventoryForm);
+        int id = inventoryDto.insertProductInInventory(inventoryForm);
         InventoryData actualInventoryData = Helper.createInventoryData(id,"product 1","barcode 1",100);
         InventoryData expectedInventoryData = inventoryDto.getProduct(id);
         assertEquals(actualInventoryData.getProductName(),expectedInventoryData.getProductName());
@@ -124,7 +122,7 @@ public class InventoryDtoTest extends AbstractUnitTest {
     @Test
     public void TestGetProductNotExistsInventory() throws ApiException{
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1",100);
-        int id = inventoryDto.insert(inventoryForm);
+        int id = inventoryDto.insertProductInInventory(inventoryForm);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Product with id not present in inventory!!");
         InventoryData expectedInventoryData = inventoryDto.getProduct(id+1);
@@ -134,13 +132,41 @@ public class InventoryDtoTest extends AbstractUnitTest {
     public void TestGetAllProducts() throws ApiException{
         List<InventoryData> actualInventoryData = new ArrayList<InventoryData>();
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1",100);
-        int id = inventoryDto.insert(inventoryForm);
+        int id = inventoryDto.insertProductInInventory(inventoryForm);
         actualInventoryData.add(Helper.createInventoryData(id,"product 1","barcode 1",100));
         InventoryForm inventoryForm1 = Helper.createInventoryForm("barcode 3",100);
-        int id1 = inventoryDto.insert(inventoryForm1);
+        int id1 = inventoryDto.insertProductInInventory(inventoryForm1);
         actualInventoryData.add(Helper.createInventoryData(id1,"product 3","barcode 3",100));
         List<InventoryData>expectedInventoryData = inventoryDto.getAllProducts();
         assertEquals(actualInventoryData.size(),expectedInventoryData.size());
+    }
+
+    @Test
+    public void TestBulkInsert() throws ApiException{
+        List<InventoryForm>inventoryFormList = new ArrayList<>();
+        inventoryFormList.add(Helper.createInventoryForm("barcode 1",20));
+        inventoryFormList.add(Helper.createInventoryForm("barcode 3",20));
+        inventoryFormList.add(Helper.createInventoryForm("barcode 3",20));
+        inventoryDto.insertInventoryList(inventoryFormList);
+        List<InventoryPojo> inventoryPojoList = inventoryService.getAllProductsInInventory();
+        assertEquals(inventoryPojoList.size(),2);
+    }
+
+    @Test
+    public void TestBulkInsertError() throws ApiException{
+        List<InventoryForm>inventoryFormList = new ArrayList<>();
+        inventoryFormList.add(Helper.createInventoryForm("barcode 5",20));
+        inventoryFormList.add(Helper.createInventoryForm("barcode 5",20));
+        inventoryFormList.add(Helper.createInventoryForm("barcode 3",20));
+        try {
+            inventoryDto.insertInventoryList(inventoryFormList);
+        } catch (ApiException e) {
+            List<ErrorData>actualErrorDataList = new ArrayList<>();
+            actualErrorDataList.add(Helper.createErrorData(1,"Product with given barcode doesn't exist!!"));
+            actualErrorDataList.add(Helper.createErrorData(2,"Product with given barcode doesn't exist!!"));
+            assertEquals(actualErrorDataList.size(),e.getErrorDataList().size());
+        }
+
     }
 
 

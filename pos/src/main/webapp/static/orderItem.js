@@ -11,9 +11,10 @@ function getOrderCode(){
 }
 
 function handleButtons(status){
-    if(status!= 'ACTIVE'){
-        $("#print-invoice").text('Prince Invoice');
+    if(status!= 'CREATED'){
+        $("#print-invoice").html('<div class="d-flex gap-2 align-items-center"><i class="fas fa-print" style="font-size: 15px; margin-right: 10px;"></i>Print Invoice</div>');
         $('#orderItem-form').hide();
+        $('#add-modal-orderItem').hide();
     }
 
 }
@@ -24,11 +25,11 @@ function getPdfUrl(){
 }
 function getOrderUrl(){
    var baseUrl = $("meta[name=baseUrl]").attr("content")
-   return baseUrl + "/api/order";
+   return baseUrl + "/api/orders";
 }
 function getOrderItemUrl(){
     var baseUrl = $("meta[name=baseUrl]").attr("content")
-    return baseUrl + "/api/order/"+orderId+"/order-items";
+    return baseUrl + "/api/orders/"+orderId+"/order-items";
 }
 
 function getOrderDetails(){
@@ -79,6 +80,7 @@ function displayEditOrderItem(id){
 }
 
 function displayOrderItem(data){
+    $("#orderItem-edit-form").removeClass("was-validated");
 	$("#orderItem-edit-form input[name=quantity]").val(data.quantity);
 	$("#orderItem-edit-form input[name=barcode]").val(data.barcode);
 	$("#orderItem-edit-form input[name=sellingPrice]").val(data.sellingPrice);
@@ -105,9 +107,9 @@ function displayOrderItemList(data){
     	for(var i in data){
     		var e = data[i];
     		var editHtml = '<button class="btn btn-primary" onclick="displayEditOrderItem('+e.id+')" ';
-    		editHtml += ((orderStatus != 'ACTIVE')?'disabled':'') + '>Edit</button>';
+    		editHtml += ((orderStatus != 'CREATED')?'disabled':'') + '><div class="d-flex gap-2 align-items-center"><i class="fas fa-pen" style="font-size: 15px; margin-right: 10px;"></i>Edit</div></button>';
     		var deleteHtml ='<button class="btn btn-danger" onclick="deleteOrderItem('+e.id+')" ';
-    		deleteHtml += ((orderStatus != 'ACTIVE')?'disabled':'') + '>Delete</button>';
+    		deleteHtml += ((orderStatus != 'CREATED')?'disabled':'') + '><div class="d-flex gap-2 align-items-center"><i class="fas fa-trash" style="font-size: 15px; margin-right: 10px;"></i>Delete</div></button>';
     		var buttonHtml = editHtml + '&nbsp' + deleteHtml;
     		i = parseInt(i)+1;
     		var row = '<tr>'
@@ -120,37 +122,48 @@ function displayOrderItemList(data){
     		+ '<td>' + buttonHtml + '</td>'
     		+ '</tr>';
             $tbody.append(row);
-            totalPrice+=(parseInt(e.sellingPrice)*parseInt(e.quantity));
+            totalPrice+=(parseFloat(e.sellingPrice)*parseInt(e.quantity));
     	}
 
-    	var $totalPriceElement = $('#total-price');
-    	$totalPriceElement.empty();
-    	$totalPriceElement.append('<h5 class="fw-bold mb-0">Total : </h5>');
-    	$totalPriceElement.append('<h5 class="fw-bold mb-0">'+totalPrice+'</h5>');
+        var totalPriceRow = '<tr class="no-border">'
+    	+'<td colspan="5" style="font-weight:600">Total Price</td>'
+    	+'<td colspan="1" style="font-weight: 600">'+totalPrice+'</td>'
+    	+'<td>'
+    	+'</tr>';
+        $tbody.append(totalPriceRow);
 
 }
 
 function addOrderItem(event){
 	//Set the values to update
 	var $form = $("#orderItem-form");
-	var json = toJson($form);
-	var url = getOrderItemUrl();
-	$.ajax({
-	   url: url,
-	   type: 'POST',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
+	if($form[0].checkValidity()){
+	    var json = toJson($form);
+        var url = getOrderItemUrl();
+        $.ajax({
+           url: url,
+           type: 'POST',
+           data: json,
+           headers: {
+            'Content-Type': 'application/json'
+           },
+           success: function(response) {
+                getOrderItemList();
+                $("#orderItem-form input[name=barcode]").val('');
+                $("#orderItem-form input[name=quantity]").val('');
+                $("#orderItem-form input[name=sellingPrice]").val('');
+                toggleOrderItemModal();
        },
-	   success: function(response) {
-	   		getOrderItemList();
-	   		$("#orderItem-form input[name=barcode]").val('');
-            $("#orderItem-form input[name=quantity]").val('');
-            $("#orderItem-form input[name=sellingPrice]").val('');
+           error:handleAjaxError
+        });
+        $form.addClass("was-validated");
+	}
+	else{
+	    event.preventDefault();
+        event.stopPropagation();
+        $form.addClass('was-validated');
+	}
 
-   },
-	   error:handleAjaxError
-	});
 
 	return false;
 }
@@ -160,21 +173,28 @@ function updateOrderItem(event){
 	var url = getOrderItemUrl() + "/" + id;
 
 	var $form = $("#orderItem-edit-form");
-	var json = toJson($form);
-	$.ajax({
-	   url: url,
-	   type: 'PUT',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
-       },
-	   success: function(response) {
-	   		getOrderItemList();
-	   		$('#edit-orderItem-modal').modal('toggle');
-	   },
-	   error: handleAjaxError
-	});
-
+	if($form[0].checkValidity()){
+	    var json = toJson($form);
+        $.ajax({
+        	   url: url,
+        	   type: 'PUT',
+        	   data: json,
+        	   headers: {
+               	'Content-Type': 'application/json'
+               },
+        	   success: function(response) {
+        	   		getOrderItemList();
+        	   		$('#edit-orderItem-modal').modal('toggle');
+        	   },
+        	   error: handleAjaxError
+        	});
+        $form.addClass('was-validated');
+	}
+	else{
+	    event.preventDefault();
+        event.stopPropagation();
+        $form.addClass('was-validated');
+	}
 	return false;
 }
 
@@ -227,7 +247,7 @@ function printInvoice(){
 }
 
 function setOrderStatus(data, callback) {
-  if(data.status == "ACTIVE"){
+  if(data.status == "CREATED"){
     var url = getOrderUrl()+'/'+ getOrderCode()
     $.ajax({
         url:url,
@@ -255,11 +275,23 @@ function displayOrderDetails(data){
     $details.append(orderTime);
 }
 
+function toggleOrderItemModal(){
+    $('#add-orderItem-modal').modal('toggle');
+}
+
+function resetOrderItemModal(){
+    $("#orderItem-form input[name=quantity]").val('');
+    $("#orderItem-form input[name=barcode]").val('');
+    $("#orderItem-form input[name=sellingPrice]").val('');
+    $("#orderItem-form").removeClass("was-validated");
+    toggleOrderItemModal();
+}
+
 function init(){
+    $('#add-modal-orderItem').click(resetOrderItemModal);
     $("#add-orderItem").click(addOrderItem);
     $("#update-orderItem").click(updateOrderItem);
     $("#print-invoice").click(printInvoice);
 }
 $(document).ready(init);
 $(document).ready(getOrderDetails);
-//$(document).ready(getOrderItemList());

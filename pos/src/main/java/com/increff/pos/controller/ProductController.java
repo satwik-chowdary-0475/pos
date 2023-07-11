@@ -14,7 +14,7 @@ import java.util.List;
 
 @Api
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/api/products")
 public class ProductController {
 
     @Autowired
@@ -22,14 +22,14 @@ public class ProductController {
 
     @ApiOperation(value = "Inserts a product")
     @PostMapping(path = "")
-    public void add(@RequestBody ProductForm form) throws ApiException {
-        productDto.insert(form);
+    public void insertProduct(@RequestBody ProductForm form) throws ApiException {
+        productDto.insertProduct(form);
     }
 
     @ApiOperation(value = "Update a product")
     @PutMapping(path = "/{id}")
-    public void update(@PathVariable int id,@RequestBody ProductForm form) throws ApiException{
-        productDto.update(id,form);
+    public void updateProduct(@PathVariable int id, @RequestBody ProductForm form) throws ApiException {
+        productDto.updateProduct(id, form);
 
     }
 
@@ -43,6 +43,12 @@ public class ProductController {
     @GetMapping(path = "/{id}")
     public ProductData getProduct(@PathVariable int id) throws ApiException {
         return productDto.getProduct(id);
+    }
+
+    @ApiOperation(value = "Add list of products")
+    @PostMapping(path = "/bulk")
+    public void insertProductList(@RequestBody List<ProductForm> productFormList) throws ApiException {
+        productDto.insertProductList(productFormList);
     }
 
 

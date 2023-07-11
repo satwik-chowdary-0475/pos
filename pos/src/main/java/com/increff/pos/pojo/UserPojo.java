@@ -12,12 +12,12 @@ import javax.persistence.*;
 @Table(
         name = "users"
 )
-public class UserPojo {
-
+public class UserPojo extends AbstractPojo{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String email;
     private String password;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 }

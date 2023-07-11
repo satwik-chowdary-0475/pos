@@ -14,6 +14,6 @@ public class OrderDetailsData {
     private ZonedDateTime invoicedAt;
     private ZonedDateTime createdAt;
     private String customerName;
-    private OrderItemData[] orderItems;
+    private OrderItemData[] orderItems;//List<OrderItemData>
 
 }

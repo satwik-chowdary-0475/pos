@@ -1,5 +1,6 @@
 package com.increff.pos.controller;
 
+import com.increff.pos.pojo.UserRole;
 import com.increff.pos.util.AdminUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,9 +29,8 @@ public abstract class AbstractUiController {
     protected ModelAndView mav(String page) {
         // Get current user
         UserPrincipal principal = SecurityUtil.getPrincipal();
-
         infoData.setEmail(principal == null ? "" : principal.getEmail());
-        infoData.setRole(getRole());
+        infoData.setRole(getRole().toLowerCase());
 
         // Set info
         ModelAndView mav = new ModelAndView(page);
@@ -44,7 +44,7 @@ public abstract class AbstractUiController {
         UserPrincipal principal = SecurityUtil.getPrincipal();
 
         infoData.setEmail(principal == null ? "" : principal.getEmail());
-        infoData.setRole(getRole());
+        infoData.setRole(getRole().toLowerCase());
 
         // Set info
         ModelAndView mav = new ModelAndView(page);
@@ -54,17 +54,18 @@ public abstract class AbstractUiController {
         return mav;
     }
 
-    private String getRole(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();;
-        if(Objects.isNull(authentication) || Objects.isNull(authentication.getAuthorities())) return "";
+    private String getRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ;
+        if (Objects.isNull(authentication) || Objects.isNull(authentication.getAuthorities())) return "";
         List<String> authorities = authentication.getAuthorities()
                 .stream()
                 .map(Object::toString)
                 .collect(Collectors.toList());
-        if(authorities.contains("supervisor")){
-            return "supervisor";
+        if (authorities.contains(UserRole.SUPERVISOR.name())) {
+            return UserRole.SUPERVISOR.name();
         }
-        return "operator";
+        return UserRole.OPERATOR.name();
     }
 
 }

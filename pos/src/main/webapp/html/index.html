@@ -3,24 +3,31 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head th:replace="snippets.html :: name_head"></head>
-
+<link rel="stylesheet" th:href="@{/static/css/index.css}">
 <body>
 <nav th:replace="snippets.html :: name_site_navbar"></nav>
 
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <div class="jumbotron">
-                <h1 class="display-4">Welcome to Pos Application!</h1>
-                <p class="lead">Point Of Sale!!</p>
-                <hr class="my-4">
-                <a class="btn btn-primary btn-lg" th:href="@{/site/login}" role="button">Login!!</a>
+<!-- Start Landing Page -->
+<div class="landing-page">
+
+    <div class="content">
+        <div class="container">
+            <div class="info">
+                <h1>Point of Sale Application</h1>
+                <p>Elevate your business with our feature-rich Point of Sale solution, designed to boost sales and enhance customer experience.</p>
+                <a th:href="@{/site/login}" style="text-decoration: none;">
+                    <button>Login</button>
+                </a>
+            </div>
+            <div class="image">
+                <img th:src="@{/static/images/landing.jpg}">
             </div>
         </div>
     </div>
-</div> <!--Container-->
+</div>
+<!-- End Landing Page -->
 
-
+<footer th:replace="snippets.html :: name_footer"></footer>
 
 </body>
 

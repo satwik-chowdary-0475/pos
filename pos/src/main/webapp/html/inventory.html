@@ -1,30 +1,78 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="snippets.html :: name_head"></head>
+<link rel="stylesheet" th:href="@{/static/css/app.css}">
 <body>
 <nav th:replace="snippets.html :: name_app_navbar"></nav>
 <div class="container">
   <h3>Inventory</h3>
   <div class="row">
+    <br>
+  </div>
+  <div class="row">
     <div class="col-12" th:if="${info.getRole()!='operator'}">
-      <form class="form-inline" style="text-align:justify;" id="inventory-form">
-        <div class="form-group my-3">
-          <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" name="barcode" id="inputBarcode" placeholder="Enter Barcode" required>
+      <div class="modal" tabindex="-1" role="dialog" id="add-inventory-modal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Add Inventory Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form class="form needs-validation" style="text-align:justify;" id="inventory-form" novalidate>
+                <div class="form-group my-3">
+                  <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="barcode" id="inputBarcode" placeholder="Enter Barcode" required>
+                    <div class="invalid-feedback">Please enter a barcode.</div>
+                  </div>
+                </div>
+                <div class="form-group my-3">
+                  <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control" name="quantity" id="inputQuantity" placeholder="Enter Quantity" required min="1" step="1">
+                    <div class="invalid-feedback">Please enter a valid quantity.</div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                <div class="d-flex gap-2 align-items-center">
+                  <i class="fas fa-times" style="font-size: 15px; margin-right: 10px;"></i>
+                  Cancel
+                </div>
+              </button>
+              <button type="button" class="btn btn-success" id="add-inventory">
+                <div class="d-flex gap-2 align-items-center">
+                  <i class="fas fa-plus-circle" style="font-size: 15px; margin-right: 10px;"></i>
+                  Add
+                </div>
+              </button>
+            </div>
           </div>
         </div>
-        <div class="form-group my-3">
-          <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
-          <div class="col-sm-10">
-            <input type="number" class="form-control" name="quantity" id="inputQuantity" placeholder="Enter Quantity" required>
-          </div>
-        </div>
+      </div>
 
-        <button type="button" class="btn btn-success" id="add-inventory">Add Inventory</button>
+
+      <div class="d-flex">
+        <button type="button" class="btn btn-success" id="add-modal-inventory">
+          <div class="d-flex gap-2 align-items-center">
+            <i class="fas fa-plus-circle" style="font-size: 15px; margin-right: 10px;"></i>
+            Add
+          </div>
+        </button>
         &nbsp;
-        <button type="button" class="btn btn-info" id="upload-data">Upload Inventory</button>
-      </form>
+        <button type="button" class="btn btn-info" id="upload-data">
+          <div class="d-flex gap-2 align-items-center">
+            <i class="fas fa-upload" style="font-size: 15px; margin-right: 10px;"></i>
+            Upload
+          </div>
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -72,15 +120,30 @@
             <label class="custom-file-label" for="inventoryFile" id="inventoryFileName">Choose file</label>
           </div>
           <br>
-          Rows: <span id="rowCount">0</span>,
-          Processed: <span id="processCount">0</span>,
+<!--          Rows: <span id="rowCount">0</span>,-->
+<!--          Processed: <span id="processCount">0</span>,-->
           Errors: <span id="errorCount">0</span>
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" id="process-data">Upload</button>
-          <button type="button" class="btn btn-warning" id="download-errors">Download Errors</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">
+            <div class="d-flex gap-2 align-items-center">
+              <i class="fas fa-times" style="font-size: 15px; margin-right: 10px;"></i>
+              Cancel
+            </div>
+          </button>
+          <button type="button" class="btn btn-primary" id="process-data" disabled>
+            <div class="d-flex gap-2 align-items-center">
+              <i class="fas fa-upload" style="font-size: 15px; margin-right: 10px;"></i>
+              Upload
+            </div>
+          </button>
+          <button type="button" class="btn btn-warning" id="download-errors" disabled>
+            <div class="d-flex gap-2 align-items-center">
+              <i class="fas fa-download" style="font-size: 15px; margin-right: 10px;"></i>
+              Download Errors
+            </div>
+          </button>
         </div>
       </div>
     </div>
@@ -97,7 +160,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <form class="form-inline" id="inventory-edit-form">
+          <form class="form needs-validation" id="inventory-edit-form" novalidate>
             <div class="form-group my-3">
               <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
 
@@ -109,15 +172,26 @@
               <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
 
               <div class="col-sm-10">
-                <input type="number" class="form-control" name="quantity" placeholder="Enter Quantity" min="0">
+                <input type="number" class="form-control" name="quantity" placeholder="Enter Quantity" min="0" step="1">
+                <div class="invalid-feedback">Please enter a valid quantity.</div>
               </div>
             </div>
             <input type="hidden" name="id">
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" id="update-inventory">Update</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">
+            <div class="d-flex gap-2 align-items-center">
+              <i class="fas fa-times" style="font-size: 15px; margin-right: 10px;"></i>
+              Cancel
+            </div>
+          </button>
+          <button type="button" class="btn btn-primary" id="update-inventory">
+            <div class="d-flex gap-2 align-items-center">
+              <i class="fas fa-pen-square" style="font-size: 15px; margin-right: 10px;"></i>
+              Update
+            </div>
+          </button>
         </div>
       </div>
     </div>

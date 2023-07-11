@@ -11,13 +11,11 @@ import com.increff.pos.service.ApiException;
 import com.increff.pos.service.OrderService;
 import com.increff.pos.spring.AbstractUnitTest;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -53,17 +51,17 @@ public class ReportDtoTest extends AbstractUnitTest {
         BrandForm brandForm2 = Helper.createBrandForm("brand 1","category 2");
         brandDto.insertBrand(brandForm2);
         ProductForm productForm = Helper.createProductForm("barcode 1", "brand 1", "category 1", "product 1", 120.12);
-        productDto.insert(productForm);
+        productDto.insertProduct(productForm);
         ProductForm productForm1 = Helper.createProductForm("barcode 2", "brand 1", "category 1", "product 2", 120.12);
-        productDto.insert(productForm1);
+        productDto.insertProduct(productForm1);
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1", 200);
-        inventoryDto.insert(inventoryForm);
+        inventoryDto.insertProductInInventory(inventoryForm);
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1", 10, 120.12);
-        orderItemDto.insert(orderPojo.getId(), orderItemForm);
-        orderDto.changeStatus(orderCode);
+        orderItemDto.insertOrderItem(orderPojo.getId(), orderItemForm);
+        orderDto.changeOrderStatus(orderCode);
     }
 
     @Test
@@ -83,7 +81,6 @@ public class ReportDtoTest extends AbstractUnitTest {
 //    @Ignore
     @Test
     public void TestDailyReport() throws ApiException{
-
         reportDto.insertDailyReport();
         List<DailySalesData>dailySalesData = reportDto.getDailySalesReport();
         assertEquals(dailySalesData.size(),1);

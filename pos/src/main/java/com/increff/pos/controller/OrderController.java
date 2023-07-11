@@ -17,7 +17,7 @@ import java.util.List;
 
 @Api
 @RestController
-@RequestMapping(path = "/api/order")
+@RequestMapping(path = "/api/orders")
 public class OrderController {
 
     @Autowired
@@ -27,14 +27,14 @@ public class OrderController {
 
     @ApiOperation(value = "Creates an order")
     @PostMapping(path = "")
-    public String insert(@RequestBody OrderForm orderForm) throws ApiException {
-        return orderDto.insert(orderForm);
+    public String createOrder(@RequestBody OrderForm orderForm) throws ApiException {
+        return orderDto.createOrder(orderForm);
     }
 
     @ApiOperation(value = "Get details of an order")
     @GetMapping(path = "/{orderCode}")
-    public OrderDetailsData getOrder(@PathVariable String orderCode) throws ApiException {
-        return orderDto.getAllDetails(orderCode);
+    public OrderDetailsData getAllOrderDetails(@PathVariable String orderCode) throws ApiException {
+        return orderDto.getAllOrderDetails(orderCode);
     }
 
     @ApiOperation(value = "Get list of all orders")
@@ -45,21 +45,21 @@ public class OrderController {
 
     @ApiOperation(value = "Delete an order")
     @DeleteMapping(path = "/{orderCode}")
-    public void delete(@PathVariable String orderCode) throws ApiException {
-        orderDto.delete(orderCode);
+    public void deleteOrder(@PathVariable String orderCode) throws ApiException {
+        orderDto.deleteOrder(orderCode);
     }
 
     @ApiOperation(value = "Changes the order status to invoiced!!")
     @PutMapping(path = "/{orderCode}")
-    public void changeStatus(@PathVariable String orderCode) throws ApiException {
-        orderDto.changeStatus(orderCode);
+    public void changeOrderStatus(@PathVariable String orderCode) throws ApiException {
+        orderDto.changeOrderStatus(orderCode);
     }
 
 
     @ApiOperation(value = "Add order item to the order")
     @PostMapping(path = "/{orderId}/order-items")
     public void insertOrderItem(@PathVariable int orderId, @RequestBody OrderItemForm orderItemForm) throws ApiException {
-        orderItemDto.insert(orderId, orderItemForm);
+        orderItemDto.insertOrderItem(orderId, orderItemForm);
     }
 
     @ApiOperation(value = "Get all order items of a order")
@@ -77,13 +77,13 @@ public class OrderController {
     @ApiOperation(value = "Update an order-item")
     @PutMapping(path = "/{orderId}/order-items/{id}")
     public void updateOrderItem(@PathVariable int orderId, @PathVariable int id, @RequestBody OrderItemForm orderItemForm) throws ApiException {
-        orderItemDto.update(orderId, id, orderItemForm);
+        orderItemDto.updateOrderItem(orderId, id, orderItemForm);
     }
 
     @ApiOperation(value = "Delete an order-item")
     @DeleteMapping(path = "/{orderId}/order-items/{id}")
     public void deleteOrderItem(@PathVariable int orderId, @PathVariable int id) throws ApiException {
-        orderItemDto.delete(orderId, id);
+        orderItemDto.deleteOrderItem(orderId, id);
     }
 
 

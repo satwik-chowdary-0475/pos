@@ -22,6 +22,7 @@ public class UserService {
         }
         userDao.insert(userPojo);
     }
+
     @Transactional(rollbackOn = ApiException.class)
     public UserPojo select(String email){
         return userDao.select(email);

@@ -6,8 +6,8 @@ import java.util.Random;
 import java.util.UUID;
 
 public class RandomStrGenerator {
-    public static String usingUUID(int length){
-        try{
+    public static String usingUUID(int length) {
+        try {
             SecureRandom secureRandom = SecureRandom.getInstance("NativePRNG");
             String allChars = UUID.randomUUID().toString().replace("-", "");
             char[] otp = new char[length];
@@ -16,8 +16,7 @@ public class RandomStrGenerator {
                         allChars.charAt(secureRandom.nextInt(allChars.length()));
             }
             return String.valueOf(otp);
-        }
-        catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }

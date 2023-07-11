@@ -1,9 +1,6 @@
 package com.increff.pos.dao;
 
 import com.increff.pos.pojo.InventoryPojo;
-import com.increff.pos.service.BrandService;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
@@ -12,7 +9,7 @@ import java.util.List;
 
 
 @Repository
-public class InventoryDao extends AbstractDao{
+public class InventoryDao extends AbstractDao {
     private static String SELECT_BY_ID = "select p from InventoryPojo p where id=:id";
     private static String SELECT_ALL = "select p from InventoryPojo p";
 
@@ -20,19 +17,19 @@ public class InventoryDao extends AbstractDao{
     private EntityManager em;
 
     @Transactional
-    public void insert(InventoryPojo inventoryPojo){
+    public void insertProductInInventory(InventoryPojo inventoryPojo) {
         em.persist(inventoryPojo);
-        InventoryPojo inventoryPojo1 = select(inventoryPojo.getId());
-
     }
+
     @Transactional
-    public InventoryPojo select(int id){
+    public InventoryPojo getProductInventoryById(int id) {
         TypedQuery<InventoryPojo> query = getQuery(SELECT_BY_ID, InventoryPojo.class);
         query.setParameter("id", id);
         return getSingle(query);
     }
+
     @Transactional
-    public List<InventoryPojo> selectAll(){
+    public List<InventoryPojo> getAllProductsInInventory() {
         TypedQuery<InventoryPojo> query = getQuery(SELECT_ALL, InventoryPojo.class);
         return query.getResultList();
     }

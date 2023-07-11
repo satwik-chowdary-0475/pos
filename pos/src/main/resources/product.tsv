@@ -1,4 +1,4 @@
-name	barcode	brandCategory	mrp
-dairymilk	barcode1	1	100.23
-dabur honey	barcode2	2	342
-air jordan	barcode3	3	10000
+name	barcode	brand	category	mrp
+dairymilk	barcode1	a	a	100.23
+dabur honey	barcode2	a	a	342
+air jordan	barcode3	b	c	10000

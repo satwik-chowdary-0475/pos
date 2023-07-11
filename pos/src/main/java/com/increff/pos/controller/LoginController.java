@@ -1,17 +1,16 @@
 package com.increff.pos.controller;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increff.pos.util.AdminUtil;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,11 +22,10 @@ import com.increff.pos.pojo.UserPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.service.UserService;
 import com.increff.pos.util.SecurityUtil;
-import com.increff.pos.util.UserPrincipal;
-
 import io.swagger.annotations.ApiOperation;
 
 @Controller
+@Log4j
 public class LoginController {
 
     @Autowired
@@ -46,7 +44,7 @@ public class LoginController {
         }
 
         // Create authentication object
-        Authentication authentication = convert(userPojo);
+        Authentication authentication = AdminUtil.convert(userPojo);
         // Create new session
         HttpSession session = req.getSession(true);
         // Attach Spring SecurityContext to this new session
@@ -61,24 +59,8 @@ public class LoginController {
     @RequestMapping(path = "/session/logout", method = RequestMethod.GET)
     public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().invalidate();
-        return new ModelAndView("redirect:/site/logout");
+        return new ModelAndView("redirect:/");
     }
 
-    private static Authentication convert(UserPojo userPojo) {
-        // Create principal
-        UserPrincipal principal = new UserPrincipal();
-        principal.setEmail(userPojo.getEmail());
-        principal.setId(userPojo.getId());
-
-        // Create Authorities
-        ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority(userPojo.getRole()));
-        // you can add more roles if required
-
-        // Create Authentication
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, null,
-                authorities);
-        return token;
-    }
 
 }

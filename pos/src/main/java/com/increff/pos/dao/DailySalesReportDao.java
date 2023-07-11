@@ -14,11 +14,11 @@ import java.util.List;
 
 @Repository
 @Log4j
-public class DailySalesReportDao extends AbstractDao{
+public class DailySalesReportDao extends AbstractDao {
     private static String SELECT_ALL = "select p from DailySalesReportPojo p";
 
     @Transactional
-    public void insert(DailySalesReportPojo dailySalesReportPojo){
+    public void insert(DailySalesReportPojo dailySalesReportPojo) {
         em().persist(dailySalesReportPojo);
     }
 

@@ -2,9 +2,8 @@ package com.increff.pos.service;
 
 import com.increff.pos.dao.OrderDao;
 import com.increff.pos.pojo.OrderPojo;
+import com.increff.pos.pojo.OrderStatus;
 import lombok.extern.log4j.Log4j;
-import org.apache.xpath.operations.Or;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,33 +20,22 @@ public class OrderService {
     private OrderDao orderDao;
 
     @Transactional
-    public void insert(OrderPojo orderPojo){
-        orderDao.insert(orderPojo);
+    public void createOrder(OrderPojo orderPojo){
+        orderDao.createOrder(orderPojo);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void update(String orderCode,OrderPojo newOrderPojo) throws ApiException {
-        OrderPojo existingOrderPojo = orderDao.select(orderCode);
-        if(existingOrderPojo == null){
-            throw new ApiException("Cannot update order as order doesn't exist!!");
-        }
-        existingOrderPojo.setTime(newOrderPojo.getTime());
-        existingOrderPojo.setStatus(newOrderPojo.getStatus());
-        existingOrderPojo.setCustomerName(newOrderPojo.getCustomerName());
-    }
-
-    @Transactional(rollbackOn = ApiException.class)
-    public OrderPojo select(String orderCode) throws ApiException{
-        OrderPojo orderPojo = orderDao.select(orderCode);
-        if(orderPojo == null){
+    public OrderPojo getOrderByOrderCode(String orderCode) throws ApiException{
+        OrderPojo orderPojo = orderDao.getOrderByOrderCode(orderCode);
+        if(Objects.isNull(orderPojo)){
             throw new ApiException("Order doesn't exist!!");
         }
         return orderPojo;
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public OrderPojo select(int orderId) throws ApiException{
-        OrderPojo orderPojo = orderDao.select(orderId);
+    public OrderPojo getOrderByOrderId(int orderId) throws ApiException{
+        OrderPojo orderPojo = orderDao.getOrderByOrderId(orderId);
         if(orderPojo == null){
             throw new ApiException("Order doesn't exist!!");
         }
@@ -55,23 +43,23 @@ public class OrderService {
     }
 
     @Transactional
-    public List<OrderPojo> selectAll(){
-        return orderDao.selectAll();
+    public List<OrderPojo> getAllOrders(){
+        return orderDao.getAllOrders();
     }
 
     @Transactional
-    public List<OrderPojo> selectByDate(Date startTime,Date endTime){
-        return orderDao.selectByDate(startTime,endTime);
+    public List<OrderPojo> getOrderByDate(Date startTime, Date endTime){
+        return orderDao.getOrderByDate(startTime,endTime);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public Integer delete(String orderCode) throws ApiException {
-        OrderPojo orderPojo = orderDao.select(orderCode);
+    public Integer deleteOrder(String orderCode) throws ApiException {
+        OrderPojo orderPojo = orderDao.getOrderByOrderCode(orderCode);
         if(Objects.nonNull(orderPojo)){
-            if(orderPojo.getStatus().equals("INVOICED")){
+            if(orderPojo.getStatus().equals(OrderStatus.INVOICED)){
                 throw new ApiException("Cannot delete order!!");
             }
-            orderDao.delete(orderCode);
+            orderDao.deleteOrder(orderCode);
             return orderPojo.getId();
         }
         return null;
@@ -79,10 +67,10 @@ public class OrderService {
 
     @Transactional(rollbackOn = ApiException.class)
     public void changeStatus(String orderCode) throws ApiException {
-        OrderPojo orderPojo = orderDao.select(orderCode);
-        if(orderPojo == null){
+        OrderPojo orderPojo = orderDao.getOrderByOrderCode(orderCode);
+        if(Objects.isNull(orderPojo)){
             throw new ApiException("Order doesn't exist!!");
         }
-        orderPojo.setStatus("INVOICED");
+        orderPojo.setStatus(OrderStatus.INVOICED);
     }
 }

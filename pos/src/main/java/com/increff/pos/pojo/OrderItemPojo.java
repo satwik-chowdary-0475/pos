@@ -11,13 +11,13 @@ import javax.persistence.*;
 @Table(
         name = "order_items"
 )
-public class OrderItemPojo extends AbstractPojo{
+public class OrderItemPojo extends AbstractPojo {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    @Column(name = "order_id" , nullable = false)
+    @Column(name = "order_id", nullable = false)
     private Integer orderId;
-    @Column(name = "product_id" , nullable = false)
+    @Column(name = "product_id", nullable = false)
     private Integer productId;
     @Column(nullable = false)
     private Integer quantity;

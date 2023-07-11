@@ -34,7 +34,7 @@ public class PdfDto {
             // Setup input and output files
             File xmlfile = new File(baseDir, "orderItemForm.xml");
             File xsltfile = new File(baseDir, "orderItemForm.xsl");
-            File pdffile = new File(outDir, "Invoiced.pdf");
+            File pdffile = new File(outDir, "Invoiced1.pdf");
 
 
             // configure fopFactory as desired

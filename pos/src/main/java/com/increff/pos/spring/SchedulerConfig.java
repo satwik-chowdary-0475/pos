@@ -15,7 +15,7 @@ public class SchedulerConfig {
     @Autowired
     private DailySalesReportService dailySalesReportService;
 
-    @Scheduled(cron = "0 0 * ? * *")
+    @Scheduled(cron = "0 0 12 * * ?")
     public void createDailySalesReport() {
         dailySalesReportService.insert();
     }

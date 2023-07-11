@@ -12,15 +12,15 @@ import javax.persistence.*;
 @Table(
         name = "product",
         uniqueConstraints =
-        @UniqueConstraint(columnNames={"barcode"})
+        @UniqueConstraint(columnNames = {"barcode"})
 )
-public class ProductPojo extends AbstractPojo{
+public class ProductPojo extends AbstractPojo {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @Column(nullable = false)
     private String barcode;
-    @Column(name = "brand_category_id" , nullable = false)
+    @Column(name = "brand_category_id", nullable = false)
     private Integer brandCategory;
     @Column(nullable = false)
     private String name;

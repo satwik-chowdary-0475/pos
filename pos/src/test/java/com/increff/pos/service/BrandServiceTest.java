@@ -21,8 +21,8 @@ public class BrandServiceTest extends AbstractUnitTest {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setBrand("brand 1");
         brandPojo.setCategory("category 1");
-        brandService.insert(brandPojo);
-        BrandPojo checkBrandPojo = brandDao.select(brandPojo.getId());
+        brandService.insertBrand(brandPojo);
+        BrandPojo checkBrandPojo = brandDao.getBrandById(brandPojo.getId());
         assertEquals("brand 1",checkBrandPojo.getBrand());
         assertEquals("category 1",checkBrandPojo.getCategory());
     }

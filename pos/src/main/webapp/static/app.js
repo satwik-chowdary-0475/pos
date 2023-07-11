@@ -2,7 +2,6 @@
 //HELPER METHOD
 function toJson($form){
     var serialized = $form.serializeArray();
-//    console.log(serialized);
     var s = '';
     var data = {};
     for(s in serialized){
@@ -11,7 +10,6 @@ function toJson($form){
     var json = JSON.stringify(data);
     return json;
 }
-
 
 function showError(message){
     $.notify(message,{className:"error",autoHideDelay: 20000});
@@ -34,27 +32,29 @@ function readFileData(file, callback){
 	Papa.parse(file, config);
 }
 
+function writeFileData(arr, format) {
+  var config = {
+    quoteChar: '"',
+    escapeChar: '"',
+    delimiter: format == 'csv' ? "," : "\t"
+  };
 
-function writeFileData(arr){
-	var config = {
-		quoteChar: '',
-		escapeChar: '',
-		delimiter: "\t"
-	};
+  var data = Papa.unparse(arr, config);
+  var mimeType = format === 'csv' ? 'text/csv' : 'text/tsv';
+  var fileExtension = format === 'csv' ? 'csv' : 'tsv';
+  var blob = new Blob([data], { type: mimeType + ';charset=utf-8;' });
+  var fileUrl = null;
 
-	var data = Papa.unparse(arr, config);
-    var blob = new Blob([data], {type: 'text/tsv;charset=utf-8;'});
-    var fileUrl =  null;
+  if (navigator.msSaveBlob) {
+    fileUrl = navigator.msSaveBlob(blob, 'download.' + fileExtension);
+  } else {
+    fileUrl = window.URL.createObjectURL(blob);
+  }
 
-    if (navigator.msSaveBlob) {
-        fileUrl = navigator.msSaveBlob(blob, 'download.tsv');
-    } else {
-        fileUrl = window.URL.createObjectURL(blob);
-    }
-    var tempLink = document.createElement('a');
-    tempLink.href = fileUrl;
-    tempLink.setAttribute('download', 'download.tsv');
-    tempLink.click();
+  var tempLink = document.createElement('a');
+  tempLink.href = fileUrl;
+  tempLink.setAttribute('download', 'download.' + fileExtension);
+  tempLink.click();
 }
 
 function convertBase64ToPDF(base64String,name) {

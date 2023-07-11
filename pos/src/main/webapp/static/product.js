@@ -1,7 +1,10 @@
 var userRole;
+var fileData = [];
+var errorData = [];
+var processCount = 0;
 function getProductUrl(){
     var baseUrl = $("meta[name=baseUrl]").attr("content")
-    return baseUrl + "/api/product";
+    return baseUrl + "/api/products";
 }
 
 function getRoleOfUser(callback){
@@ -9,52 +12,70 @@ function getRoleOfUser(callback){
     callback(userRole);
 }
 
-function handleForm(role){
-    if(role == 'operator'){
-        $("#product-form").hide();
-    }
-}
-
 function addProduct(event){
     var $form = $("#product-form");
-    	var json = toJson($form);
-    	var url = getProductUrl();
-    	$.ajax({
-    	   url: url,
-    	   type: 'POST',
-    	   data: json,
-    	   headers: {
-           	'Content-Type': 'application/json'
+    if($form[0].checkValidity()){
+        var json = toJson($form);
+        var url = getProductUrl();
+        $.ajax({
+           url: url,
+           type: 'POST',
+           data: json,
+           headers: {
+            'Content-Type': 'application/json'
            },
-    	   success: function(response) {
+           success: function(response) {
                 getProductList();
                 $("#product-form input[name=name]").val('');
                 $("#product-form input[name=barcode]").val('');
                 $("#product-form input[name=brand]").val('');
                 $("#product-form input[name=category]").val('');
                 $("#product-form input[name=mrp]").val('');
+                toggleProductModal();
                 $.notify("Added product successfully","success");
 
        },
-    	   error: function(response){
-    	        if(response.status == 403){
-    	            $.notify("You cannot add product",{className:"error",autoHideDelay: 20000})
-    	        }
-    	        handleAjaxError(response);
-    	   }
-    	});
-
+           error: function(response){
+                if(response.status == 403){
+                    $.notify("You cannot add product",{className:"error",autoHideDelay: 20000})
+                }
+                handleAjaxError(response);
+           }
+        });
+        $form.addClass('was-validated');
+    }
+    else{
+        event.preventDefault();
+        event.stopPropagation();
+        $form.addClass('was-validated');
+    }
     	return false;
 }
 
 function processData(){
+    resetErrorCount();
 	var file = $('#productFile')[0].files[0];
 	readFileData(file, readFileDataCallback);
 }
 
+function validateFileData(fileData){
+    const columnHeaders = Object.keys(fileData[0]);
+    const expectedHeaders = ["name","barcode","brand", "category","mrp"];
+    const headersMatched = expectedHeaders.every(header => columnHeaders.includes(header));
+    return (headersMatched && columnHeaders.length === expectedHeaders.length);
+}
+
 function readFileDataCallback(results){
 	fileData = results.data;
-	uploadRows();
+    if(validateFileData(fileData)){
+        resetErrorCount();
+        uploadRows();
+    }
+    else{
+        resetErrorCount();
+        updateUploadDialog();
+        $.notify("Uploaded file not supported. Columns not matched",{className:"error",autoHideDelay: 20000});
+    }
 }
 
 function getProductList(){
@@ -82,6 +103,7 @@ function displayEditProduct(id){
 }
 
 function displayProduct(data){
+    $("#product-edit-form").removeClass("was-validated");
 	$("#product-edit-form input[name=name]").val(data.name);
 	$("#product-edit-form input[name=brand]").val(data.brand);
 	$("#product-edit-form input[name=category]").val(data.category);
@@ -97,7 +119,8 @@ function displayProductList(data){
 	for(var i in data){
 		var e = data[i];
 		var buttonHtml = '<button class="btn btn-primary" onclick="displayEditProduct('+e.id+')" ';
-		buttonHtml += ((userRole == 'operator')?'disabled ':' ') +'>Edit</button>';
+		buttonHtml += ((userRole == 'operator')?'disabled ':' ') +'>';
+		buttonHtml += '<div class="d-flex gap-2 align-items-center"><i class="fas fa-pen" style="font-size: 15px; margin-right: 10px;"></i>Edit</div></button>';
         i = parseInt(i)+1;
 		var row = '<tr>'
 		+ '<td>' + i + '</td>'
@@ -112,51 +135,54 @@ function displayProductList(data){
 	}
 }
 
+function processErrorData(errorDataList){
+ if(errorDataList!=null && errorDataList.length > 0){
+         $.notify("Failed to upload the data",{className:"error",autoHideDelay: 20000});
+         $.each(errorDataList, function(index) {
+           var row = {"row":errorDataList[index].row,"error":errorDataList[index].errorMessage};
+           errorData.push(row);
+         })
+     }
+ updateUploadDialog();
+}
+
 function uploadRows(){
 //Update progress
-	updateUploadDialog();
-	//If everything processed then return
-	if(processCount==fileData.length){
-	    getProductList();
-		return;
-	}
-
-	//Process next row
-	var row = fileData[processCount];
-	processCount++;
-
-	var json = JSON.stringify(row);
-
-	var url = getProductUrl();
-
-	//Make ajax call
-	$.ajax({
-	   url: url,
-	   type: 'POST',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
-       },
-	   success: function(response) {
-	   		uploadRows();
-	   },
-	   error: function(response){
-	   		row.error=response.responseText
-	   		errorData.push(row);
-	   		uploadRows();
-	   		if(response.status == 403){
-	   		    $.notify("You cannot upload the data",{className:"error",autoHideDelay: 20000});
-	   		}
-	   }
-	});
+//	updateUploadDialog();
 
 
+	var json = JSON.stringify(fileData);
+
+	var url = getProductUrl()+'/bulk';
+
+    if(json.length <= 5000 && json.length > 0){
+        //Make ajax call
+        $.ajax({
+        	   url: url,
+        	   type: 'POST',
+        	   data: json,
+        	   headers: {
+               	'Content-Type': 'application/json'
+               },
+        	   success: function(response) {
+        	        getProductList();
+        	        $.notify("Uploaded data successfully","success");
+        	        updateUploadDialog();
+        	   },
+        	   error: function(response){
+        	   		if(response.status == 403){
+        	   		    $.notify("You cannot upload the data",{className:"error",autoHideDelay: 20000});
+        	   		}
+                    processErrorData(JSON.parse(response.responseText).errorDataList);
+        	   }
+        	});
+    }
+    else{
+        (json.length>5000)?($.notify("Cannot upload more than 5000 rows",{className:"error",autoHideDelay: 20000})):($.notify("Empty file uploaded",{className:"error",autoHideDelay:20000}));
+    }
 }
 
 
-var fileData = [];
-var errorData = [];
-var processCount = 0;
 
 
 function displayUploadData(){
@@ -164,6 +190,9 @@ function displayUploadData(){
 	$('#upload-product-modal').modal('toggle');
 }
 
+function resetErrorCount(){
+    errorData = [];
+}
 function resetUploadDialog(){
 	//Reset file name
 	var $file = $('#productFile');
@@ -172,21 +201,24 @@ function resetUploadDialog(){
 	//Reset various counts
 	processCount = 0;
 	fileData = [];
-	errorData = [];
+    resetErrorCount();
+    $('#download-errors').prop('disabled',true);
+    $('#process-data').prop('disabled',true);
 	//Update counts
 	updateUploadDialog();
 }
 
 function updateUploadDialog(){
-	$('#rowCount').html("" + fileData.length);
-	$('#processCount').html("" + processCount);
 	$('#errorCount').html("" + errorData.length);
+	$('#download-errors').prop('disabled',(errorData.length == 0));
 }
 
 function updateFileName(){
 	var $file = $('#productFile');
 	var fileName = $file.val();
 	$('#productFileName').html(fileName);
+	console.log("file name  ", fileName);
+	$("#process-data").prop('disabled',(fileName.length == 0));
 }
 function downloadErrors(){
 	writeFileData(errorData);
@@ -194,38 +226,57 @@ function downloadErrors(){
 
 function updateProduct(event){
 
-	//Get the ID
-	var id = $("#product-edit-form input[name=id]").val();
-	var url = getProductUrl() + "/" + id;
-
-	//Set the values to update
-	var $form = $("#product-edit-form");
-	var json = toJson($form);
-	$.ajax({
-	   url: url,
-	   type: 'PUT',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
-       },
-	   success: function(response) {
-	   		getProductList();
-	   		$('#edit-product-modal').modal('toggle');
-	   		$.notify("Product updated successfully","success")
-	   },
-	   error: function(response){
-	        if(response.status == 403){
-                $.notify("You cannot upload the data",{className:"error",autoHideDelay: 20000});
-            }
-	        handleAjaxError(response);
-	   }
-	});
-
+    var $form = $("#product-edit-form");
+    if($form[0].checkValidity()){
+        var id = $("#product-edit-form input[name=id]").val();
+        	var url = getProductUrl() + "/" + id;
+        	//Set the values to update
+        	var json = toJson($form);
+        	$.ajax({
+        	   url: url,
+        	   type: 'PUT',
+        	   data: json,
+        	   headers: {
+               	'Content-Type': 'application/json'
+               },
+        	   success: function(response) {
+        	   		getProductList();
+        	   		$('#edit-product-modal').modal('toggle');
+        	   		$.notify("Product updated successfully","success")
+        	   },
+        	   error: function(response){
+        	        if(response.status == 403){
+                        $.notify("You cannot update the data",{className:"error",autoHideDelay: 20000});
+                    }
+        	        handleAjaxError(response);
+        	   }
+        	});
+        	$form.addClass("was-validated");
+    }
+    else{
+        event.preventDefault();
+        event.stopPropagation();
+        $form.addClass('was-validated');
+    }
 	return false;
 }
 
+function toggleProductModal(){
+    $('#add-product-modal').modal('toggle');
+}
+
+function resetProductModal(){
+    $("#product-form input[name=name]").val('');
+    $("#product-form input[name=brand]").val('');
+    $("#product-form input[name=category]").val('');
+    $("#product-form input[name=mrp]").val('');
+    $("#product-form input[name=barcode]").val('');
+    $("#product-form").removeClass("was-validated");
+    toggleProductModal();
+}
 
 function init(){
+    $('#add-modal-product').click(resetProductModal);
     $('#add-product').click(addProduct);
     $('#update-product').click(updateProduct);
     $('#upload-data').click(displayUploadData);

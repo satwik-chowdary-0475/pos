@@ -15,7 +15,7 @@ import java.time.ZonedDateTime;
 @Table(
         name = "daily_sales"
 )
-public class DailySalesReportPojo extends AbstractPojo{
+public class DailySalesReportPojo extends AbstractPojo {
     @Id
     private ZonedDateTime time;
     @Column(name = "invoiced_orders_count", nullable = false)

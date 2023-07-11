@@ -2,6 +2,7 @@ package com.increff.pos.dto;
 
 import com.increff.pos.dto.helper.HelperDto;
 import com.increff.pos.model.data.BrandData;
+import com.increff.pos.model.data.ErrorData;
 import com.increff.pos.model.form.BrandForm;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.service.ApiException;
@@ -10,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class BrandDto {
@@ -22,32 +25,49 @@ public class BrandDto {
     public int insertBrand(BrandForm brandForm) throws ApiException {
         HelperDto.normalise(brandForm);
         BrandPojo brandPojo = HelperDto.convert(brandForm);
-        return brandService.insert(brandPojo);
+        return brandService.insertBrand(brandPojo);
+    }
+
+    //TODO:for loops or streams??
+    @Transactional(rollbackOn = ApiException.class)
+    public void insertBrandList(List<BrandForm> brandFormList) throws ApiException {
+        List<ErrorData> errorDataList = IntStream.range(0, brandFormList.size())
+                .mapToObj(row -> {
+                    BrandForm brandForm = brandFormList.get(row);
+                    try {
+                        insertBrand(brandForm);
+                        return null;
+                    } catch (ApiException e) {
+                        return HelperDto.convert(row + 1, e.getMessage());
+                    }
+                }).filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        if (!errorDataList.isEmpty()) {
+            throw new ApiException(errorDataList);
+        }
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void updateBrand(int id, BrandForm brandForm) throws ApiException{
+    public void updateBrand(int id, BrandForm brandForm) throws ApiException {
         HelperDto.normalise(brandForm);
         BrandPojo brandPojo = HelperDto.convert(brandForm);
-        brandService.update(id,brandPojo);
+        brandService.updateBrand(id, brandPojo);
     }
 
-    @Transactional
-    public List<BrandData> getAllBrand(){
-        List<BrandPojo> brandPojoList = brandService.selectAll();
-        List<BrandData> brandDataList = new ArrayList<BrandData>();
-        for(BrandPojo brandPojo : brandPojoList){
-            brandDataList.add(HelperDto.convert(brandPojo));
-        }
-        return brandDataList;
-    }
-
-    @Transactional
-    public BrandData getBrand(int id) throws ApiException{
-        BrandPojo brandPojo = brandService.select(id);
+    @Transactional(rollbackOn = ApiException.class)
+    public BrandData getBrandData(int id) throws ApiException {
+        BrandPojo brandPojo = brandService.getBrandById(id);
         return HelperDto.convert(brandPojo);
     }
 
+    @Transactional
+    public List<BrandData> getAllBrandDataList() {
+        List<BrandPojo> brandPojoList = brandService.getAllBrands();
+        List<BrandData> brandDataList = brandPojoList.stream()
+                .map(HelperDto::convert)
+                .collect(Collectors.toList());
+        return brandDataList;
+    }
 
 
 }

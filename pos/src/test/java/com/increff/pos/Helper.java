@@ -5,9 +5,17 @@ import com.increff.pos.model.form.*;
 import com.increff.pos.pojo.OrderPojo;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Helper {
+
+    public static UserForm createUserForm(String email,String password){
+        UserForm userForm = new UserForm();
+        userForm.setEmail(email);
+        userForm.setPassword(password);
+        return userForm;
+    }
 
     public static BrandForm createBrandForm(String brand, String category){
         BrandForm brandForm = new BrandForm();
@@ -70,7 +78,7 @@ public class Helper {
     public static OrderData createOrderData(OrderPojo orderPojo) {
         OrderData orderData = new OrderData();
         orderData.setOrderCode(orderPojo.getOrderCode());
-        orderData.setStatus(orderPojo.getStatus());
+        orderData.setStatus(orderPojo.getStatus().name());
         orderData.setCreatedAt(orderPojo.getCreatedAt());
         orderData.setUpdatedAt(orderPojo.getUpdatedAt());
         orderData.setId(orderPojo.getId());
@@ -84,9 +92,9 @@ public class Helper {
         orderDetailsData.setOrderItems((OrderItemData[]) orderItemDataList.toArray(new OrderItemData[0]));
         orderDetailsData.setCreatedAt(orderPojo.getCreatedAt());
         orderDetailsData.setInvoicedAt(orderPojo.getUpdatedAt());
-        orderDetailsData.setStatus(orderPojo.getStatus());
+        orderDetailsData.setStatus(orderPojo.getStatus().name());
         orderDetailsData.setCustomerName(orderDetailsData.getCustomerName());
-        orderDetailsData.setStatus(orderPojo.getStatus());
+        orderDetailsData.setStatus(orderPojo.getStatus().name());
         return orderDetailsData;
     }
 
@@ -99,11 +107,19 @@ public class Helper {
     }
 
     public static SalesForm createSalesForm(String brand, String category, ZonedDateTime startTime,ZonedDateTime endTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         SalesForm salesForm = new SalesForm();
         salesForm.setBrand(brand);
         salesForm.setCategory(category);
-        salesForm.setStartTime(startTime);
-        salesForm.setEndTime(endTime);
+        salesForm.setStartTime(formatter.format(startTime));
+        salesForm.setEndTime(formatter.format(endTime));
         return salesForm;
+    }
+
+    public static ErrorData createErrorData(int row, String errorMessage) {
+        ErrorData errorData = new ErrorData();
+        errorData.setRow(row);
+        errorData.setErrorMessage(errorMessage);
+        return errorData;
     }
 }

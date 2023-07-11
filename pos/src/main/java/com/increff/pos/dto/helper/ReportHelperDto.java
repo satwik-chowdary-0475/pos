@@ -11,22 +11,32 @@ import com.increff.pos.service.ApiException;
 import com.increff.pos.util.StringUtil;
 import javafx.util.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class ReportHelperDto {
+
+    public static InventoryReportData convert(String brand, String category, Integer quantity) {
+        InventoryReportData inventoryReportData = new InventoryReportData();
+        inventoryReportData.setBrand(brand);
+        inventoryReportData.setCategory(category);
+        inventoryReportData.setQuantity(quantity);
+        return inventoryReportData;
+    }
+
     public static DailySalesData convert(DailySalesReportPojo dailySalesReportPojo) {
         DailySalesData dailySalesData = new DailySalesData();
         dailySalesData.setTotalRevenue(dailySalesReportPojo.getTotalRevenue());
         dailySalesData.setInvoicedItemsCount(dailySalesReportPojo.getInvoicedItemsCount());
         dailySalesData.setInvoicedOrdersCount(dailySalesReportPojo.getInvoicedOrdersCount());
-        dailySalesData.setDate(dailySalesReportPojo.getTime());
+        ZonedDateTime zonedDateTime = dailySalesReportPojo.getTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+        dailySalesData.setDate(zonedDateTime.format(formatter));
         return dailySalesData;
     }
 
-    public static SalesData convert(BrandPojo brandPojo,Integer quantity,Double totalRevenue){
+    public static SalesData convert(BrandPojo brandPojo, Integer quantity, Double totalRevenue) {
         SalesData salesData = new SalesData();
         salesData.setQuantity(quantity);
         salesData.setCategory(brandPojo.getCategory());
@@ -36,16 +46,24 @@ public class ReportHelperDto {
     }
 
     public static void validate(SalesForm salesForm) throws ApiException {
-        if(salesForm==null){
+        if (Objects.isNull(salesForm)) {
             throw new ApiException("Invalid sales form details");
         }
-        if(salesForm.getBrand() == null){
+        if(Objects.isNull(salesForm.getStartTime()) || salesForm.getStartTime().length() == 0){
+            throw new ApiException("Invalid start time");
+        }
+        if(Objects.isNull(salesForm.getEndTime()) || salesForm.getEndTime().length() == 0){
+            throw new ApiException("Invalid end time");
+        }
+        if(Objects.isNull(salesForm.getBrand()))
+        {
             throw new ApiException("Invalid brand name");
         }
-        if(salesForm.getCategory() == null){
+        if (Objects.isNull(salesForm.getCategory())) {
             throw new ApiException("Invalid category name");
         }
     }
+
     public static void normalise(SalesForm salesForm) throws ApiException {
         salesForm.setBrand(StringUtil.toLowerCase(salesForm.getBrand()));
         salesForm.setCategory(StringUtil.toLowerCase(salesForm.getCategory()));

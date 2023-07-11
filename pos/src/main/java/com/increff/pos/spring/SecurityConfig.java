@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static Logger logger = Logger.getLogger(SecurityConfig.class);
+
     //TODO: add UI authorities commented for now
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -25,24 +26,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/**")//
                 .antMatchers("/ui/**")//
                 .and().authorizeRequests()//
-                .antMatchers(HttpMethod.GET, "/api/brand/**", "/api/product/**", "/api/inventory/**")
-                .hasAnyAuthority("supervisor", "operator")
-                .antMatchers(HttpMethod.POST, "/api/brand/**", "/api/product/**", "/api/inventory/**", "/api/order/**")
-                .hasAuthority("supervisor")
-                .antMatchers(HttpMethod.PUT, "/api/brand/**", "/api/product/**", "/api/inventory/**", "/api/order/**")
-                .hasAuthority("supervisor")
-                .antMatchers(HttpMethod.DELETE, "/api/brand/**", "/api/product/**", "/api/inventory/**", "/api/order/**")
-                .hasAuthority("supervisor")
-                .antMatchers("/ui/supervisor/**").hasAuthority("supervisor")
-                .antMatchers("/ui/**").hasAnyAuthority("supervisor", "operator")
+                .antMatchers(HttpMethod.GET, "/api/brands/**", "/api/products/**", "/api/inventory/**")
+                .hasAnyAuthority("SUPERVISOR", "OPERATOR")
+                .antMatchers(HttpMethod.POST, "/api/brands/**", "/api/products/**", "/api/inventory/**")
+                .hasAuthority("SUPERVISOR")
+                .antMatchers(HttpMethod.PUT, "/api/brands/**", "/api/products/**", "/api/inventory/**")
+                .hasAuthority("SUPERVISOR")
+                .antMatchers(HttpMethod.DELETE, "/api/brands/**", "/api/products/**", "/api/inventory/**")
+                .hasAuthority("SUPERVISOR")
+                .antMatchers("/api/orders/**").hasAnyAuthority("SUPERVISOR","OPERATOR")
+                .antMatchers("/api/reports/**").hasAuthority("SUPERVISOR")
+                .antMatchers("/ui/reports/**").hasAuthority("SUPERVISOR")
+                .antMatchers("/ui/SUPERVISOR/**").hasAuthority("SUPERVISOR")
+                .antMatchers("/ui/**").hasAnyAuthority("SUPERVISOR", "OPERATOR")
                 // Ignore CSRF and CORS
-                .and().csrf().disable().cors().disable();
+                .and().csrf().disable().cors().disable().exceptionHandling().accessDeniedPage("/site/error-403");
         logger.info("Configuration complete");
     }
 
-    // For enabling swagger
+    // TODO: SHOULD MODIFY THIS, FOR NOW JUST TESTING PURPOSE
     @Override
     public void configure(WebSecurity web) throws Exception {
+//        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**","/api/**","/ui/**");
         web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**");
     }
 

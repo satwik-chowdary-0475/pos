@@ -49,22 +49,22 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
         brandDto.insertBrand(brandForm);
         ProductForm productForm = Helper.createProductForm("barcode 1","brand 1","category 1","product 1",120.12);
-        productDto.insert(productForm);
+        productDto.insertProduct(productForm);
         ProductForm productForm1 = Helper.createProductForm("barcode 2","brand 1","category 1","product 2",120.12);
-        productDto.insert(productForm1);
+        productDto.insertProduct(productForm1);
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1",200);
-        inventoryDto.insert(inventoryForm);
+        inventoryDto.insertProductInInventory(inventoryForm);
     }
 
     @Test
     public void TestInsert() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
-        OrderItemPojo orderItemPojo = orderItemService.select(orderPojo.getId(),id);
-        ProductPojo productPojo = productService.select("barcode 1");
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
+        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(orderPojo.getId(),id);
+        ProductPojo productPojo = productService.getProductByString("barcode 1");
         // Check insert order item
         assertEquals(orderItemPojo.getOrderId(),orderPojo.getId());
         assertEquals(orderItemPojo.getProductId(),productPojo.getId());
@@ -73,125 +73,125 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         assertEquals(orderItemPojo.getOrderId(),orderPojo.getId());
 
         // Check inventory
-        assertEquals(Optional.ofNullable(inventoryService.select(orderItemPojo.getProductId()).getQuantity()),Optional.ofNullable(190));
+        assertEquals(Optional.ofNullable(inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId()).getQuantity()),Optional.ofNullable(190));
     }
 
     @Test
     public void TestInsertNotExistsProduct() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 3",10,120.12);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Product with given barcode doesn't exist!!");
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
     }
 
     @Test
     public void TestInsertNotExistsInventory() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 2",10,120.12);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Product with id not present in inventory!!");
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
     }
 
     @Test
     public void TestInsertInsufficientInventory() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",300,120.12);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Insufficient inventory for the product!!!");
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
     }
 
     @Test
     public void TestInsertAddExistingItem() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
-        orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         OrderItemForm newOrderItemForm = Helper.createOrderItemForm("barcode 1",20,12.23);
-        int id = orderItemDto.insert(orderPojo.getId(),newOrderItemForm);
-        OrderItemPojo orderItemPojo = orderItemService.select(orderPojo.getId(),id);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),newOrderItemForm);
+        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(orderPojo.getId(),id);
 
         //Check insert
         assertEquals(orderItemPojo.getSellingPrice(),12.23);
         assertEquals(Optional.ofNullable(orderItemPojo.getQuantity()),Optional.ofNullable(30));
 
         // Check inventory reduce
-        assertEquals(Optional.ofNullable(inventoryService.select(orderItemPojo.getProductId()).getQuantity()),Optional.ofNullable(170));
+        assertEquals(Optional.ofNullable(inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId()).getQuantity()),Optional.ofNullable(170));
     }
 
     @Test
     public void TestInsertInvoiced() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
-        orderDto.changeStatus(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
+        orderDto.changeOrderStatus(orderCode);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Order cannot be modified!!");
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
-        orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
     }
 
     @Test
     public void TestDeleteOrderItem() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
-        OrderItemPojo orderItemPojo = orderItemService.select(orderPojo.getId(),id);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
+        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(orderPojo.getId(),id);
         assertNotNull(orderItemPojo);
-        assertEquals(Optional.ofNullable(inventoryService.select(orderItemPojo.getProductId()).getQuantity()), Optional.ofNullable(190));
+        assertEquals(Optional.ofNullable(inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId()).getQuantity()), Optional.ofNullable(190));
         //Check delete
-        orderItemDto.delete(orderPojo.getId(),id);
+        orderItemDto.deleteOrderItem(orderPojo.getId(),id);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Order item with given order id and id doesn't exist!!");
-        OrderItemPojo checkOrderItemPojo = orderItemService.select(orderPojo.getId(),id);
+        OrderItemPojo checkOrderItemPojo = orderItemService.getOrderItemById(orderPojo.getId(),id);
 
         // Check updated Inventory
-        assertEquals(Optional.ofNullable(inventoryService.select(orderItemPojo.getProductId()).getQuantity()), Optional.ofNullable(200));
+        assertEquals(Optional.ofNullable(inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId()).getQuantity()), Optional.ofNullable(200));
     }
 
     @Test
     public void TestDeleteNotExistsOrder() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Order doesn't exist!!");
-        orderItemDto.delete(orderPojo.getId()+1,id);
+        orderItemDto.deleteOrderItem(orderPojo.getId()+1,id);
 
     }
 
     @Test
     public void TestDeleteNotExistsOrderItem() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Order item with given order id and id doesn't exist!!");
-        orderItemDto.delete(orderPojo.getId(),id+1);
+        orderItemDto.deleteOrderItem(orderPojo.getId(),id+1);
     }
 
     @Test
     public void TestGetOrderItem() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         OrderItemData orderItemData = orderItemDto.getOrderItem(orderPojo.getId(),id);
         assertEquals(orderItemData.getOrderId(),orderPojo.getId());
         assertEquals(Optional.ofNullable(orderItemData.getQuantity()),Optional.ofNullable(10));
@@ -204,10 +204,10 @@ public class OrderItemDtoTest extends AbstractUnitTest {
     @Test
     public void TestGetOrderItemNotExistsOrder() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Order doesn't exist!!");
         orderItemDto.getOrderItem(orderPojo.getId()+1,id);
@@ -216,10 +216,10 @@ public class OrderItemDtoTest extends AbstractUnitTest {
     @Test
     public void TestGetOrderItemNotExists() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Order item with given order id and id doesn't exist!!");
         orderItemDto.getOrderItem(orderPojo.getId(),id+1);
@@ -228,14 +228,14 @@ public class OrderItemDtoTest extends AbstractUnitTest {
     @Test
     public void TestUpdate() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         OrderItemForm updatedOrderItemForm = Helper.createOrderItemForm("barcode 1",20,100.23);
-        orderItemDto.update(orderPojo.getId(),id,updatedOrderItemForm);
-        OrderItemPojo orderItemPojo = orderItemService.select(orderPojo.getId(),id);
-        ProductPojo productPojo = productService.select("barcode 1");
+        orderItemDto.updateOrderItem(orderPojo.getId(),id,updatedOrderItemForm);
+        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(orderPojo.getId(),id);
+        ProductPojo productPojo = productService.getProductByString("barcode 1");
 
         //Check for order item update
         assertEquals(orderItemPojo.getProductId(),productPojo.getId());
@@ -244,60 +244,60 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         assertEquals(orderItemPojo.getSellingPrice(),100.23);
 
         //Check for inventory change
-        InventoryPojo inventoryPojo = inventoryService.select(productPojo.getId());
+        InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(productPojo.getId());
         assertEquals(Optional.ofNullable(inventoryPojo.getQuantity()),Optional.ofNullable(180));
     }
 
     @Test
     public void TestUpdateNotExistProduct() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Product with given barcode doesn't exist!!");
         OrderItemForm updatedOrderItemForm = Helper.createOrderItemForm("barcode 3",20,100.23);
-        orderItemDto.update(orderPojo.getId(),id,updatedOrderItemForm);
+        orderItemDto.updateOrderItem(orderPojo.getId(),id,updatedOrderItemForm);
     }
 
     @Test
     public void TestUpdateNotExistOrder() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Order doesn't exist!!");
         OrderItemForm updatedOrderItemForm = Helper.createOrderItemForm("barcode 1",20,100.23);
-        orderItemDto.update(orderPojo.getId()+1,id,updatedOrderItemForm);
+        orderItemDto.updateOrderItem(orderPojo.getId()+1,id,updatedOrderItemForm);
     }
 
     @Test
     public void TestUpdateNotExistInventory() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Insufficient inventory for the product!!!");
         OrderItemForm updatedOrderItemForm = Helper.createOrderItemForm("barcode 1",220,100.23);
-        orderItemDto.update(orderPojo.getId(),id,updatedOrderItemForm);
+        orderItemDto.updateOrderItem(orderPojo.getId(),id,updatedOrderItemForm);
     }
 
     @Test
     public void TestUpdateNotExistOrderItem() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.insert(orderForm);
-        OrderPojo orderPojo = orderService.select(orderCode);
+        String orderCode = orderDto.createOrder(orderForm);
+        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
-        int id = orderItemDto.insert(orderPojo.getId(),orderItemForm);
+        int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Order item with given order id and id doesn't exist!!");
         OrderItemForm updatedOrderItemForm = Helper.createOrderItemForm("barcode 1",20,100.23);
-        orderItemDto.update(orderPojo.getId(),id+1,updatedOrderItemForm);
+        orderItemDto.updateOrderItem(orderPojo.getId(),id+1,updatedOrderItemForm);
     }
 
 

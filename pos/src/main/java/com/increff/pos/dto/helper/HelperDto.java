@@ -1,14 +1,12 @@
 package com.increff.pos.dto.helper;
 
+import com.increff.pos.pojo.OrderStatus;
+import com.increff.pos.pojo.UserRole;
 import com.increff.pos.model.data.*;
 import com.increff.pos.model.form.*;
 import com.increff.pos.pojo.*;
 import com.increff.pos.service.ApiException;
-import com.increff.pos.util.AdminUtil;
-import com.increff.pos.util.RandomStrGenerator;
-import com.increff.pos.util.RoundUtil;
-import com.increff.pos.util.StringUtil;
-import lombok.Value;
+import com.increff.pos.util.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -116,15 +114,12 @@ public class HelperDto {
         if (Objects.isNull(userForm.getPassword()) || userForm.getPassword().length() == 0) {
             throw new ApiException("Invalid Password");
         }
-        if (Objects.isNull(userForm.getRole()) || userForm.getRole().length() == 0) {
-            throw new ApiException("Invalid Role");
-        }
     }
 
     public static OrderDetailsData convert(OrderPojo orderPojo, List<OrderItemData> orderItemDataList) {
         OrderDetailsData orderDetailsData = new OrderDetailsData();
         orderDetailsData.setId(orderPojo.getId());
-        orderDetailsData.setStatus(orderPojo.getStatus());
+        orderDetailsData.setStatus(orderPojo.getStatus().name());
         orderDetailsData.setCustomerName(orderPojo.getCustomerName());
         orderDetailsData.setInvoicedAt(orderPojo.getUpdatedAt());
         orderDetailsData.setCreatedAt(orderPojo.getCreatedAt());
@@ -186,7 +181,7 @@ public class HelperDto {
     public static OrderPojo convert(OrderForm orderForm) {
         OrderPojo orderPojo = new OrderPojo();
         orderPojo.setCustomerName(orderForm.getCustomerName());
-        orderPojo.setStatus("ACTIVE");
+        orderPojo.setStatus(OrderStatus.CREATED);
         orderPojo.setOrderCode(RandomStrGenerator.usingUUID(10));
         return orderPojo;
     }
@@ -196,9 +191,9 @@ public class HelperDto {
         userPojo.setEmail(userForm.getEmail());
         userPojo.setPassword(userForm.getPassword());
         if (AdminUtil.checkAdmin(userForm.getEmail())) {
-            userPojo.setRole("supervisor");
+            userPojo.setRole(UserRole.SUPERVISOR);
         } else {
-            userPojo.setRole("operator");
+            userPojo.setRole(UserRole.OPERATOR);
         }
         return userPojo;
     }
@@ -206,7 +201,7 @@ public class HelperDto {
     public static OrderData convert(OrderPojo orderPojo) {
         OrderData orderData = new OrderData();
         orderData.setId(orderPojo.getId());
-        orderData.setStatus(orderPojo.getStatus());
+        orderData.setStatus(orderPojo.getStatus().name());
         orderData.setCustomerName(orderPojo.getCustomerName());
         orderData.setCreatedAt(orderPojo.getCreatedAt());
         orderData.setUpdatedAt(orderPojo.getUpdatedAt());
@@ -233,6 +228,13 @@ public class HelperDto {
         orderItemData.setBarcode(barcode);
         orderItemData.setTotalPrice(orderItemPojo.getQuantity() * orderItemPojo.getSellingPrice());
         return orderItemData;
+    }
+
+    public static ErrorData convert(int row,String errorMessage){
+        ErrorData errorData = new ErrorData();
+        errorData.setErrorMessage(errorMessage);
+        errorData.setRow(row);
+        return errorData;
     }
 
     public static void normalise(ProductForm productForm) throws ApiException {

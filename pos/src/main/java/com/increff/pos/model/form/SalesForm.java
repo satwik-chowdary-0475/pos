@@ -8,10 +8,8 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter
 public class SalesForm {
-
     private String brand;
     private String category;
-    private ZonedDateTime startTime;
-    private ZonedDateTime endTime;
-
+    private String startTime;
+    private String endTime;
 }
