@@ -20,43 +20,39 @@ public class OrderService {
     private OrderDao orderDao;
 
     @Transactional
-    public void createOrder(OrderPojo orderPojo){
+    public void createOrder(OrderPojo orderPojo) {
         orderDao.createOrder(orderPojo);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public OrderPojo getOrderByOrderCode(String orderCode) throws ApiException{
+    public OrderPojo getOrderByOrderCode(String orderCode) throws ApiException {
         OrderPojo orderPojo = orderDao.getOrderByOrderCode(orderCode);
-        if(Objects.isNull(orderPojo)){
-            throw new ApiException("Order doesn't exist!!");
-        }
+        checkOrder(orderPojo);
         return orderPojo;
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public OrderPojo getOrderByOrderId(int orderId) throws ApiException{
+    public OrderPojo getOrderByOrderId(int orderId) throws ApiException {
         OrderPojo orderPojo = orderDao.getOrderByOrderId(orderId);
-        if(orderPojo == null){
-            throw new ApiException("Order doesn't exist!!");
-        }
+        checkOrder(orderPojo);
         return orderPojo;
     }
 
     @Transactional
-    public List<OrderPojo> getAllOrders(){
+    public List<OrderPojo> getAllOrders() {
         return orderDao.getAllOrders();
     }
 
     @Transactional
-    public List<OrderPojo> getOrderByDate(Date startTime, Date endTime){
-        return orderDao.getOrderByDate(startTime,endTime);
+    public List<OrderPojo> getOrderByDate(Date startTime, Date endTime) {
+        return orderDao.getOrderByDate(startTime, endTime);
     }
 
     @Transactional(rollbackOn = ApiException.class)
     public Integer deleteOrder(String orderCode) throws ApiException {
         OrderPojo orderPojo = orderDao.getOrderByOrderCode(orderCode);
-        if(Objects.nonNull(orderPojo)){
-            if(orderPojo.getStatus().equals(OrderStatus.INVOICED)){
+        if (Objects.nonNull(orderPojo)) {
+            if (orderPojo.getStatus().equals(OrderStatus.INVOICED)) {
                 throw new ApiException("Cannot delete order!!");
             }
             orderDao.deleteOrder(orderCode);
@@ -68,9 +64,13 @@ public class OrderService {
     @Transactional(rollbackOn = ApiException.class)
     public void changeStatus(String orderCode) throws ApiException {
         OrderPojo orderPojo = orderDao.getOrderByOrderCode(orderCode);
-        if(Objects.isNull(orderPojo)){
+        checkOrder(orderPojo);
+        orderPojo.setStatus(OrderStatus.INVOICED);
+    }
+
+    private void checkOrder(OrderPojo orderPojo) throws ApiException {
+        if (Objects.isNull(orderPojo)) {
             throw new ApiException("Order doesn't exist!!");
         }
-        orderPojo.setStatus(OrderStatus.INVOICED);
     }
 }

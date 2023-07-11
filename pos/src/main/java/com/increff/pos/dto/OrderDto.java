@@ -54,9 +54,7 @@ public class OrderDto {
         Integer orderId = orderService.deleteOrder(orderCode);
         List<OrderItemPojo> orderItemPojoList = orderItemService.getAllOrderItems(orderId);
         for (OrderItemPojo orderItemPojo : orderItemPojoList) {
-            InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId());
-            int updatedQuantity = inventoryPojo.getQuantity() + orderItemPojo.getQuantity();
-            inventoryService.updateProductInInventory(inventoryPojo, updatedQuantity);
+            updateProductInInventory(orderItemPojo);
         }
         orderItemService.deleteOrderItemsByOrder(orderId);
     }
@@ -81,5 +79,10 @@ public class OrderDto {
         return HelperDto.convert(orderPojo, orderItemDataList);
     }
 
+    private void updateProductInInventory(OrderItemPojo orderItemPojo) throws ApiException {
+        InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId());
+        int updatedQuantity = inventoryPojo.getQuantity() + orderItemPojo.getQuantity();
+        inventoryService.updateProductInInventory(inventoryPojo, updatedQuantity);
+    }
 
 }

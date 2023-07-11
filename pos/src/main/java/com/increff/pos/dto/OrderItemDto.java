@@ -36,12 +36,11 @@ public class OrderItemDto {
         validateStatus(orderPojo.getStatus());
         OrderItemPojo orderItemPojo = HelperDto.convert(orderItemForm, orderId, productPojo);
         InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId());
-        int orderItemId =  orderItemService.insertOrderItem(orderItemPojo, inventoryPojo);
-        updateInventoryQuantity(inventoryPojo,orderItemPojo.getQuantity());
+        int orderItemId = orderItemService.insertOrderItem(orderItemPojo, inventoryPojo);
+        updateInventoryQuantity(inventoryPojo, orderItemPojo.getQuantity());
         return orderItemId;
     }
 
-    //TODO : Streams exception
     @Transactional(rollbackOn = ApiException.class)
     public List<OrderItemData> getOrderItems(int orderId) throws ApiException {
         OrderPojo orderPojo = orderService.getOrderByOrderId(orderId);
@@ -74,7 +73,7 @@ public class OrderItemDto {
         int requiredQuantity = orderItemPojo.getQuantity();
         int previousQuantity = existingOrderItemPojo.getQuantity();
         orderItemService.updateOrderItem(orderId, id, orderItemPojo, inventoryPojo);
-        updateInventoryQuantity(inventoryPojo,(requiredQuantity-previousQuantity));
+        updateInventoryQuantity(inventoryPojo, (requiredQuantity - previousQuantity));
     }
 
     @Transactional(rollbackOn = ApiException.class)

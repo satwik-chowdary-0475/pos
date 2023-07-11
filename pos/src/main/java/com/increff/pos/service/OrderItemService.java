@@ -24,17 +24,12 @@ public class OrderItemService {
     public int insertOrderItem(OrderItemPojo orderItemPojo, InventoryPojo inventoryPojo) throws ApiException {
         int requiredQuantity = orderItemPojo.getQuantity();
         int inventoryQuantity = inventoryPojo.getQuantity();
+        checkInventory(requiredQuantity, inventoryQuantity);
         OrderItemPojo existingOrderItemPojo = orderItemDao.getOrderItemByProductId(orderItemPojo.getOrderId(), orderItemPojo.getProductId());
-        if (requiredQuantity > inventoryQuantity) {
-            throw new ApiException("Insufficient inventory for the product!!!");
-        }
         if (Objects.nonNull(existingOrderItemPojo)) {
-            existingOrderItemPojo.setSellingPrice(orderItemPojo.getSellingPrice());
-            existingOrderItemPojo.setQuantity(requiredQuantity + existingOrderItemPojo.getQuantity());
-            return existingOrderItemPojo.getId();
+            return insertExistingOrderItem(existingOrderItemPojo, orderItemPojo);
         } else {
-            orderItemDao.insertOrderItem(orderItemPojo);
-            return orderItemPojo.getId();
+            return insertNewOrderItem(orderItemPojo);
         }
     }
 
@@ -58,9 +53,7 @@ public class OrderItemService {
         OrderItemPojo existingOrderItemPojo = orderItemDao.getOrderItemById(orderId, id);
         int requiredQuantity = updatedOrderItemPojo.getQuantity();
         int inventoryQuantity = inventoryPojo.getQuantity() + existingOrderItemPojo.getQuantity();
-        if (requiredQuantity > inventoryQuantity) {
-            throw new ApiException("Insufficient inventory for the product!!!");
-        }
+        checkInventory(requiredQuantity, inventoryQuantity);
         existingOrderItemPojo.setQuantity(requiredQuantity);
         existingOrderItemPojo.setSellingPrice(updatedOrderItemPojo.getSellingPrice());
     }
@@ -79,5 +72,24 @@ public class OrderItemService {
         orderItemDao.deleteAllOrderItems(orderId);
     }
 
+    @Transactional
+    private void checkInventory(int requiredQuantity, int inventoryQuantity) throws ApiException {
+        if (requiredQuantity > inventoryQuantity) {
+            throw new ApiException("Insufficient inventory for the product!!!");
+        }
+    }
+
+    @Transactional
+    private Integer insertNewOrderItem(OrderItemPojo orderItemPojo) {
+        orderItemDao.insertOrderItem(orderItemPojo);
+        return orderItemPojo.getId();
+    }
+
+    @Transactional
+    private Integer insertExistingOrderItem(OrderItemPojo existingOrderItemPojo, OrderItemPojo orderItemPojo) {
+        existingOrderItemPojo.setSellingPrice(orderItemPojo.getSellingPrice());
+        existingOrderItemPojo.setQuantity(orderItemPojo.getQuantity() + existingOrderItemPojo.getQuantity());
+        return existingOrderItemPojo.getId();
+    }
 
 }
