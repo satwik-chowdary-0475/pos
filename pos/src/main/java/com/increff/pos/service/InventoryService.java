@@ -17,20 +17,24 @@ public class InventoryService {
 
     @Transactional(rollbackOn = ApiException.class)
     public Integer insertProductInInventory(InventoryPojo inventoryPojo) throws ApiException {
-        int id = inventoryPojo.getId();
+        int productId = inventoryPojo.getProductId();
         int quantity = inventoryPojo.getQuantity();
-        InventoryPojo existingInventoryPojo = inventoryDao.getProductInventoryById(id);
+        InventoryPojo existingInventoryPojo = inventoryDao.getProductInventoryById(productId);
         if (Objects.isNull(existingInventoryPojo)) {
-            InventoryPojo newInventoryPojo = new InventoryPojo();
-            newInventoryPojo.setId(id);
-            newInventoryPojo.setQuantity(quantity);
-            inventoryDao.insertProductInInventory(newInventoryPojo);
-            return id;
+            return insertNewProductInInventory(productId, quantity);
         } else {
-            int newQuantity = quantity + existingInventoryPojo.getQuantity();
-            existingInventoryPojo.setQuantity(newQuantity);
-            return existingInventoryPojo.getId();
+            updateProductInInventory(existingInventoryPojo, (quantity + existingInventoryPojo.getQuantity()));
+            return existingInventoryPojo.getProductId();
         }
+    }
+
+    @Transactional
+    public Integer insertNewProductInInventory(Integer productId, Integer quantity) {
+        InventoryPojo newInventoryPojo = new InventoryPojo();
+        newInventoryPojo.setProductId(productId);
+        newInventoryPojo.setQuantity(quantity);
+        inventoryDao.insertProductInInventory(newInventoryPojo);
+        return productId;
     }
 
     @Transactional(rollbackOn = ApiException.class)
@@ -49,7 +53,7 @@ public class InventoryService {
 
     @Transactional(rollbackOn = ApiException.class)
     public void updateProductInInventory(InventoryPojo updatedInventoryPojo) throws ApiException {
-        InventoryPojo existingInventoryPojo = inventoryDao.getProductInventoryById(updatedInventoryPojo.getId());
+        InventoryPojo existingInventoryPojo = inventoryDao.getProductInventoryById(updatedInventoryPojo.getProductId());
         if (Objects.isNull(existingInventoryPojo)) {
             throw new ApiException("Product with id not present in inventory!!");
         }

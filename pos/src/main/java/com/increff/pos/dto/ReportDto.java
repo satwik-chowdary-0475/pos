@@ -51,7 +51,7 @@ public class ReportDto {
         HashMap<Integer, Integer> inventoryMap = new HashMap<>();
         List<InventoryPojo> inventoryPojoList = inventoryService.getAllProductsInInventory();
         for (InventoryPojo inventoryPojo : inventoryPojoList) {
-            inventoryMap.put(inventoryPojo.getId(), inventoryPojo.getQuantity());
+            inventoryMap.put(inventoryPojo.getProductId(), inventoryPojo.getQuantity());
         }
         return inventoryMap;
     }

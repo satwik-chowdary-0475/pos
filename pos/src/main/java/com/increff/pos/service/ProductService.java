@@ -48,7 +48,7 @@ public class ProductService {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public ProductPojo getProductByString(String barcode) throws ApiException {
+    public ProductPojo getProductByBarcode(String barcode) throws ApiException {
         ProductPojo productPojo = productDao.getProductByBarcode(barcode);
         if(Objects.isNull(productPojo)){
             throw new ApiException("Product with given barcode doesn't exist!!");

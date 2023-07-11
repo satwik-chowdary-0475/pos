@@ -31,7 +31,7 @@ public class OrderItemDto {
     @Transactional(rollbackOn = ApiException.class)
     public int insertOrderItem(int orderId, OrderItemForm orderItemForm) throws ApiException {
         HelperDto.normalise(orderItemForm);
-        ProductPojo productPojo = productService.getProductByString(orderItemForm.getBarcode());
+        ProductPojo productPojo = productService.getProductByBarcode(orderItemForm.getBarcode());
         OrderPojo orderPojo = orderService.getOrderByOrderId(orderId);
         validateStatus(orderPojo.getStatus());
         OrderItemPojo orderItemPojo = HelperDto.convert(orderItemForm, orderId, productPojo);
@@ -65,7 +65,7 @@ public class OrderItemDto {
     @Transactional(rollbackOn = ApiException.class)
     public void updateOrderItem(int orderId, int id, OrderItemForm orderItemForm) throws ApiException {
         HelperDto.normalise(orderItemForm);
-        ProductPojo productPojo = productService.getProductByString(orderItemForm.getBarcode());
+        ProductPojo productPojo = productService.getProductByBarcode(orderItemForm.getBarcode());
         OrderPojo orderPojo = orderService.getOrderByOrderId(orderId);
         validateStatus(orderPojo.getStatus());
         OrderItemPojo orderItemPojo = HelperDto.convert(orderItemForm, orderId, productPojo);

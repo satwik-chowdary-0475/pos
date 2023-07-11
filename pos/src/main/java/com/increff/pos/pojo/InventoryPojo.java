@@ -1,6 +1,5 @@
 package com.increff.pos.pojo;
 
-import io.swagger.models.auth.In;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +13,7 @@ import javax.persistence.*;
 )
 public class InventoryPojo extends AbstractPojo {
     @Id
-    private Integer id;
+    private Integer productId;
     @Column(nullable = false)
     private Integer quantity;
 }

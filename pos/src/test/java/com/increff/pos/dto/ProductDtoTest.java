@@ -115,7 +115,7 @@ public class ProductDtoTest extends AbstractUnitTest {
         int id = productDto.insertProduct(productForm);
         ProductForm updatedProductForm = Helper.createProductForm("barcode 1","brand 1","category 1","product 2",100.00);
         productDto.updateProduct(id,updatedProductForm);
-        ProductPojo productPojo = productService.getProductByString("barcode 1");
+        ProductPojo productPojo = productService.getProductByBarcode("barcode 1");
         assertEquals(productPojo.getName(),"product 2");
         assertEquals(productPojo.getMrp(),100.00);
     }

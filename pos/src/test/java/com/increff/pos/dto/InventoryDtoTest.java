@@ -57,7 +57,7 @@ public class InventoryDtoTest extends AbstractUnitTest {
         int id = inventoryDto.insertProductInInventory(inventoryForm);
         InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(id);
         assertEquals(inventoryPojo.getQuantity().intValue(),100);
-        assertEquals(inventoryPojo.getId().intValue(),id);
+        assertEquals(inventoryPojo.getProductId().intValue(),id);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class InventoryDtoTest extends AbstractUnitTest {
         assertEquals(actualInventoryData.getProductName(),expectedInventoryData.getProductName());
         assertEquals(actualInventoryData.getBarcode(),expectedInventoryData.getBarcode());
         assertEquals(actualInventoryData.getQuantity(),expectedInventoryData.getQuantity());
-        assertEquals(actualInventoryData.getId(),expectedInventoryData.getId());
+        assertEquals(actualInventoryData.getProductId(),expectedInventoryData.getProductId());
     }
 
     @Test

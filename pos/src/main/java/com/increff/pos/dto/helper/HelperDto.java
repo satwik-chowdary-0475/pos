@@ -151,7 +151,7 @@ public class HelperDto {
         InventoryData inventoryData = new InventoryData();
         inventoryData.setProductName(productName);
         inventoryData.setBarcode(barcode);
-        inventoryData.setId(inventoryPojo.getId());
+        inventoryData.setProductId(inventoryPojo.getProductId());
         inventoryData.setQuantity(inventoryPojo.getQuantity());
         return inventoryData;
     }
@@ -159,7 +159,7 @@ public class HelperDto {
     public static InventoryPojo convert(InventoryForm inventoryForm, int id) {
         InventoryPojo inventoryPojo = new InventoryPojo();
         inventoryPojo.setQuantity(inventoryForm.getQuantity());
-        inventoryPojo.setId(id);
+        inventoryPojo.setProductId(id);
         return inventoryPojo;
     }
 

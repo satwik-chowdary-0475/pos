@@ -63,7 +63,7 @@ public class Helper {
     public static InventoryData createInventoryData(int id,String productName,String barcode,int quantity){
         InventoryData inventoryData = new InventoryData();
         inventoryData.setProductName(productName);
-        inventoryData.setId(id);
+        inventoryData.setProductId(id);
         inventoryData.setQuantity(quantity);
         inventoryData.setBarcode(barcode);
         return inventoryData;

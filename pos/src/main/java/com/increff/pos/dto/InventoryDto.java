@@ -31,7 +31,7 @@ public class InventoryDto {
 
     @Transactional(rollbackOn = ApiException.class)
     public int insertProductInInventory(InventoryForm inventoryForm) throws ApiException {
-        ProductPojo productPojo = productService.getProductByString(inventoryForm.getBarcode());
+        ProductPojo productPojo = productService.getProductByBarcode(inventoryForm.getBarcode());
         HelperDto.validate(inventoryForm);
         InventoryPojo inventoryPojo = HelperDto.convert(inventoryForm, productPojo.getId());
         return inventoryService.insertProductInInventory(inventoryPojo);
@@ -49,7 +49,7 @@ public class InventoryDto {
     @Transactional(rollbackOn = ApiException.class)
     public InventoryData getProduct(int id) throws ApiException {
         InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(id);
-        ProductPojo productPojo = productService.getProductById(inventoryPojo.getId());
+        ProductPojo productPojo = productService.getProductById(inventoryPojo.getProductId());
         return HelperDto.convert(inventoryPojo, productPojo.getBarcode(), productPojo.getName());
     }
 
@@ -58,7 +58,7 @@ public class InventoryDto {
         List<InventoryPojo> inventoryPojoList = inventoryService.getAllProductsInInventory();
         List<InventoryData> inventoryDataList = new ArrayList<InventoryData>();
         for (InventoryPojo inventoryPojo : inventoryPojoList) {
-            ProductPojo productPojo = productService.getProductById(inventoryPojo.getId());
+            ProductPojo productPojo = productService.getProductById(inventoryPojo.getProductId());
             inventoryDataList.add(HelperDto.convert(inventoryPojo, productPojo.getBarcode(), productPojo.getName()));
         }
         return inventoryDataList;
@@ -71,6 +71,7 @@ public class InventoryDto {
         }
     }
 
+    //TODO: for loops or streams??
     @Transactional(rollbackOn = ApiException.class)
     public void insertInventoryList(List<InventoryForm> inventoryFormList) throws ApiException {
         List<ErrorData> errorDataList = IntStream.range(0, inventoryFormList.size())

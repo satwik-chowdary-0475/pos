@@ -71,7 +71,7 @@ function displayEditInventory(id){
 
 function displayInventory(data){
     $("#inventory-edit-form").removeClass("was-validated");
-	$("#inventory-edit-form input[name=id]").val(data.id);
+	$("#inventory-edit-form input[name=id]").val(data.productId);
 	$("#inventory-edit-form input[name=barcode]").val(data.barcode);
 	$("#inventory-edit-form input[name=quantity]").val(data.quantity);
 	$('#edit-inventory-modal').modal('toggle');
@@ -82,7 +82,7 @@ function displayInventoryList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button class="btn btn-primary" onclick="displayEditInventory('+e.id+') "';
+		var buttonHtml = '<button class="btn btn-primary" onclick="displayEditInventory('+e.productId+') "';
 		buttonHtml += ((userRole=='operator')?' disabled':'')+'>';
 		buttonHtml += '<div class="d-flex gap-2 align-items-center"><i class="fas fa-pen" style="font-size: 15px; margin-right: 10px;"></i>Edit</div></button>';
 		i = parseInt(i) + 1;

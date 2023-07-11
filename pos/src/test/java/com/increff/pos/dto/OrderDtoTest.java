@@ -103,7 +103,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",100,100.12);
         orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
-        ProductPojo productPojo = productService.getProductByString("barcode 1");
+        ProductPojo productPojo = productService.getProductByBarcode("barcode 1");
         // Optional.ofNullable checks if the object is not null
         assertEquals(Optional.ofNullable((inventoryService.getProductInventoryByProductId(productPojo.getId()).getQuantity())),Optional.ofNullable(100));
         List<OrderItemData>orderItemDataList = orderItemDto.getOrderItems(orderPojo.getId());
@@ -133,7 +133,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",100,100.12);
         orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
-        ProductPojo productPojo = productService.getProductByString("barcode 1");
+        ProductPojo productPojo = productService.getProductByBarcode("barcode 1");
         assertEquals(Optional.ofNullable(inventoryService.getProductInventoryByProductId(productPojo.getId()).getQuantity()),Optional.ofNullable(100));
         //check order delete
         exceptionRule.expect(ApiException.class);

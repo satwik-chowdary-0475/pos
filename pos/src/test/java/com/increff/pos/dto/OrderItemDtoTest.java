@@ -64,7 +64,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
         int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(orderPojo.getId(),id);
-        ProductPojo productPojo = productService.getProductByString("barcode 1");
+        ProductPojo productPojo = productService.getProductByBarcode("barcode 1");
         // Check insert order item
         assertEquals(orderItemPojo.getOrderId(),orderPojo.getId());
         assertEquals(orderItemPojo.getProductId(),productPojo.getId());
@@ -235,7 +235,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderItemForm updatedOrderItemForm = Helper.createOrderItemForm("barcode 1",20,100.23);
         orderItemDto.updateOrderItem(orderPojo.getId(),id,updatedOrderItemForm);
         OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(orderPojo.getId(),id);
-        ProductPojo productPojo = productService.getProductByString("barcode 1");
+        ProductPojo productPojo = productService.getProductByBarcode("barcode 1");
 
         //Check for order item update
         assertEquals(orderItemPojo.getProductId(),productPojo.getId());

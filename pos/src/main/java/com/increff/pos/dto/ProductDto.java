@@ -34,6 +34,7 @@ public class ProductDto {
         return productService.insertProduct(productPojo);
     }
 
+    //TODO: for loops or streams
     @Transactional(rollbackOn = ApiException.class)
     public void insertProductList(List<ProductForm>productFormList) throws ApiException {
         List<ErrorData> errorDataList = IntStream.range(0, productFormList.size())
@@ -58,7 +59,7 @@ public class ProductDto {
         HelperDto.normalise(form);
         BrandPojo brandPojo = brandService.getBrandByBrandCategory(form.getBrand(),form.getCategory());
         ProductPojo productPojo = HelperDto.convert(form, brandPojo.getId());
-        ProductPojo existingProductPojo = productService.getProductByString(productPojo.getBarcode());
+        ProductPojo existingProductPojo = productService.getProductByBarcode(productPojo.getBarcode());
         productService.updateProduct(id,productPojo);
     }
 

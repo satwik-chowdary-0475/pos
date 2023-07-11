@@ -405,3 +405,14 @@
 2023-07-11 13:22:37 INFO  SecurityConfig:44 - Configuration complete
 2023-07-11 13:24:01 INFO  SecurityConfig:44 - Configuration complete
 2023-07-11 13:24:30 INFO  SecurityConfig:44 - Configuration complete
+2023-07-11 13:44:29 INFO  SecurityConfig:44 - Configuration complete
+2023-07-11 13:45:26 WARN  SqlExceptionHelper:137 - SQL Error: 1364, SQLState: HY000
+2023-07-11 13:45:26 ERROR SqlExceptionHelper:142 - Field 'id' doesn't have a default value
+2023-07-11 13:45:26 ERROR ExceptionMapperStandardImpl:39 - HHH000346: Error during managed flush [org.hibernate.exception.GenericJDBCException: could not execute statement]
+2023-07-11 13:45:48 WARN  SqlExceptionHelper:137 - SQL Error: 1364, SQLState: HY000
+2023-07-11 13:45:48 ERROR SqlExceptionHelper:142 - Field 'id' doesn't have a default value
+2023-07-11 13:45:48 ERROR ExceptionMapperStandardImpl:39 - HHH000346: Error during managed flush [org.hibernate.exception.GenericJDBCException: could not execute statement]
+2023-07-11 13:46:36 INFO  SecurityConfig:44 - Configuration complete
+2023-07-11 13:48:30 INFO  SecurityConfig:44 - Configuration complete
+2023-07-11 13:52:12 INFO  SecurityConfig:44 - Configuration complete
+2023-07-11 13:54:11 INFO  SecurityConfig:44 - Configuration complete
