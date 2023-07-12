@@ -58,7 +58,7 @@
                                 <div class="form-group my-3">
                                     <label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
                                     <div class="col-sm-10">
-                                        <input type="number" class="form-control" name="mrp" id="inputMrp" placeholder="Enter MRP" required min="0" step=any>
+                                        <input type="number" class="form-control" name="mrp" id="inputMrp" placeholder="Enter MRP" required min="0.01" step=any>
                                         <div class="invalid-feedback">Please enter a valid MRP.</div>
                                     </div>
                                 </div>
@@ -118,7 +118,7 @@
                     <th scope="col">Brand Name</th>
                     <th scope="col">Category Name</th>
                     <th scope="col">MRP</th>
-                    <th scope="col">Action</th>
+                    <th scope="col" th:if="${info.getRole()!='' && info.getRole()!='operator'}">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -215,7 +215,7 @@
                         <div class="form-group my-3">
                             <label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" name="mrp" placeholder="Enter MRP" min="0" step="any" required>
+                                <input type="number" class="form-control" name="mrp" placeholder="Enter MRP" min="0.01" step="any" required>
                                 <div class="invalid-feedback">Please enter a valid MRP.</div>
                             </div>
                         </div>
@@ -243,6 +243,6 @@
 
 </div>
 <footer th:replace="snippets.html :: name_footer"></footer>
-<script th:src="@{/static/product.js}"/></script>
+<script th:src="@{/static/js/product.js}"/></script>
 </body>
 </html>

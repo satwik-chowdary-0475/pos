@@ -128,9 +128,9 @@ function displayProductList(data){
 		+ '<td>'  + e.name + '</td>'
 		+ '<td>'  + e.brand + '</td>'
 		+ '<td>'  + e.category + '</td>'
-        + '<td>'  + e.mrp + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '</tr>';
+        + '<td>'  + (e.mrp).toFixed(2) + '</td>';
+        row += (userRole!=null && userRole != 'operator')?( '<td>' + buttonHtml + '</td>'):'';
+        row += '</tr>';
         $tbody.append(row);
 	}
 }
@@ -217,7 +217,6 @@ function updateFileName(){
 	var $file = $('#productFile');
 	var fileName = $file.val();
 	$('#productFileName').html(fileName);
-	console.log("file name  ", fileName);
 	$("#process-data").prop('disabled',(fileName.length == 0));
 }
 function downloadErrors(){

@@ -6,8 +6,6 @@ import com.increff.pos.model.data.*;
 import com.increff.pos.model.form.SalesForm;
 import com.increff.pos.pojo.*;
 import com.increff.pos.service.*;
-import io.swagger.models.auth.In;
-import javafx.util.Pair;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,7 +63,7 @@ public class ReportDto {
     public List<InventoryReportData> getInventoryReport() throws ApiException {
         List<BrandPojo> brandPojoList = brandService.getAllBrands();
         List<InventoryPojo> inventoryPojoList = inventoryService.getAllProductsInInventory();
-        Map<Integer, Integer> brandCategoryMap = getBrandCategoryMap(inventoryPojoList);
+        HashMap<Integer, Integer> brandCategoryMap = getBrandCategoryMap(inventoryPojoList);
         List<InventoryReportData> inventoryReportDataList = brandPojoList.stream()
                 .map(brandPojo -> {
                     int brandId = brandPojo.getId();
@@ -92,95 +90,64 @@ public class ReportDto {
         return brandCategoryMap;
     }
 
-//    private HashMap<Integer, Integer> getBrandCategoryMap(List<InventoryPojo> inventoryPojoList) throws ApiException {
-//        return inventoryPojoList.stream()
-//                .collect(Collectors.toMap(
-//                        inventoryPojo -> {
-//                            try {
-//                                ProductPojo productPojo = productService.getProductById(inventoryPojo.getProductId());
-//                                return productPojo.getBrandCategory();
-//                            } catch (ApiException e) {
-//                                return null;
-//                            }
-//                        },
-//                        InventoryPojo::getQuantity,
-//                        Integer::sum,
-//                        HashMap::new
-//                ));
-//    }
 
-//    private HashMap<Integer, Integer> getInventoryMap(List<InventoryPojo>inventoryPojoList) {
-//        HashMap<Integer, Integer> inventoryMap = new HashMap<>();
-//        for (InventoryPojo inventoryPojo : inventoryPojoList) {
-//            inventoryMap.put(inventoryPojo.getProductId(), inventoryPojo.getQuantity());
-//        }
-//        return inventoryMap;
-//    }
-
-//    private HashMap<Integer, Integer> getBrandCategoryMap(HashMap<Integer, Integer> inventoryMap) {
-//        List<ProductPojo> productPojoList = productService.getAllProducts();
-//        HashMap<Integer, Integer> brandCategoryMap = new HashMap<>();
-//        for (ProductPojo productPojo : productPojoList) {
-//            if (inventoryMap.containsKey(productPojo.getId())) {
-//                int brandId = productPojo.getBrandCategory();
-//                if (brandCategoryMap.containsKey(productPojo.getBrandCategory())) {
-//                    brandCategoryMap.put(brandId, brandCategoryMap.get(brandId) + inventoryMap.get(productPojo.getId()));
-//                } else {
-//                    brandCategoryMap.put(brandId, inventoryMap.get(productPojo.getId()));
-//                }
-//            }
-//        }
-//        return brandCategoryMap;
-//    }
-
-
-    //TODO: WROTE BRUTE FORCE n^2 need to optimise. Can we use Pair??
+    //TODO: WROTE BRUTE FORCE n^2 need to optimise.
+    // DB calls -> 1(brands) + 1(orders) + 1(orderItems) + x(no of brands)
     @Transactional(rollbackOn = ApiException.class)
     public List<SalesData> getSalesReport(SalesForm salesForm) throws ApiException {
         ReportHelperDto.normalise(salesForm);
         Date startTime = Date.valueOf(LocalDate.parse(salesForm.getStartTime()));
         Date endTime = Date.valueOf(LocalDate.parse(salesForm.getEndTime()));
-        List<SalesData> salesDataList = new ArrayList<SalesData>();
-        List<BrandPojo> brandPojoList = brandService.getBrandListByBrandCategory(salesForm.getBrand(), salesForm.getCategory());
         List<OrderPojo> orderPojoList = orderService.getOrderByDate(startTime, endTime);
-        HashMap<Integer, Pair<Integer, Double>> productOrderItemMap = getProductOrderItemMap(orderPojoList);
-        for (BrandPojo brandPojo : brandPojoList) {
-            List<ProductPojo> productPojoList = productService.getProductByBrandCategoryId(brandPojo.getId());
-            Integer quantity = new Integer(0);
-            Double revenue = new Double(0.0);
-            for (ProductPojo productPojo : productPojoList) {
-                if (productOrderItemMap.containsKey(productPojo.getId())) {
-                    quantity += productOrderItemMap.get(productPojo.getId()).getKey();
-                    revenue += productOrderItemMap.get(productPojo.getId()).getValue();
-                }
-            }
-            salesDataList.add(ReportHelperDto.convert(brandPojo, quantity, revenue));
-        }
+//        HashMap<Integer, Pair<Integer, Double>> productOrderItemMap = getProductOrderItemMap(orderPojoList);
+        HashMap<Integer,ReportData> productOrderItemMap = getProductOrderItemMap(orderPojoList);
+        List<SalesData> salesDataList = brandService.getBrandListByBrandCategory(salesForm.getBrand(), salesForm.getCategory())
+                .stream()
+                .map(brandPojo -> {
+                    List<ProductPojo> productPojoList = productService.getProductByBrandCategoryId(brandPojo.getId());
+                    int quantity = getSalesReportQuantity(productPojoList, productOrderItemMap);
+                    double revenue = getSalesReportRevenue(productPojoList, productOrderItemMap);
+                    return ReportHelperDto.convert(brandPojo, quantity, revenue);
+                })
+                .collect(Collectors.toList());
 
         return salesDataList;
 
     }
 
-    //TODO : can be optimised??
-    public HashMap<Integer, Pair<Integer, Double>> getProductOrderItemMap(List<OrderPojo> orderPojoList) {
-        HashMap<Integer, Pair<Integer, Double>> productOrderItemMap = new HashMap<>();
-        for (OrderPojo orderPojo : orderPojoList) {
-            List<OrderItemPojo> orderItemPojoList = orderItemService.getAllOrderItems(orderPojo.getId());
-            for (OrderItemPojo orderItemPojo : orderItemPojoList) {
-                int productId = orderItemPojo.getProductId();
-                if (productOrderItemMap.containsKey(orderItemPojo.getProductId())) {
-                    Integer updatedQuantity = productOrderItemMap.get(productId).getKey() + orderItemPojo.getQuantity();
-                    Double updatedRevenue = productOrderItemMap.get(productId).getValue() + (orderItemPojo.getQuantity() * orderItemPojo.getSellingPrice());
-                    Pair<Integer, Double> updatedEntry = new Pair<>(updatedQuantity, updatedRevenue);
-                    productOrderItemMap.put(productId, updatedEntry);
-                } else {
-                    Integer quantity = orderItemPojo.getQuantity();
-                    Double revenue = (orderItemPojo.getQuantity() * orderItemPojo.getSellingPrice());
-                    Pair<Integer, Double> updatedEntry = new Pair<>(quantity, revenue);
-                    productOrderItemMap.put(productId, updatedEntry);
-                }
-            }
-        }
+    private double getSalesReportRevenue(List<ProductPojo> productPojoList, HashMap<Integer, ReportData> productOrderItemMap) {
+        return productPojoList.stream()
+                .filter(productPojo -> productOrderItemMap.containsKey(productPojo.getId()))
+                .mapToDouble(productPojo -> productOrderItemMap.get(productPojo.getId()).getRevenue())
+                .sum();
+    }
+
+    private int getSalesReportQuantity(List<ProductPojo> productPojoList, HashMap<Integer, ReportData> productOrderItemMap) {
+        return productPojoList.stream()
+                .filter(productPojo -> productOrderItemMap.containsKey(productPojo.getId()))
+                .mapToInt(productPojo -> productOrderItemMap.get(productPojo.getId()).getQuantity())
+                .sum();
+    }
+
+    // db call = 1
+    public HashMap<Integer, ReportData> getProductOrderItemMap(List<OrderPojo> orderPojoList) {
+        List<OrderItemPojo> orderItemPojoList = orderItemService.getAllOrderItemsByOrderList(orderPojoList);
+        HashMap<Integer, ReportData> productOrderItemMap = orderItemPojoList.stream()
+                .collect(Collectors.toMap(
+                        OrderItemPojo::getProductId,
+                        orderItemPojo -> {
+                            Integer quantity = orderItemPojo.getQuantity();
+                            Double revenue = orderItemPojo.getQuantity() * orderItemPojo.getSellingPrice();
+                            return ReportHelperDto.convert(quantity,revenue);
+
+                        },
+                        (existingPair, newPair) -> {
+                            Integer updatedQuantity = existingPair.getQuantity() + newPair.getQuantity();
+                            Double updatedRevenue = existingPair.getRevenue() + newPair.getRevenue();
+                            return ReportHelperDto.convert(updatedQuantity,updatedRevenue);
+                        },
+                        HashMap::new
+                ));
         return productOrderItemMap;
     }
 

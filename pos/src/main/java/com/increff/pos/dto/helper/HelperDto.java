@@ -123,7 +123,7 @@ public class HelperDto {
         orderDetailsData.setCustomerName(orderPojo.getCustomerName());
         orderDetailsData.setInvoicedAt(orderPojo.getUpdatedAt());
         orderDetailsData.setCreatedAt(orderPojo.getCreatedAt());
-        orderDetailsData.setOrderItems(orderItemDataList.toArray(new OrderItemData[0]));
+        orderDetailsData.setOrderItems(orderItemDataList);
         return orderDetailsData;
     }
 

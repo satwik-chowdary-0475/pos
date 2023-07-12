@@ -1,6 +1,7 @@
 package com.increff.pos.service;
 
 import com.increff.pos.dao.ProductDao;
+import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.ProductPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class ProductService {
     public ProductPojo getProductById(int id) throws ApiException {
         ProductPojo productPojo = productDao.getProductById(id);
         if(Objects.isNull(productPojo)){
-            throw new ApiException("Product with given id doesn't exist!!");
+            throw new ApiException("Product doesn't exist!!");
         }
         return productPojo;
     }
@@ -51,7 +52,7 @@ public class ProductService {
     public ProductPojo getProductByBarcode(String barcode) throws ApiException {
         ProductPojo productPojo = productDao.getProductByBarcode(barcode);
         if(Objects.isNull(productPojo)){
-            throw new ApiException("Product with given barcode doesn't exist!!");
+            throw new ApiException("Product with barcode "+barcode + " doesn't exist!!");
         }
         return productPojo;
     }

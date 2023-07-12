@@ -30,8 +30,7 @@ public abstract class AbstractUiController {
         // Get current user
         UserPrincipal principal = SecurityUtil.getPrincipal();
         infoData.setEmail(Objects.isNull(principal) ? "" : principal.getEmail());
-        infoData.setRole(getRole().toLowerCase());
-
+        infoData.setRole(AdminUtil.getRole().toLowerCase());
         // Set info
         ModelAndView mav = new ModelAndView(page);
         mav.addObject("info", infoData);
@@ -42,10 +41,8 @@ public abstract class AbstractUiController {
     protected ModelAndView mav(String page, String orderCode) {
         // Get current user
         UserPrincipal principal = SecurityUtil.getPrincipal();
-
         infoData.setEmail(Objects.isNull(principal) ? "" : principal.getEmail());
-        infoData.setRole(getRole().toLowerCase());
-
+        infoData.setRole(AdminUtil.getRole().toLowerCase());
         // Set info
         ModelAndView mav = new ModelAndView(page);
         mav.addObject("info", infoData);
@@ -54,18 +51,5 @@ public abstract class AbstractUiController {
         return mav;
     }
 
-    private String getRole() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ;
-        if (Objects.isNull(authentication) || Objects.isNull(authentication.getAuthorities())) return "";
-        List<String> authorities = authentication.getAuthorities()
-                .stream()
-                .map(Object::toString)
-                .collect(Collectors.toList());
-        if (authorities.contains(UserRole.SUPERVISOR.name())) {
-            return UserRole.SUPERVISOR.name();
-        }
-        return UserRole.OPERATOR.name();
-    }
 
 }

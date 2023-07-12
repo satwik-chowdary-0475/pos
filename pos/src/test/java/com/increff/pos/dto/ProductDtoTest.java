@@ -60,7 +60,7 @@ public class ProductDtoTest extends AbstractUnitTest {
     public void TestInsertExceptionBrandCategory() throws ApiException{
         ProductForm productForm =  Helper.createProductForm("barcode 1","brand 2","category 2","product 1",120.12);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Brand item with given name-category doesn't exist!!");
+        exceptionRule.expectMessage("Brand item with brand name brand 2 and category name category 2 doesn't exist!!");
         productDto.insertProduct(productForm);
     }
 
@@ -92,7 +92,7 @@ public class ProductDtoTest extends AbstractUnitTest {
         ProductForm productForm = Helper.createProductForm("barcode 1","brand 1","category 1","product 1",120.12);
         int id = productDto.insertProduct(productForm);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Product with given id doesn't exist!!");
+        exceptionRule.expectMessage("Product doesn't exist!!");
         ProductData productData = productDto.getProduct(id+1);
     }
 

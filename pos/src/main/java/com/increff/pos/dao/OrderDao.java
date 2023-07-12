@@ -15,11 +15,10 @@ import java.util.List;
 public class OrderDao extends AbstractDao {
 
     private static String SELECT_BY_ID = "select p from OrderPojo p where id=:id";
-    private static String DELETE_BY_ORDERCODE = "delete from OrderPojo p where orderCode=:orderCode and status=:status";
-    private static String SELECT_BY_ORDERCODE = "select p from OrderPojo p where orderCode=:orderCode";
+    private static String DELETE_BY_ORDER_CODE = "delete from OrderPojo p where orderCode=:orderCode and status=:status";
+    private static String SELECT_BY_ORDER_CODE = "select p from OrderPojo p where orderCode=:orderCode";
     private static String SELECT_ALL = "select p from OrderPojo p ORDER BY p.id DESC";
-    //TODO: remove <= to <
-    private static String SELECT_BY_DATE = "select p from OrderPojo p where p.status =:status and DAY(p.updatedAt) >= DAY(:startTime) and DAY(p.updatedAt) <= DAY(:endTime)";
+    private static String SELECT_BY_DATE = "select p from OrderPojo p where p.status =:status and DAY(p.updatedAt) >= DAY(:startTime) and DAY(p.updatedAt) < DAY(:endTime)";
 
 
     @Transactional
@@ -38,7 +37,7 @@ public class OrderDao extends AbstractDao {
 
     @Transactional
     public OrderPojo getOrderByOrderCode(String orderCode) {
-        TypedQuery<OrderPojo> query = getQuery(SELECT_BY_ORDERCODE, OrderPojo.class);
+        TypedQuery<OrderPojo> query = getQuery(SELECT_BY_ORDER_CODE, OrderPojo.class);
         query.setParameter("orderCode", orderCode);
         return getSingle(query);
     }
@@ -58,7 +57,7 @@ public class OrderDao extends AbstractDao {
 
     @Transactional
     public int deleteOrder(String orderCode) {
-        Query query = em().createQuery(DELETE_BY_ORDERCODE);
+        Query query = em().createQuery(DELETE_BY_ORDER_CODE);
         query.setParameter("orderCode", orderCode);
         query.setParameter("status", OrderStatus.CREATED);
         return query.executeUpdate();

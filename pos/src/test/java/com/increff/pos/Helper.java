@@ -89,7 +89,7 @@ public class Helper {
     public static OrderDetailsData createOrderDetailsData(OrderPojo orderPojo, List<OrderItemData> orderItemDataList) {
         OrderDetailsData orderDetailsData = new OrderDetailsData();
         orderDetailsData.setId(orderPojo.getId());
-        orderDetailsData.setOrderItems((OrderItemData[]) orderItemDataList.toArray(new OrderItemData[0]));
+        orderDetailsData.setOrderItems(orderItemDataList);
         orderDetailsData.setCreatedAt(orderPojo.getCreatedAt());
         orderDetailsData.setInvoicedAt(orderPojo.getUpdatedAt());
         orderDetailsData.setStatus(orderPojo.getStatus().name());

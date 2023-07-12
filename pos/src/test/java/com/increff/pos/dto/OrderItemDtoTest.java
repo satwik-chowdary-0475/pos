@@ -83,7 +83,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 3",10,120.12);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Product with given barcode doesn't exist!!");
+        exceptionRule.expectMessage("Product with barcode barcode 3 doesn't exist!!");
         int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
     }
 
@@ -94,7 +94,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 2",10,120.12);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Product with id not present in inventory!!");
+        exceptionRule.expectMessage("Product not present in inventory!!");
         int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
     }
 
@@ -105,7 +105,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",300,120.12);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Insufficient inventory for the product!!!");
+        exceptionRule.expectMessage("Insufficient inventory for the product!!");
         int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
     }
 
@@ -153,7 +153,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         //Check delete
         orderItemDto.deleteOrderItem(orderPojo.getId(),id);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Order item with given order id and id doesn't exist!!");
+        exceptionRule.expectMessage("Order item doesn't exist!!");
         OrderItemPojo checkOrderItemPojo = orderItemService.getOrderItemById(orderPojo.getId(),id);
 
         // Check updated Inventory
@@ -181,7 +181,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
         int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Order item with given order id and id doesn't exist!!");
+        exceptionRule.expectMessage("Order item doesn't exist!!");
         orderItemDto.deleteOrderItem(orderPojo.getId(),id+1);
     }
 
@@ -221,7 +221,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
         int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Order item with given order id and id doesn't exist!!");
+        exceptionRule.expectMessage("Order item doesn't exist!!");
         orderItemDto.getOrderItem(orderPojo.getId(),id+1);
     }
 
@@ -256,7 +256,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
         int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Product with given barcode doesn't exist!!");
+        exceptionRule.expectMessage("Product with barcode barcode 3 doesn't exist!!");
         OrderItemForm updatedOrderItemForm = Helper.createOrderItemForm("barcode 3",20,100.23);
         orderItemDto.updateOrderItem(orderPojo.getId(),id,updatedOrderItemForm);
     }
@@ -282,7 +282,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
         int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Insufficient inventory for the product!!!");
+        exceptionRule.expectMessage("Insufficient inventory for the product!!");
         OrderItemForm updatedOrderItemForm = Helper.createOrderItemForm("barcode 1",220,100.23);
         orderItemDto.updateOrderItem(orderPojo.getId(),id,updatedOrderItemForm);
     }
@@ -295,7 +295,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
         int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Order item with given order id and id doesn't exist!!");
+        exceptionRule.expectMessage("Order item doesn't exist!!");
         OrderItemForm updatedOrderItemForm = Helper.createOrderItemForm("barcode 1",20,100.23);
         orderItemDto.updateOrderItem(orderPojo.getId(),id+1,updatedOrderItemForm);
     }

@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-// TODO: enum for role
 @Entity
 @Setter
 @Getter

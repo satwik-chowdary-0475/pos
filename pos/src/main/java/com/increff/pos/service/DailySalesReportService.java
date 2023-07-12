@@ -34,13 +34,19 @@ public class DailySalesReportService {
         LocalDate previousDate = currentDate.minusDays(1);
         Date previousDay = Date.valueOf(previousDate);
         List<OrderPojo> orderPojoList = orderDao.getOrderByDate(previousDay,currentDay);
-        Object[] dailySalesReport = orderItemDao.getOrderItemsReport(orderPojoList);
-        Integer totalInvoicedItems =  ((Long) dailySalesReport[0]).intValue();
+        Object[] dailySalesReport = getOrderItemsReport(orderPojoList);
+        Integer totalInvoicedItems = (Integer)(dailySalesReport[0]);
         Double totalRevenue = ((Double) dailySalesReport[1]);
         DailySalesReportPojo dailySalesReportPojo = setDailySalesReport(totalInvoicedItems,totalRevenue,orderPojoList.size());
         dailySalesReportDao.insertDailySalesReport(dailySalesReportPojo);
     }
 
+    private Object[] getOrderItemsReport(List<OrderPojo>orderPojoList){
+        if(!orderPojoList.isEmpty()){
+            orderItemDao.getOrderItemsReport(orderPojoList);
+        }
+        return new Object[]{0,0.0};
+    }
     public DailySalesReportPojo setDailySalesReport(Integer totalInvoicedItems,Double totalRevenue, int ordersCount){
         DailySalesReportPojo dailySalesReportPojo = new DailySalesReportPojo();
         dailySalesReportPojo.setInvoicedItemsCount((Integer) totalInvoicedItems);

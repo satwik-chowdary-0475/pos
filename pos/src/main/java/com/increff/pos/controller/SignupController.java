@@ -24,7 +24,7 @@ public class SignupController extends AbstractUiController {
     @ApiOperation(value = "Initializes application")
     @RequestMapping(path = "/site/signup", method = RequestMethod.POST)
     public ModelAndView signupSite(UserForm userForm) throws ApiException {
-        userDto.add(userForm);
+        userDto.insertUser(userForm);
         infoData.setMessage("User added successfully!");
         return mav("login.html");
     }

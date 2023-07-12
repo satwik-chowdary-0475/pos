@@ -2,6 +2,7 @@ package com.increff.pos.dto.helper;
 
 import com.increff.pos.model.data.DailySalesData;
 import com.increff.pos.model.data.InventoryReportData;
+import com.increff.pos.model.data.ReportData;
 import com.increff.pos.model.data.SalesData;
 import com.increff.pos.model.form.SalesForm;
 import com.increff.pos.pojo.BrandPojo;
@@ -43,6 +44,13 @@ public class ReportHelperDto {
         salesData.setBrand(brandPojo.getBrand());
         salesData.setRevenue(totalRevenue);
         return salesData;
+    }
+
+    public static ReportData convert(Integer quantity, Double revenue){
+        ReportData reportData = new ReportData();
+        reportData.setRevenue(revenue);
+        reportData.setQuantity(quantity);
+        return  reportData;
     }
 
     public static void validate(SalesForm salesForm) throws ApiException {

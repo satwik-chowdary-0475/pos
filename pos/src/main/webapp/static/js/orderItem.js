@@ -45,6 +45,7 @@ function getOrderDetails(){
             orderCreationTime = data.createdAt;
             handleButtons(orderStatus);
             displayOrderDetails(data);
+            handleOrderItemTable(orderStatus);
             getOrderItemList();
         },
         error: function(e){
@@ -52,6 +53,17 @@ function getOrderDetails(){
         }
     });
     return orderStatus;
+}
+
+function handleOrderItemTable(orderStatus){
+    var headerHtml = '<th scope="col" >S.No</th>'
+                     + '<th scope="col" >Barcode</th>'
+                     + '<th scope="col" >Name</th>'
+                     + '<th scope="col" >Quantity</th>'
+                     + '<th scope="col" >Selling Price</th>'
+                     + '<th scope="col" >Total</th>';
+    headerHtml += (orderStatus == 'CREATED')?('<th scope="col">Actions'):'';
+    $("#orderItem-table-header").html(headerHtml);
 }
 
 function getOrderItemList(){
@@ -117,19 +129,20 @@ function displayOrderItemList(data){
     		+ '<td>' + e.barcode + '</td>'
     		+ '<td>' + e.productName + '</td>'
     		+ '<td>' + e.quantity + '</td>'
-    		+ '<td>' + e.sellingPrice + '</td>'
-    		+ '<td>' + e.totalPrice + '</td>'
-    		+ '<td>' + buttonHtml + '</td>'
-    		+ '</tr>';
+    		+ '<td>' + e.sellingPrice.toFixed(2) + '</td>'
+    		+ '<td>' + e.totalPrice.toFixed(2) + '</td>';
+    		row += (orderStatus!=null && orderStatus == 'CREATED')?('<td>' + buttonHtml + '</td>'):'';
+    		row += '</tr>';
             $tbody.append(row);
-            totalPrice+=(parseFloat(e.sellingPrice)*parseInt(e.quantity));
+            totalPrice+=(parseFloat(e.sellingPrice.toFixed(2))*parseInt(e.quantity));
     	}
 
         var totalPriceRow = '<tr class="no-border">'
     	+'<td colspan="5" style="font-weight:600">Total Price</td>'
-    	+'<td colspan="1" style="font-weight: 600">'+totalPrice+'</td>'
-    	+'<td>'
-    	+'</tr>';
+    	+'<td colspan="1" style="font-weight: 600">'+totalPrice.toFixed(2)+'</td>';
+
+    	totalPriceRow += (orderStatus!=null && orderStatus == 'CREATED')?('<td>'):'';
+    	totalPriceRow += '</tr>';
         $tbody.append(totalPriceRow);
 
 }

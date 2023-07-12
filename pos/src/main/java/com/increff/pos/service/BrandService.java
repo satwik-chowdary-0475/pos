@@ -21,7 +21,7 @@ public class BrandService {
     public int insertBrand(BrandPojo brandPojo) throws ApiException {
         BrandPojo existingBrandPojo = brandDao.getBrandByBrandCategory(brandPojo.getBrand(), brandPojo.getCategory());
         if (Objects.nonNull(existingBrandPojo))
-            throw new ApiException("Brand-category pair already exist!!");
+            throw new ApiException("Brand "+ existingBrandPojo.getBrand() + " - category " + existingBrandPojo.getCategory() + " already exist!!");
         brandDao.insertBrand(brandPojo);
         return brandPojo.getId();
     }
@@ -31,7 +31,7 @@ public class BrandService {
         BrandPojo existingBrandPojo = getBrandById(id);
         BrandPojo brandPojoCheck = brandDao.getBrandByBrandCategory(brandPojo.getBrand(), brandPojo.getCategory());
         if (Objects.nonNull(brandPojoCheck) && existingBrandPojo != brandPojoCheck)
-            throw new ApiException("Brand-category pair already exist!!");
+            throw new ApiException("Brand "+ existingBrandPojo.getBrand() + " - category " + existingBrandPojo.getCategory() + " already exist!!");
         existingBrandPojo.setBrand(brandPojo.getBrand());
         existingBrandPojo.setCategory(brandPojo.getCategory());
     }
@@ -48,7 +48,7 @@ public class BrandService {
     public BrandPojo getBrandByBrandCategory(String brand, String category) throws ApiException {
         BrandPojo brandPojo = brandDao.getBrandByBrandCategory(brand, category);
         if (Objects.isNull(brandPojo))
-            throw new ApiException("Brand item with given name-category doesn't exist!!");
+            throw new ApiException("Brand item with brand name "+brand + " and category name "+category + " doesn't exist!!");
         return brandPojo;
     }
 

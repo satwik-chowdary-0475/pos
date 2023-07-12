@@ -41,7 +41,7 @@ public class InventoryService {
     public InventoryPojo getProductInventoryByProductId(int id) throws ApiException {
         InventoryPojo inventoryPojo = inventoryDao.getProductInventoryById(id);
         if (Objects.isNull(inventoryPojo)) {
-            throw new ApiException("Product with id not present in inventory!!");
+            throw new ApiException("Product not present in inventory!!");
         }
         return inventoryPojo;
     }
@@ -55,7 +55,7 @@ public class InventoryService {
     public void updateProductInInventory(InventoryPojo updatedInventoryPojo) throws ApiException {
         InventoryPojo existingInventoryPojo = inventoryDao.getProductInventoryById(updatedInventoryPojo.getProductId());
         if (Objects.isNull(existingInventoryPojo)) {
-            throw new ApiException("Product with id not present in inventory!!");
+            throw new ApiException("Product not present in inventory!!");
         }
         existingInventoryPojo.setQuantity(updatedInventoryPojo.getQuantity());
     }

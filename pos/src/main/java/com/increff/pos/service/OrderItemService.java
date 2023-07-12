@@ -3,11 +3,13 @@ package com.increff.pos.service;
 import com.increff.pos.dao.OrderItemDao;
 import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.OrderItemPojo;
+import com.increff.pos.pojo.OrderPojo;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,7 +26,7 @@ public class OrderItemService {
     public int insertOrderItem(OrderItemPojo orderItemPojo, InventoryPojo inventoryPojo) throws ApiException {
         int requiredQuantity = orderItemPojo.getQuantity();
         int inventoryQuantity = inventoryPojo.getQuantity();
-        checkInventory(requiredQuantity, inventoryQuantity);
+        checkInventory(requiredQuantity, inventoryQuantity,inventoryPojo.getProductId());
         OrderItemPojo existingOrderItemPojo = orderItemDao.getOrderItemByProductId(orderItemPojo.getOrderId(), orderItemPojo.getProductId());
         if (Objects.nonNull(existingOrderItemPojo)) {
             return insertExistingOrderItem(existingOrderItemPojo, orderItemPojo);
@@ -37,7 +39,7 @@ public class OrderItemService {
     public OrderItemPojo getOrderItemById(int orderId, int id) throws ApiException {
         OrderItemPojo orderItemPojo = orderItemDao.getOrderItemById(orderId, id);
         if (Objects.isNull(orderItemPojo)) {
-            throw new ApiException("Order item with given order id and id doesn't exist!!");
+            throw new ApiException("Order item doesn't exist!!");
         }
         return orderItemPojo;
     }
@@ -53,7 +55,7 @@ public class OrderItemService {
         OrderItemPojo existingOrderItemPojo = orderItemDao.getOrderItemById(orderId, id);
         int requiredQuantity = updatedOrderItemPojo.getQuantity();
         int inventoryQuantity = inventoryPojo.getQuantity() + existingOrderItemPojo.getQuantity();
-        checkInventory(requiredQuantity, inventoryQuantity);
+        checkInventory(requiredQuantity, inventoryQuantity,inventoryPojo.getProductId());
         existingOrderItemPojo.setQuantity(requiredQuantity);
         existingOrderItemPojo.setSellingPrice(updatedOrderItemPojo.getSellingPrice());
     }
@@ -73,9 +75,9 @@ public class OrderItemService {
     }
 
     @Transactional
-    private void checkInventory(int requiredQuantity, int inventoryQuantity) throws ApiException {
+    private void checkInventory(int requiredQuantity, int inventoryQuantity, int productId) throws ApiException {
         if (requiredQuantity > inventoryQuantity) {
-            throw new ApiException("Insufficient inventory for the product!!!");
+            throw new ApiException("Insufficient inventory for the product!!");
         }
     }
 
@@ -92,4 +94,11 @@ public class OrderItemService {
         return existingOrderItemPojo.getId();
     }
 
+    @Transactional
+    public List<OrderItemPojo> getAllOrderItemsByOrderList(List<OrderPojo> orderPojoList) {
+        if(!orderPojoList.isEmpty()) {
+            return orderItemDao.getAllOrderItemsByOrderList(orderPojoList);
+        }
+        return new ArrayList<>();
+    }
 }

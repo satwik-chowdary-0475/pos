@@ -4,9 +4,9 @@
     <Heading>
         <Logo src="/Users/satwikchowdary/Desktop/pos-app/invoice-app/src/main/resources"/>
         <Address>Address</Address>
-        <CustomerName>satwik</CustomerName>
-        <InvoicedTime>2023/07/11 15:38:09 IST</InvoicedTime>
-        <OrderId>4</OrderId>
+        <CustomerName>harshit</CustomerName>
+        <InvoicedTime>2023/07/12 09:16:51 IST</InvoicedTime>
+        <OrderId>12</OrderId>
     </Heading>
     <OrderItem>
         <Barcode>a</Barcode>
@@ -15,5 +15,12 @@
         <SellingPrice>1.0</SellingPrice>
         <TotalPrice>1.0</TotalPrice>
     </OrderItem>
-    <TotalOrderPrice>1.0</TotalOrderPrice>
+    <OrderItem>
+        <Barcode>b</Barcode>
+        <ProductName>b</ProductName>
+        <Quantity>1</Quantity>
+        <SellingPrice>1.0</SellingPrice>
+        <TotalPrice>1.0</TotalPrice>
+    </OrderItem>
+    <TotalOrderPrice>2.0</TotalOrderPrice>
 </Order>

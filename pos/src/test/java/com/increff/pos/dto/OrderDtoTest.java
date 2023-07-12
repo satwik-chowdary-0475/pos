@@ -110,7 +110,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         OrderDetailsData actualOrderDetailsData = Helper.createOrderDetailsData(orderPojo,orderItemDataList);
         OrderDetailsData expectedOrderDetailsData = orderDto.getAllOrderDetails(orderCode);
         assertEquals(actualOrderDetailsData.getStatus(),expectedOrderDetailsData.getStatus());
-        assertEquals(actualOrderDetailsData.getOrderItems().length,expectedOrderDetailsData.getOrderItems().length);
+        assertEquals(actualOrderDetailsData.getOrderItems().size(),expectedOrderDetailsData.getOrderItems().size());
         assertEquals(actualOrderDetailsData.getCreatedAt(),expectedOrderDetailsData.getCreatedAt());
         assertEquals(actualOrderDetailsData.getInvoicedAt(),expectedOrderDetailsData.getInvoicedAt());
         assertEquals(actualOrderDetailsData.getId(),expectedOrderDetailsData.getId());

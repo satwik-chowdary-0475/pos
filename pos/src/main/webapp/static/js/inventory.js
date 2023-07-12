@@ -90,9 +90,9 @@ function displayInventoryList(data){
 		+ '<td>' + i + '</td>'
 		+ '<td>' + e.productName + '</td>'
 		+ '<td>' + e.barcode + '</td>'
-		+ '<td>' + e.quantity + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '</tr>';
+		+ '<td>' + e.quantity + '</td>';
+		row += (userRole!=null && userRole != 'operator')?('<td>' + buttonHtml + '</td>'):'';
+		row += '</tr>';
         $tbody.append(row);
 	}
 }

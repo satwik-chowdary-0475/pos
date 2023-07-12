@@ -166,9 +166,9 @@ function displayBrandList(data){
 		var row = '<tr>'
        	+ '<td>' + i + '</td>'
 		+ '<td>' + e.brand + '</td>'
-		+ '<td>'  + e.category + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '</tr>';
+		+ '<td>'  + e.category + '</td>';
+		row += (userRole!=null && userRole != 'operator')?('<td>' + buttonHtml + '</td>'):'';
+		row+= '</tr>';
         $tbody.append(row);
 	}
 }
@@ -204,6 +204,7 @@ function updateUploadDialog(){
 function updateFileName(){
 	var $file = $('#brandFile');
 	var fileName = $file.val();
+	fileName = fileName.substring(fileName.lastIndexOf("\\") + 1, fileName.length);
 	$('#brandFileName').html(fileName);
 	$("#process-data").prop('disabled',(fileName.length == 0));
 }

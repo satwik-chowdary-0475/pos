@@ -64,7 +64,7 @@ public class InventoryDtoTest extends AbstractUnitTest {
     public void TestInsertNotExist() throws ApiException{
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 2",100);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Product with given barcode doesn't exist!!");
+        exceptionRule.expectMessage("Product with barcode barcode 2 doesn't exist!!");
         inventoryDto.insertProductInInventory(inventoryForm);
     }
 
@@ -103,7 +103,7 @@ public class InventoryDtoTest extends AbstractUnitTest {
         int id = inventoryDto.insertProductInInventory(inventoryForm);
         InventoryForm updatedInventoryForm = Helper.createInventoryForm("barcode 3",200);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Product with id not present in inventory!!");
+        exceptionRule.expectMessage("Product not present in inventory!!");
         inventoryDto.updateProductInInventory(id+1,updatedInventoryForm);
     }
 
@@ -124,7 +124,7 @@ public class InventoryDtoTest extends AbstractUnitTest {
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1",100);
         int id = inventoryDto.insertProductInInventory(inventoryForm);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Product with id not present in inventory!!");
+        exceptionRule.expectMessage("Product not present in inventory!!");
         InventoryData expectedInventoryData = inventoryDto.getProduct(id+1);
     }
 
@@ -162,8 +162,8 @@ public class InventoryDtoTest extends AbstractUnitTest {
             inventoryDto.insertInventoryList(inventoryFormList);
         } catch (ApiException e) {
             List<ErrorData>actualErrorDataList = new ArrayList<>();
-            actualErrorDataList.add(Helper.createErrorData(1,"Product with given barcode doesn't exist!!"));
-            actualErrorDataList.add(Helper.createErrorData(2,"Product with given barcode doesn't exist!!"));
+            actualErrorDataList.add(Helper.createErrorData(1,"Product with barcode barcode 5 doesn't exist!!"));
+            actualErrorDataList.add(Helper.createErrorData(2,"Product with barcode barcode 5 doesn't exist!!"));
             assertEquals(actualErrorDataList.size(),e.getErrorDataList().size());
         }
 

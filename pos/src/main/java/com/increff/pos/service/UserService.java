@@ -15,22 +15,22 @@ public class UserService {
     private UserDao userDao;
 
     @Transactional(rollbackOn = ApiException.class)
-    public void add(UserPojo userPojo) throws ApiException {
-        UserPojo existingUserPojo = userDao.select(userPojo.getEmail());
+    public void insertUser(UserPojo userPojo) throws ApiException {
+        UserPojo existingUserPojo = userDao.getUserByEmail(userPojo.getEmail());
         if(Objects.nonNull(existingUserPojo)){
             throw new ApiException("Email already exists");
         }
-        userDao.insert(userPojo);
+        userDao.insertUser(userPojo);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public UserPojo select(String email){
-        return userDao.select(email);
+    public UserPojo getUserByEmail(String email){
+        return userDao.getUserByEmail(email);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public List<UserPojo> selectAll(){
-        return userDao.selectAll();
+    public List<UserPojo> getAllUsers(){
+        return userDao.getAllUsers();
     }
 
 }

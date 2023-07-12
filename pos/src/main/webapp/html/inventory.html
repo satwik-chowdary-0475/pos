@@ -91,7 +91,7 @@
           <th scope="col">Product Name</th>
           <th scope="col">Barcode</th>
           <th scope="col">Quantity</th>
-          <th scope="col">Action</th>
+          <th scope="col" th:if="${info.getRole()!='' && info.getRole()!='operator'}">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -199,6 +199,6 @@
 
 </div>
 <footer th:replace="snippets.html :: name_footer"></footer>
-<script th:src="@{/static/inventory.js}"/></script>
+<script th:src="@{/static/js/inventory.js}"/></script>
 </body>
 </html>

@@ -46,7 +46,7 @@ public class BrandDtoTest extends AbstractUnitTest {
         int id = brandDto.insertBrand(brandForm);
         BrandForm duplicateBrandForm = Helper.createBrandForm("brand 1","category 1");
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Brand-category pair already exist!!");
+        exceptionRule.expectMessage("Brand brand 1 - category category 1 already exist!!");
         brandDto.insertBrand(duplicateBrandForm);
     }
 
@@ -74,7 +74,6 @@ public class BrandDtoTest extends AbstractUnitTest {
 
     @Test
     public void testUpdateItemNotExists() throws ApiException{
-
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
         int id = brandDto.insertBrand(brandForm);
         exceptionRule.expect(ApiException.class);
@@ -89,7 +88,7 @@ public class BrandDtoTest extends AbstractUnitTest {
         BrandForm brandForm1 = Helper.createBrandForm("brand 2","category 2");
         int id = brandDto.insertBrand(brandForm1);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Brand-category pair already exist!!");
+        exceptionRule.expectMessage("Brand brand 2 - category category 2 already exist!!");
         brandDto.updateBrand(id,brandForm);
     }
 
@@ -147,8 +146,8 @@ public class BrandDtoTest extends AbstractUnitTest {
             brandDto.insertBrandList(brandFormList);
         } catch (ApiException e) {
             List<ErrorData>actualErrorDataList = new ArrayList<>();
-            actualErrorDataList.add(Helper.createErrorData(2,"Brand-category pair already exist!!"));
-            actualErrorDataList.add(Helper.createErrorData(3,"Brand-category pair already exist!!"));
+            actualErrorDataList.add(Helper.createErrorData(2,"Brand brand 1 - category category 1 already exist!!"));
+            actualErrorDataList.add(Helper.createErrorData(3,"Brand brand 1 - category category 1 already exist!!"));
             assertEquals(actualErrorDataList.size(),e.getErrorDataList().size());
         }
     }

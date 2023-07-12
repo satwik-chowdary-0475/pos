@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,7 @@ public class OrderItemDao extends AbstractDao {
     private static String DELETE_BY_ORDER_ID = "delete from OrderItemPojo p where orderId=:orderId";
     private static String SELECT_ALL_REPORT = "SELECT SUM(p.quantity), SUM(p.quantity * p.sellingPrice) FROM OrderItemPojo p WHERE p.orderId IN :orderIdsList";
 
+    private static String SELECT_BY_ORDER_LIST = "select p from OrderItemPojo p where p.orderId IN :orderIdsList";
 
     @Transactional
     public void insertOrderItem(OrderItemPojo orderItemPojo) {
@@ -43,19 +45,13 @@ public class OrderItemDao extends AbstractDao {
         return getSingle(query);
     }
 
-    //TODO: shld handle the case of empty list not supporting IN clause
     @Transactional
     public Object[] getOrderItemsReport(List<OrderPojo> orderPojoList) {
         TypedQuery<Object[]> query = em().createQuery(SELECT_ALL_REPORT, Object[].class);
         List<Integer> orderIdsList = orderPojoList.stream().map(OrderPojo::getId).collect(Collectors.toList());
         query.setParameter("orderIdsList", orderIdsList);
-        if (!orderIdsList.isEmpty()) {
-            query.setParameter("orderIdsList", orderIdsList);
-            Object[] result = query.getSingleResult();
-            return result;
-        } else {
-            return new Object[]{0,0.0};
-        }
+        Object[] result = query.getSingleResult();
+        return result;
     }
 
     @Transactional
@@ -81,4 +77,10 @@ public class OrderItemDao extends AbstractDao {
         return query.executeUpdate();
     }
 
+    public List<OrderItemPojo> getAllOrderItemsByOrderList(List<OrderPojo> orderPojoList) {
+        List<Integer> orderIdsList = orderPojoList.stream().map(OrderPojo::getId).collect(Collectors.toList());
+        TypedQuery<OrderItemPojo> query = getQuery(SELECT_BY_ORDER_LIST, OrderItemPojo.class);
+        query.setParameter("orderIdsList", orderIdsList);
+        return query.getResultList();
+    }
 }
