@@ -5,6 +5,7 @@ import com.increff.pos.dao.OrderDao;
 import com.increff.pos.dao.OrderItemDao;
 import com.increff.pos.pojo.DailySalesReportPojo;
 import com.increff.pos.pojo.OrderPojo;
+import com.increff.pos.pojo.OrderStatus;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class DailySalesReportService {
         Date currentDay = Date.valueOf(currentDate);
         LocalDate previousDate = currentDate.minusDays(1);
         Date previousDay = Date.valueOf(previousDate);
-        List<OrderPojo> orderPojoList = orderDao.getOrderByDate(previousDay,currentDay);
+        List<OrderPojo> orderPojoList = orderDao.getOrderByDate(previousDay,currentDay, OrderStatus.INVOICED);
         Object[] dailySalesReport = getOrderItemsReport(orderPojoList);
         Integer totalInvoicedItems = (Integer)(dailySalesReport[0]);
         Double totalRevenue = ((Double) dailySalesReport[1]);

@@ -213,11 +213,12 @@ function updateOrderItem(event){
 
 function generatePdf(data){
     var url = getPdfUrl();
+    console.log(data);
     var customerName = data.customerName;
     var json = {
         customerName: data.customerName,
         invoicedTime : data.createdAt,
-        orderId : data.id,
+        orderCode : getOrderCode(),
         orderItems : data.orderItems
     }
     var jsonString = JSON.stringify(json);

@@ -56,7 +56,7 @@ public class OrderItemDto {
     @Transactional(rollbackOn = ApiException.class)
     public OrderItemData getOrderItem(int orderId, int id) throws ApiException {
         OrderPojo orderPojo = orderService.getOrderByOrderId(orderId);
-        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(orderId, id);//change
+        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(id);//change
         ProductPojo productPojo = productService.getProductById(orderItemPojo.getProductId());
         return HelperDto.convert(orderItemPojo, productPojo.getBarcode(), productPojo.getName());
     }
@@ -69,10 +69,10 @@ public class OrderItemDto {
         validateStatus(orderPojo.getStatus());
         OrderItemPojo orderItemPojo = HelperDto.convert(orderItemForm, orderId, productPojo);
         InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(productPojo.getId());
-        OrderItemPojo existingOrderItemPojo = orderItemService.getOrderItemById(orderId, id);
+        OrderItemPojo existingOrderItemPojo = orderItemService.getOrderItemById(id);
         int requiredQuantity = orderItemPojo.getQuantity();
         int previousQuantity = existingOrderItemPojo.getQuantity();
-        orderItemService.updateOrderItem(orderId, id, orderItemPojo, inventoryPojo);
+        orderItemService.updateOrderItem(id, orderItemPojo, inventoryPojo);
         updateInventoryQuantity(inventoryPojo, (requiredQuantity - previousQuantity));
     }
 
@@ -80,13 +80,13 @@ public class OrderItemDto {
     public void deleteOrderItem(int orderId, int id) throws ApiException {
         OrderPojo orderPojo = orderService.getOrderByOrderId(orderId);
         validateStatus(orderPojo.getStatus());
-        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(orderId, id);
+        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(id);
         InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId());
-        orderItemService.deleteOrderItem(orderId, id);
+        orderItemService.deleteOrderItem(id);
         inventoryService.updateProductInInventory(inventoryPojo, inventoryPojo.getQuantity() + orderItemPojo.getQuantity());
     }
 
-    public void validateStatus(OrderStatus orderStatus) throws ApiException {
+    private void validateStatus(OrderStatus orderStatus) throws ApiException {
         if (orderStatus.equals(OrderStatus.INVOICED)) {
             throw new ApiException("Order cannot be modified!!");
         }

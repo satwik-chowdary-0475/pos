@@ -1,6 +1,5 @@
 package com.increff.pos.pojo;
 
-import io.swagger.models.auth.In;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,8 +19,8 @@ public class ProductPojo extends AbstractPojo {
     private Integer id;
     @Column(nullable = false)
     private String barcode;
-    @Column(name = "brand_category_id", nullable = false)
-    private Integer brandCategory;
+    @Column(nullable = false)
+    private Integer brandCategoryId;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)

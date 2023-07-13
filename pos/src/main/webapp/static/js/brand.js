@@ -276,5 +276,6 @@ $(document).ready(function() {
     getRoleOfUser(function(role) {
         init();
         getBrandList();
+
     });
 });

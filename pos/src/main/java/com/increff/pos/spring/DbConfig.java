@@ -33,6 +33,8 @@ public class DbConfig {
     private String hibernateShowSql;
     @Value("${hibernate.hbm2ddl.auto}")
     private String hibernateHbm2ddl;
+    @Value("${hibernate.physical_naming_strategy}")
+    private String hibernatePhysicalNamingStrategy;
 
 
     @Bean(name = "dataSource")
@@ -67,6 +69,7 @@ public class DbConfig {
         jpaProperties.put("hibernate.show_sql", hibernateShowSql);
         jpaProperties.put("hibernate.hbm2ddl.auto", hibernateHbm2ddl);
         jpaProperties.put("hibernate.hbm2ddl.auto", hibernateHbm2ddl);
+        jpaProperties.put("hibernate.physical_naming_strategy",hibernatePhysicalNamingStrategy);
         bean.setJpaProperties(jpaProperties);
         return bean;
     }

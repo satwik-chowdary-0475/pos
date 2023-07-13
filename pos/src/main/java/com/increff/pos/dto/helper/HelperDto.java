@@ -124,6 +124,7 @@ public class HelperDto {
         orderDetailsData.setInvoicedAt(orderPojo.getUpdatedAt());
         orderDetailsData.setCreatedAt(orderPojo.getCreatedAt());
         orderDetailsData.setOrderItems(orderItemDataList);
+        orderDetailsData.setOrderCode(orderPojo.getOrderCode());
         return orderDetailsData;
     }
 
@@ -143,7 +144,7 @@ public class HelperDto {
         productPojo.setBarcode(productForm.getBarcode());
         productPojo.setMrp(productForm.getMrp());
         productPojo.setName(productForm.getName());
-        productPojo.setBrandCategory(brandId);
+        productPojo.setBrandCategoryId(brandId);
         return productPojo;
     }
 

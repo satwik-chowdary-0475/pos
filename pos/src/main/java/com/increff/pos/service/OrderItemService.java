@@ -36,8 +36,8 @@ public class OrderItemService {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public OrderItemPojo getOrderItemById(int orderId, int id) throws ApiException {
-        OrderItemPojo orderItemPojo = orderItemDao.getOrderItemById(orderId, id);
+    public OrderItemPojo getOrderItemById(int id) throws ApiException {
+        OrderItemPojo orderItemPojo = orderItemDao.getOrderItemById(id);
         if (Objects.isNull(orderItemPojo)) {
             throw new ApiException("Order item doesn't exist!!");
         }
@@ -51,8 +51,8 @@ public class OrderItemService {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void updateOrderItem(int orderId, int id, OrderItemPojo updatedOrderItemPojo, InventoryPojo inventoryPojo) throws ApiException {
-        OrderItemPojo existingOrderItemPojo = orderItemDao.getOrderItemById(orderId, id);
+    public void updateOrderItem(int id, OrderItemPojo updatedOrderItemPojo, InventoryPojo inventoryPojo) throws ApiException {
+        OrderItemPojo existingOrderItemPojo = orderItemDao.getOrderItemById(id);
         int requiredQuantity = updatedOrderItemPojo.getQuantity();
         int inventoryQuantity = inventoryPojo.getQuantity() + existingOrderItemPojo.getQuantity();
         checkInventory(requiredQuantity, inventoryQuantity,inventoryPojo.getProductId());
@@ -61,12 +61,12 @@ public class OrderItemService {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void deleteOrderItem(int orderId, int id) throws ApiException {
-        OrderItemPojo orderItemPojo = orderItemDao.getOrderItemById(orderId, id);
+    public void deleteOrderItem(int id) throws ApiException {
+        OrderItemPojo orderItemPojo = orderItemDao.getOrderItemById(id);
         if (Objects.isNull(orderItemPojo)) {
             throw new ApiException("Order item doesn't exist!!");
         }
-        orderItemDao.deleteOrderItem(orderId, id);
+        orderItemDao.deleteOrderItem(id);
     }
 
     @Transactional

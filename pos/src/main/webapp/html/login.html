@@ -13,18 +13,19 @@
 
 <div class="container" id="container">
     <div class="form-container sign-up-container">
-        <form class="form" id="init-form" method="POST" onsubmit="validateForm(event)" th:action="@{/site/signup}">
+        <form class="form" id="init-form" >
             <h1>Create Account</h1>
-            <input name="email" id="email" type="email" placeholder="email" />
-            <input type="password" placeholder="Password" name="password" id="password"
-                   pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
-                   title="Password must be at least 8 characters long and include at least one letter, one number, and one special character">
-            <button type = "submit">Sign Up</button>
+                    <input name="email" id="email" type="email" placeholder="Enter email" />
+                    <input type="password" placeholder="Enter password" name="password" id="password"
+                           pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
+                           title="Password must be at least 8 characters long and include at least one letter, one number, and one special character">
+
+            <button type = "button" id="signup">Sign Up</button>
 
         </form>
     </div>
     <div class="form-container sign-in-container" >
-        <form id="login-form" method="POST" th:action="@{/session/login}">
+        <form id="login-form">
             <h1>Login</h1>
 <!--            <div class="social-container">-->
 <!--                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>-->
@@ -34,10 +35,10 @@
 <!--            <span>or use your account</span>-->
             <input  name="email" id="email" type="email" placeholder="Email" />
             <input name="password" id="password" type="password" placeholder="Password" />
-            <button type="submit" id="login">Login</button>
-            <div class="my-2 text-danger">
-                [[${info.getMessage()}]]
-            </div>
+            <button type="button" id="login">Login</button>
+<!--            <div class="my-2 text-success">-->
+<!--                [[${info.getMessage()}]]-->
+<!--            </div>-->
 
         </form>
     </div>

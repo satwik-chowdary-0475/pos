@@ -1,0 +1,214 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ProductDto</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.increff.pos.dto</a>
+</div>
+
+<h1>Coverage Summary for Class: ProductDto (com.increff.pos.dto)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ProductDto</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (31/31)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$57e0787</td>
+  </tr>
+  <tr>
+    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$57e0787$$FastClassBySpringCGLIB$$1110e3d3</td>
+  </tr>
+  <tr>
+    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$9b0509bc</td>
+  </tr>
+  <tr>
+    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$9b0509bc$$FastClassBySpringCGLIB$$390eb54e</td>
+  </tr>
+  <tr>
+    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$e5295635</td>
+  </tr>
+  <tr>
+    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$e5295635$$FastClassBySpringCGLIB$$caee4530</td>
+  </tr>
+  <tr>
+    <td class="name">ProductDto$$FastClassBySpringCGLIB$$1e3a6f63</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (31/31)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.dto;
+&nbsp;
+&nbsp;import com.increff.pos.dto.helper.HelperDto;
+&nbsp;import com.increff.pos.model.data.ErrorData;
+&nbsp;import com.increff.pos.model.data.ProductData;
+&nbsp;import com.increff.pos.model.form.ProductForm;
+&nbsp;import com.increff.pos.pojo.BrandPojo;
+&nbsp;import com.increff.pos.pojo.ProductPojo;
+&nbsp;import com.increff.pos.service.ApiException;
+&nbsp;import com.increff.pos.service.BrandService;
+&nbsp;import com.increff.pos.service.ProductService;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import javax.transaction.Transactional;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;import java.util.stream.IntStream;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;public class ProductDto {</b>
+&nbsp;    @Autowired
+&nbsp;    private BrandService brandService;
+&nbsp;    @Autowired
+&nbsp;    private ProductService productService;
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public int insertProduct(ProductForm form) throws ApiException {
+<b class="fc">&nbsp;        HelperDto.normalise(form);</b>
+<b class="fc">&nbsp;        BrandPojo brandPojo = brandService.getBrandByBrandCategory(form.getBrand(),form.getCategory());</b>
+<b class="fc">&nbsp;        ProductPojo productPojo = HelperDto.convert(form,brandPojo.getId());</b>
+<b class="fc">&nbsp;        return productService.insertProduct(productPojo);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //TODO: for loops or streams
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public void insertProductList(List&lt;ProductForm&gt;productFormList) throws ApiException {
+<b class="fc">&nbsp;        List&lt;ErrorData&gt; errorDataList = IntStream.range(0, productFormList.size())</b>
+<b class="fc">&nbsp;                .mapToObj(row -&gt; {</b>
+<b class="fc">&nbsp;                    ProductForm productForm = productFormList.get(row);</b>
+&nbsp;                    try {
+<b class="fc">&nbsp;                        insertProduct(productForm);</b>
+<b class="fc">&nbsp;                        return null;</b>
+<b class="fc">&nbsp;                    } catch (ApiException e) {</b>
+<b class="fc">&nbsp;                        return HelperDto.convert(row + 1, e.getMessage());</b>
+&nbsp;                    }
+&nbsp;                })
+<b class="fc">&nbsp;                .filter(Objects::nonNull)</b>
+<b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+<b class="fc">&nbsp;        if (!errorDataList.isEmpty()) {</b>
+<b class="fc">&nbsp;            throw new ApiException(errorDataList);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public void updateProduct(int id, ProductForm form) throws ApiException{
+<b class="fc">&nbsp;        HelperDto.normalise(form);</b>
+<b class="fc">&nbsp;        BrandPojo brandPojo = brandService.getBrandByBrandCategory(form.getBrand(),form.getCategory());</b>
+<b class="fc">&nbsp;        ProductPojo productPojo = HelperDto.convert(form, brandPojo.getId());</b>
+<b class="fc">&nbsp;        ProductPojo existingProductPojo = productService.getProductByBarcode(productPojo.getBarcode());</b>
+<b class="fc">&nbsp;        productService.updateProduct(id,productPojo);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public ProductData getProduct(int id) throws ApiException{
+<b class="fc">&nbsp;        ProductPojo productPojo = productService.getProductById(id);</b>
+<b class="fc">&nbsp;        BrandPojo brandPojo = brandService.getBrandById(productPojo.getBrandCategoryId());</b>
+<b class="fc">&nbsp;        return HelperDto.convert(productPojo,brandPojo.getBrand(),brandPojo.getCategory());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public List&lt;ProductData&gt; getAllProducts() throws ApiException{
+<b class="fc">&nbsp;        List&lt;ProductPojo&gt; productPojoList = productService.getAllProducts();</b>
+<b class="fc">&nbsp;        List&lt;ProductData&gt; productDataList = new ArrayList&lt;ProductData&gt;();</b>
+<b class="fc">&nbsp;        for(ProductPojo productPojo : productPojoList){</b>
+<b class="fc">&nbsp;            BrandPojo brandPojo = brandService.getBrandById(productPojo.getBrandCategoryId());</b>
+<b class="fc">&nbsp;            productDataList.add(HelperDto.convert(productPojo,brandPojo.getBrand(), brandPojo.getCategory()));</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return productDataList;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-07-13 11:24</div>
+</div>
+</body>
+</html>

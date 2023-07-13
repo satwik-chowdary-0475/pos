@@ -40,8 +40,8 @@
                         <xsl:value-of select="Order/Heading/InvoicedTime"/>
                     </fo:block>
                     <fo:block margin-bottom="20pt">
-                        <xsl:text>Order ID: </xsl:text>
-                        <xsl:value-of select="Order/Heading/OrderId"/>
+                        <xsl:text>Order Code: </xsl:text>
+                        <xsl:value-of select="Order/Heading/OrderCode"/>
                     </fo:block>
                     <fo:table table-layout="fixed" width="100%" border-collapse="collapse" border="1pt solid black" margin-bottom="20pt">
                         <fo:table-column column-width="proportional-column-width(2)"/>

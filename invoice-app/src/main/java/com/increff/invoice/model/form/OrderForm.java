@@ -11,6 +11,6 @@ import java.time.ZonedDateTime;
 public class OrderForm {
     private String customerName;
     private String invoicedTime;
-    private Integer orderId;
+    private String orderCode;
     private OrderItemForm[] orderItems;
 }

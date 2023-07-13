@@ -1,7 +1,6 @@
 package com.increff.pos.service;
 
 import com.increff.pos.dao.ProductDao;
-import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.ProductPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ public class ProductService {
         existingProductPojo.setBarcode(updatedProductPojo.getBarcode());
         existingProductPojo.setName(updatedProductPojo.getName());
         existingProductPojo.setMrp(updatedProductPojo.getMrp());
-        existingProductPojo.setBrandCategory(updatedProductPojo.getBrandCategory());
+        existingProductPojo.setBrandCategoryId(updatedProductPojo.getBrandCategoryId());
     }
 
 

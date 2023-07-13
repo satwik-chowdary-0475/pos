@@ -63,7 +63,7 @@ public class OrderDto {
     public void changeOrderStatus(String orderCode) throws ApiException {
         OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         if (orderPojo.getStatus().equals(OrderStatus.CREATED)) {
-            orderService.changeStatus(orderCode);
+            orderService.changeStatus(orderCode,OrderStatus.INVOICED);
         }
     }
 

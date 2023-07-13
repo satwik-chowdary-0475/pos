@@ -80,7 +80,7 @@ public class ReportDto {
         HashMap<Integer, Integer> brandCategoryMap = new HashMap<>();
         for (InventoryPojo inventoryPojo : inventoryPojoList) {
             ProductPojo productPojo = productService.getProductById(inventoryPojo.getProductId());
-            int brandCategoryId = productPojo.getBrandCategory();
+            int brandCategoryId = productPojo.getBrandCategoryId();
             if (brandCategoryMap.containsKey(brandCategoryId)) {
                 brandCategoryMap.put(brandCategoryId, brandCategoryMap.get(brandCategoryId) + inventoryPojo.getQuantity());
             } else {

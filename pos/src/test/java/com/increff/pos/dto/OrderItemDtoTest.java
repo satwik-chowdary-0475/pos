@@ -63,7 +63,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
         int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
-        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(orderPojo.getId(),id);
+        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(id);
         ProductPojo productPojo = productService.getProductByBarcode("barcode 1");
         // Check insert order item
         assertEquals(orderItemPojo.getOrderId(),orderPojo.getId());
@@ -118,7 +118,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         OrderItemForm newOrderItemForm = Helper.createOrderItemForm("barcode 1",20,12.23);
         int id = orderItemDto.insertOrderItem(orderPojo.getId(),newOrderItemForm);
-        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(orderPojo.getId(),id);
+        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(id);
 
         //Check insert
         assertEquals(orderItemPojo.getSellingPrice(),12.23);
@@ -147,14 +147,14 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",10,120.12);
         int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
-        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(orderPojo.getId(),id);
+        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(id);
         assertNotNull(orderItemPojo);
         assertEquals(Optional.ofNullable(inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId()).getQuantity()), Optional.ofNullable(190));
         //Check delete
         orderItemDto.deleteOrderItem(orderPojo.getId(),id);
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Order item doesn't exist!!");
-        OrderItemPojo checkOrderItemPojo = orderItemService.getOrderItemById(orderPojo.getId(),id);
+        OrderItemPojo checkOrderItemPojo = orderItemService.getOrderItemById(id);
 
         // Check updated Inventory
         assertEquals(Optional.ofNullable(inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId()).getQuantity()), Optional.ofNullable(200));
@@ -234,7 +234,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         int id = orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
         OrderItemForm updatedOrderItemForm = Helper.createOrderItemForm("barcode 1",20,100.23);
         orderItemDto.updateOrderItem(orderPojo.getId(),id,updatedOrderItemForm);
-        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(orderPojo.getId(),id);
+        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(id);
         ProductPojo productPojo = productService.getProductByBarcode("barcode 1");
 
         //Check for order item update

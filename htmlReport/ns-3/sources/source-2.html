@@ -1,0 +1,183 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ReportHelperDto</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.increff.pos.dto.helper</a>
+</div>
+
+<h1>Coverage Summary for Class: ReportHelperDto (com.increff.pos.dto.helper)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ReportHelperDto</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.4%
+  </span>
+  <span class="absValue">
+    (5/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    73%
+  </span>
+  <span class="absValue">
+    (27/37)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.dto.helper;
+&nbsp;
+&nbsp;import com.increff.pos.model.data.DailySalesData;
+&nbsp;import com.increff.pos.model.data.InventoryReportData;
+&nbsp;import com.increff.pos.model.data.ReportData;
+&nbsp;import com.increff.pos.model.data.SalesData;
+&nbsp;import com.increff.pos.model.form.SalesForm;
+&nbsp;import com.increff.pos.pojo.BrandPojo;
+&nbsp;import com.increff.pos.pojo.DailySalesReportPojo;
+&nbsp;import com.increff.pos.pojo.InventoryPojo;
+&nbsp;import com.increff.pos.service.ApiException;
+&nbsp;import com.increff.pos.util.StringUtil;
+&nbsp;import javafx.util.Pair;
+&nbsp;
+&nbsp;import java.time.ZonedDateTime;
+&nbsp;import java.time.format.DateTimeFormatter;
+&nbsp;import java.util.*;
+&nbsp;
+<b class="nc">&nbsp;public class ReportHelperDto {</b>
+&nbsp;
+&nbsp;    public static InventoryReportData convert(String brand, String category, Integer quantity) {
+<b class="fc">&nbsp;        InventoryReportData inventoryReportData = new InventoryReportData();</b>
+<b class="fc">&nbsp;        inventoryReportData.setBrand(brand);</b>
+<b class="fc">&nbsp;        inventoryReportData.setCategory(category);</b>
+<b class="fc">&nbsp;        inventoryReportData.setQuantity(quantity);</b>
+<b class="fc">&nbsp;        return inventoryReportData;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static DailySalesData convert(DailySalesReportPojo dailySalesReportPojo) {
+<b class="fc">&nbsp;        DailySalesData dailySalesData = new DailySalesData();</b>
+<b class="fc">&nbsp;        dailySalesData.setTotalRevenue(dailySalesReportPojo.getTotalRevenue());</b>
+<b class="fc">&nbsp;        dailySalesData.setInvoicedItemsCount(dailySalesReportPojo.getInvoicedItemsCount());</b>
+<b class="fc">&nbsp;        dailySalesData.setInvoicedOrdersCount(dailySalesReportPojo.getInvoicedOrdersCount());</b>
+<b class="fc">&nbsp;        ZonedDateTime zonedDateTime = dailySalesReportPojo.getTime();</b>
+<b class="fc">&nbsp;        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd HH:mm:ss z&quot;);</b>
+<b class="fc">&nbsp;        dailySalesData.setDate(zonedDateTime.format(formatter));</b>
+<b class="fc">&nbsp;        return dailySalesData;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static SalesData convert(BrandPojo brandPojo, Integer quantity, Double totalRevenue) {
+<b class="fc">&nbsp;        SalesData salesData = new SalesData();</b>
+<b class="fc">&nbsp;        salesData.setQuantity(quantity);</b>
+<b class="fc">&nbsp;        salesData.setCategory(brandPojo.getCategory());</b>
+<b class="fc">&nbsp;        salesData.setBrand(brandPojo.getBrand());</b>
+<b class="fc">&nbsp;        salesData.setRevenue(totalRevenue);</b>
+<b class="fc">&nbsp;        return salesData;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static ReportData convert(Integer quantity, Double revenue){
+<b class="nc">&nbsp;        ReportData reportData = new ReportData();</b>
+<b class="nc">&nbsp;        reportData.setRevenue(revenue);</b>
+<b class="nc">&nbsp;        reportData.setQuantity(quantity);</b>
+<b class="nc">&nbsp;        return  reportData;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void validate(SalesForm salesForm) throws ApiException {
+<b class="fc">&nbsp;        if (Objects.isNull(salesForm)) {</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid sales form details&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if(Objects.isNull(salesForm.getStartTime()) || salesForm.getStartTime().length() == 0){</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid start time&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if(Objects.isNull(salesForm.getEndTime()) || salesForm.getEndTime().length() == 0){</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid end time&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if(Objects.isNull(salesForm.getBrand()))</b>
+&nbsp;        {
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid brand name&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (Objects.isNull(salesForm.getCategory())) {</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid category name&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void normalise(SalesForm salesForm) throws ApiException {
+<b class="fc">&nbsp;        salesForm.setBrand(StringUtil.toLowerCase(salesForm.getBrand()));</b>
+<b class="fc">&nbsp;        salesForm.setCategory(StringUtil.toLowerCase(salesForm.getCategory()));</b>
+<b class="fc">&nbsp;        ReportHelperDto.validate(salesForm);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-07-13 11:24</div>
+</div>
+</body>
+</html>

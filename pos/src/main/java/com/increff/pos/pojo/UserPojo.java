@@ -15,8 +15,11 @@ public class UserPojo extends AbstractPojo{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
 }

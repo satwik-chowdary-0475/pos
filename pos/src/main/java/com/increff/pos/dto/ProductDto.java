@@ -66,7 +66,7 @@ public class ProductDto {
     @Transactional(rollbackOn = ApiException.class)
     public ProductData getProduct(int id) throws ApiException{
         ProductPojo productPojo = productService.getProductById(id);
-        BrandPojo brandPojo = brandService.getBrandById(productPojo.getBrandCategory());
+        BrandPojo brandPojo = brandService.getBrandById(productPojo.getBrandCategoryId());
         return HelperDto.convert(productPojo,brandPojo.getBrand(),brandPojo.getCategory());
     }
 
@@ -75,7 +75,7 @@ public class ProductDto {
         List<ProductPojo> productPojoList = productService.getAllProducts();
         List<ProductData> productDataList = new ArrayList<ProductData>();
         for(ProductPojo productPojo : productPojoList){
-            BrandPojo brandPojo = brandService.getBrandById(productPojo.getBrandCategory());
+            BrandPojo brandPojo = brandService.getBrandById(productPojo.getBrandCategoryId());
             productDataList.add(HelperDto.convert(productPojo,brandPojo.getBrand(), brandPojo.getCategory()));
         }
         return productDataList;

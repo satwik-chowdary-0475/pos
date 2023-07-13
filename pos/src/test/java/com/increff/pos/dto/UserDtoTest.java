@@ -23,7 +23,7 @@ public class UserDtoTest extends AbstractUnitTest {
     @Test
     public void TestInsertOperator() throws ApiException{
         UserForm userForm = Helper.createUserForm("a@gmail.com","1234");
-        userDto.insertUser(userForm);
+        userDto.signup(userForm);
         List<UserPojo> userPojoList = userService.getAllUsers();
         assertEquals(userPojoList.size(),1);
         assertEquals(userPojoList.get(0).getRole(),UserRole.OPERATOR);
@@ -32,7 +32,7 @@ public class UserDtoTest extends AbstractUnitTest {
     @Test
     public void TestInsertSupervisor() throws ApiException{
         UserForm userForm = Helper.createUserForm("abc@gmail.com","1234");
-        userDto.insertUser(userForm);
+        userDto.signup(userForm);
         List<UserPojo> userPojoList = userService.getAllUsers();
         assertEquals(userPojoList.size(),1);
         assertEquals(userPojoList.get(0).getRole(), UserRole.SUPERVISOR);

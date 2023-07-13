@@ -14,9 +14,9 @@ public class OrderPojo extends AbstractPojo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    @Column(name = "order_code", nullable = false)
+    @Column(nullable = false)
     private String orderCode;
-    @Column(name = "customer_name", nullable = false)
+    @Column(nullable = false)
     private String customerName;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

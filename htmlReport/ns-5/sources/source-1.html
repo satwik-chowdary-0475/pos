@@ -1,0 +1,166 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > AdminUtil</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.increff.pos.util</a>
+</div>
+
+<h1>Coverage Summary for Class: AdminUtil (com.increff.pos.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AdminUtil</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (3/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    15.8%
+  </span>
+  <span class="absValue">
+    (3/19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.util;
+&nbsp;
+&nbsp;import com.increff.pos.pojo.UserPojo;
+&nbsp;import com.increff.pos.pojo.UserRole;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+&nbsp;import org.springframework.security.core.Authentication;
+&nbsp;import org.springframework.security.core.authority.SimpleGrantedAuthority;
+&nbsp;import org.springframework.security.core.context.SecurityContextHolder;
+&nbsp;import org.springframework.stereotype.Component;
+&nbsp;
+&nbsp;import javax.persistence.Version;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;@Component
+<b class="fc">&nbsp;public class AdminUtil {</b>
+&nbsp;
+&nbsp;    private static List&lt;String&gt; adminsList;
+&nbsp;
+&nbsp;    @Value(&quot;${admins}&quot;)
+&nbsp;    private void setAdmins(String admins) {
+<b class="fc">&nbsp;        adminsList = Arrays.asList(admins.split(&quot;,&quot;));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Boolean checkAdmin(String email) {
+<b class="fc">&nbsp;        return adminsList.contains(email);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Authentication convert(UserPojo userPojo) {
+&nbsp;        // Create principal
+<b class="nc">&nbsp;        UserPrincipal principal = new UserPrincipal();</b>
+<b class="nc">&nbsp;        principal.setEmail(userPojo.getEmail());</b>
+<b class="nc">&nbsp;        principal.setId(userPojo.getId());</b>
+&nbsp;
+&nbsp;        // Create Authorities
+<b class="nc">&nbsp;        ArrayList&lt;SimpleGrantedAuthority&gt; authorities = new ArrayList&lt;SimpleGrantedAuthority&gt;();</b>
+<b class="nc">&nbsp;        authorities.add(new SimpleGrantedAuthority(userPojo.getRole().name()));</b>
+&nbsp;        // you can add more roles if required
+&nbsp;
+&nbsp;        // Create Authentication
+<b class="nc">&nbsp;        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, null,</b>
+&nbsp;                authorities);
+<b class="nc">&nbsp;        return token;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static String getRole() {
+<b class="nc">&nbsp;        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();</b>
+&nbsp;        ;
+<b class="nc">&nbsp;        if (Objects.isNull(authentication) || Objects.isNull(authentication.getAuthorities())) return &quot;&quot;;</b>
+<b class="nc">&nbsp;        List&lt;String&gt; authorities = authentication.getAuthorities()</b>
+<b class="nc">&nbsp;                .stream()</b>
+<b class="nc">&nbsp;                .map(Object::toString)</b>
+<b class="nc">&nbsp;                .collect(Collectors.toList());</b>
+<b class="nc">&nbsp;        if (authorities.contains(UserRole.SUPERVISOR.name())) {</b>
+<b class="nc">&nbsp;            return UserRole.SUPERVISOR.name();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return UserRole.OPERATOR.name();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-07-13 11:24</div>
+</div>
+</body>
+</html>

@@ -45,7 +45,7 @@ public class OrderService {
 
     @Transactional
     public List<OrderPojo> getOrderByDate(Date startTime, Date endTime) {
-        return orderDao.getOrderByDate(startTime, endTime);
+        return orderDao.getOrderByDate(startTime, endTime,OrderStatus.INVOICED);
     }
 
     @Transactional(rollbackOn = ApiException.class)
@@ -62,10 +62,10 @@ public class OrderService {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void changeStatus(String orderCode) throws ApiException {
+    public void changeStatus(String orderCode,OrderStatus status) throws ApiException {
         OrderPojo orderPojo = orderDao.getOrderByOrderCode(orderCode);
         checkOrder(orderPojo);
-        orderPojo.setStatus(OrderStatus.INVOICED);
+        orderPojo.setStatus(status);
     }
 
     private void checkOrder(OrderPojo orderPojo) throws ApiException {

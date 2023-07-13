@@ -6,14 +6,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increff.pos.dto.UserDto;
 import com.increff.pos.util.AdminUtil;
+import io.swagger.annotations.Api;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.increff.pos.model.data.InfoData;
@@ -24,43 +28,19 @@ import com.increff.pos.service.UserService;
 import com.increff.pos.util.SecurityUtil;
 import io.swagger.annotations.ApiOperation;
 
-@Controller
-@Log4j
+@RestController
+@Api
 public class LoginController {
 
     @Autowired
     private UserService userService;
     @Autowired
-    private InfoData info;
+    private UserDto userDto;
 
     @ApiOperation(value = "Logs in a user")
-    @RequestMapping(path = "/session/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ModelAndView login(HttpServletRequest req, LoginForm loginForm) throws ApiException {
-        UserPojo userPojo = userService.getUserByEmail(loginForm.getEmail());
-        boolean authenticated = (Objects.nonNull(userPojo) && Objects.equals(userPojo.getPassword(), loginForm.getPassword()));
-        if (!authenticated) {
-            info.setMessage("Invalid username or password");
-            return new ModelAndView("redirect:/site/login");
-        }
-
-        // Create authentication object
-        Authentication authentication = AdminUtil.convert(userPojo);
-        // Create new session
-        HttpSession session = req.getSession(true);
-        // Attach Spring SecurityContext to this new session
-        SecurityUtil.createContext(session);
-        // Attach Authentication object to the Security Context
-        SecurityUtil.setAuthentication(authentication);
-
-        return new ModelAndView("redirect:/ui/home");
-
+    @RequestMapping(path = "/session/login", method = RequestMethod.POST)
+    public void login(HttpServletRequest request, @RequestBody LoginForm loginForm) throws ApiException {
+        userDto.login(request, loginForm);
     }
-
-    @RequestMapping(path = "/session/logout", method = RequestMethod.GET)
-    public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
-        request.getSession().invalidate();
-        return new ModelAndView("redirect:/");
-    }
-
 
 }

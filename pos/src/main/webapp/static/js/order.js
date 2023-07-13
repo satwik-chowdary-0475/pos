@@ -23,11 +23,12 @@ function deleteOrder(orderCode){
 }
 function generatePdf(data){
     var url = getPdfUrl();
+    console.log(data);
     var customerName = data.customerName;
     var json = {
         customerName: data.customerName,
         invoicedTime : data.invoicedAt,
-        orderId : data.id,
+        orderCode : data.orderCode,
         orderItems : data.orderItems
     }
     var jsonString = JSON.stringify(json);

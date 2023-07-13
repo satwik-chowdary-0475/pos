@@ -56,7 +56,7 @@ public class XMLCreation {
 
             createElementWithText(doc, headingElement, "CustomerName", orderForm.getCustomerName());
             createElementWithText(doc, headingElement, "InvoicedTime", formattedDate);
-            createElementWithText(doc, headingElement, "OrderId", orderForm.getOrderId().toString());
+            createElementWithText(doc, headingElement, "OrderCode", orderForm.getOrderCode());
 
             OrderItemForm[] orderItems = orderForm.getOrderItems();
             // Iterate over each order item

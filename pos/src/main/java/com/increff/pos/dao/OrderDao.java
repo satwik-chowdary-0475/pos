@@ -27,11 +27,11 @@ public class OrderDao extends AbstractDao {
     }
 
     @Transactional
-    public List<OrderPojo> getOrderByDate(Date startTime, Date endTime) {
+    public List<OrderPojo> getOrderByDate(Date startTime, Date endTime,OrderStatus status) {
         Query query = em().createQuery(SELECT_BY_DATE);
         query.setParameter("startTime", startTime, TemporalType.TIMESTAMP);
         query.setParameter("endTime", endTime, TemporalType.TIMESTAMP);
-        query.setParameter("status", OrderStatus.INVOICED);
+        query.setParameter("status", status);
         return query.getResultList();
     }
 

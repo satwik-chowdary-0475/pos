@@ -1,0 +1,187 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > InventoryService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.increff.pos.service</a>
+</div>
+
+<h1>Coverage Summary for Class: InventoryService (com.increff.pos.service)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">InventoryService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (23/23)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">InventoryService$$EnhancerBySpringCGLIB$$da1fea40</td>
+  </tr>
+  <tr>
+    <td class="name">InventoryService$$EnhancerBySpringCGLIB$$da1fea40$$FastClassBySpringCGLIB$$98bd1d4d</td>
+  </tr>
+  <tr>
+    <td class="name">InventoryService$$FastClassBySpringCGLIB$$7f418056</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (23/23)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.service;
+&nbsp;
+&nbsp;
+&nbsp;import com.increff.pos.dao.InventoryDao;
+&nbsp;import com.increff.pos.pojo.InventoryPojo;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import javax.transaction.Transactional;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;public class InventoryService {</b>
+&nbsp;    @Autowired
+&nbsp;    private InventoryDao inventoryDao;
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public Integer insertProductInInventory(InventoryPojo inventoryPojo) throws ApiException {
+<b class="fc">&nbsp;        int productId = inventoryPojo.getProductId();</b>
+<b class="fc">&nbsp;        int quantity = inventoryPojo.getQuantity();</b>
+<b class="fc">&nbsp;        InventoryPojo existingInventoryPojo = inventoryDao.getProductInventoryById(productId);</b>
+<b class="fc">&nbsp;        if (Objects.isNull(existingInventoryPojo)) {</b>
+<b class="fc">&nbsp;            return insertNewProductInInventory(productId, quantity);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            updateProductInInventory(existingInventoryPojo, (quantity + existingInventoryPojo.getQuantity()));</b>
+<b class="fc">&nbsp;            return existingInventoryPojo.getProductId();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public Integer insertNewProductInInventory(Integer productId, Integer quantity) {
+<b class="fc">&nbsp;        InventoryPojo newInventoryPojo = new InventoryPojo();</b>
+<b class="fc">&nbsp;        newInventoryPojo.setProductId(productId);</b>
+<b class="fc">&nbsp;        newInventoryPojo.setQuantity(quantity);</b>
+<b class="fc">&nbsp;        inventoryDao.insertProductInInventory(newInventoryPojo);</b>
+<b class="fc">&nbsp;        return productId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public InventoryPojo getProductInventoryByProductId(int id) throws ApiException {
+<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryDao.getProductInventoryById(id);</b>
+<b class="fc">&nbsp;        if (Objects.isNull(inventoryPojo)) {</b>
+<b class="fc">&nbsp;            throw new ApiException(&quot;Product not present in inventory!!&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return inventoryPojo;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public List&lt;InventoryPojo&gt; getAllProductsInInventory() {
+<b class="fc">&nbsp;        return inventoryDao.getAllProductsInInventory();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public void updateProductInInventory(InventoryPojo updatedInventoryPojo) throws ApiException {
+<b class="fc">&nbsp;        InventoryPojo existingInventoryPojo = inventoryDao.getProductInventoryById(updatedInventoryPojo.getProductId());</b>
+<b class="fc">&nbsp;        if (Objects.isNull(existingInventoryPojo)) {</b>
+<b class="fc">&nbsp;            throw new ApiException(&quot;Product not present in inventory!!&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        existingInventoryPojo.setQuantity(updatedInventoryPojo.getQuantity());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public void updateProductInInventory(InventoryPojo inventoryPojo, int quantity) {
+<b class="fc">&nbsp;        inventoryPojo.setQuantity(quantity);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-07-13 11:24</div>
+</div>
+</body>
+</html>

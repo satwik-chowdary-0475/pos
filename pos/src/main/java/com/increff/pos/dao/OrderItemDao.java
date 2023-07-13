@@ -15,13 +15,12 @@ import java.util.stream.Collectors;
 @Repository
 @Log4j
 public class OrderItemDao extends AbstractDao {
-    private static String SELECT_BY_ID = "select p from OrderItemPojo p where id=:id and orderId=:orderId";
+    private static String SELECT_BY_ID = "select p from OrderItemPojo p where id=:id";
     private static String SELECT_BY_PRODUCT_ID = "select p from OrderItemPojo p where orderId=:orderId and productId=:productId";
     private static String SELECT_ALL = "select p from OrderItemPojo p where orderId=:orderId";
-    private static String DELETE_BY_ID = "delete from OrderItemPojo p where orderId=:orderId and id=:id";
+    private static String DELETE_BY_ID = "delete from OrderItemPojo p where id=:id";
     private static String DELETE_BY_ORDER_ID = "delete from OrderItemPojo p where orderId=:orderId";
     private static String SELECT_ALL_REPORT = "SELECT SUM(p.quantity), SUM(p.quantity * p.sellingPrice) FROM OrderItemPojo p WHERE p.orderId IN :orderIdsList";
-
     private static String SELECT_BY_ORDER_LIST = "select p from OrderItemPojo p where p.orderId IN :orderIdsList";
 
     @Transactional
@@ -30,9 +29,8 @@ public class OrderItemDao extends AbstractDao {
     }
 
     @Transactional
-    public OrderItemPojo getOrderItemById(int orderId, int id) {
+    public OrderItemPojo getOrderItemById(int id) {
         TypedQuery<OrderItemPojo> query = getQuery(SELECT_BY_ID, OrderItemPojo.class);
-        query.setParameter("orderId", orderId);
         query.setParameter("id", id);
         return getSingle(query);
     }
@@ -63,10 +61,9 @@ public class OrderItemDao extends AbstractDao {
 
 
     @Transactional
-    public int deleteOrderItem(int orderId, int id) {
+    public int deleteOrderItem( int id) {
         Query query = em().createQuery(DELETE_BY_ID);
         query.setParameter("id", id);
-        query.setParameter("orderId", orderId);
         return query.executeUpdate();
     }
 

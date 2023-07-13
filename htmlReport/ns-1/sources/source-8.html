@@ -1,0 +1,164 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > UserDao</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.increff.pos.dao</a>
+</div>
+
+<h1>Coverage Summary for Class: UserDao (com.increff.pos.dao)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserDao</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    76.9%
+  </span>
+  <span class="absValue">
+    (10/13)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">UserDao$$EnhancerBySpringCGLIB$$c9891f13</td>
+  </tr>
+  <tr>
+    <td class="name">UserDao$$EnhancerBySpringCGLIB$$c9891f13$$FastClassBySpringCGLIB$$ab673820</td>
+  </tr>
+  <tr>
+    <td class="name">UserDao$$FastClassBySpringCGLIB$$b95ff667</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    76.9%
+  </span>
+  <span class="absValue">
+    (10/13)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.dao;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import javax.persistence.TypedQuery;
+&nbsp;import javax.transaction.Transactional;
+&nbsp;
+&nbsp;import org.springframework.stereotype.Repository;
+&nbsp;
+&nbsp;import com.increff.pos.pojo.UserPojo;
+&nbsp;
+&nbsp;@Repository
+<b class="fc">&nbsp;public class UserDao extends AbstractDao {</b>
+&nbsp;
+<b class="fc">&nbsp;    private static String SELECT_BY_ID = &quot;select p from UserPojo p where id=:id&quot;;</b>
+<b class="fc">&nbsp;    private static String SELECT_BY_EMAIL = &quot;select p from UserPojo p where email=:email&quot;;</b>
+<b class="fc">&nbsp;    private static String SELECT_ALL = &quot;select p from UserPojo p&quot;;</b>
+&nbsp;
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public void insertUser(UserPojo userPojo) {
+<b class="fc">&nbsp;        em().persist(userPojo);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public UserPojo getUserById(int id) {
+<b class="nc">&nbsp;        TypedQuery&lt;UserPojo&gt; query = getQuery(SELECT_BY_ID, UserPojo.class);</b>
+<b class="nc">&nbsp;        query.setParameter(&quot;id&quot;, id);</b>
+<b class="nc">&nbsp;        return getSingle(query);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public UserPojo getUserByEmail(String email) {
+<b class="fc">&nbsp;        TypedQuery&lt;UserPojo&gt; query = getQuery(SELECT_BY_EMAIL, UserPojo.class);</b>
+<b class="fc">&nbsp;        query.setParameter(&quot;email&quot;, email);</b>
+<b class="fc">&nbsp;        return getSingle(query);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public List&lt;UserPojo&gt; getAllUsers() {
+<b class="fc">&nbsp;        TypedQuery&lt;UserPojo&gt; query = getQuery(SELECT_ALL, UserPojo.class);</b>
+<b class="fc">&nbsp;        return query.getResultList();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-07-13 11:24</div>
+</div>
+</body>
+</html>

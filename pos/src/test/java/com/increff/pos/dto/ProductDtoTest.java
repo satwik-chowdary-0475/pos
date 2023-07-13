@@ -51,7 +51,7 @@ public class ProductDtoTest extends AbstractUnitTest {
         ProductPojo productPojo = productService.getProductById(id);
         assertEquals(productPojo.getId().intValue(),id);
         assertEquals(productPojo.getBarcode(),"barcode 1");
-        assertEquals(productPojo.getBrandCategory(),brandPojo.getId());
+        assertEquals(productPojo.getBrandCategoryId(),brandPojo.getId());
         assertEquals(productPojo.getName(),"product 1");
         assertEquals(productPojo.getMrp(),120.12);
     }
