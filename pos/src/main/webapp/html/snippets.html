@@ -19,7 +19,7 @@
 
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-1" th:fragment="name_app_navbar">
-    <a class="navbar-brand" th:href="@{/}">
+    <a class="navbar-brand" th:href="@{/ui/home}">
         <img th:src="@{/static/images/logo.jpg}" class="d-inline-block align-top" height="50" alt="">
     </a>
 
@@ -51,17 +51,42 @@
         </ul>
 
         <ul class="navbar-nav ml-auto mr-3">
-            <li class="navbar-text">
-                [[${info.getEmail()}]]
-                &nbsp;&gt;&nbsp;
+            <li class="dropdown">
+                <a href="#" class="display-picture"><img th:src="@{/static/images/profile-pic.svg}"></a>
+                    <div class="card-profile hidden">
+                        <ul>
+                            <li class="navbar-text" style="color:#FFF">
+                                [[${info.getEmail()}]]
+                            </li>
+                            <li class="navbar-text" style="color:#FFF">
+                                [[${info.getRole()}]]
+                            </li>
+                            <li class="nav-item list-unstyled">
+                                <a class="nav-link" th:href="@{/session/logout}" style="color:#FFF;margin:0;padding:0">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+<!--                    <li class="navbar-text">-->
+<!--                        [[${info.getEmail()}]]-->
+<!--                    </li>-->
+<!--                    <li class="navbar-text">-->
+<!--                        [[${info.getRole()}]]-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" th:href="@{/session/logout}">Logout</a>-->
+<!--                    </li>-->
             </li>
-            <li class="navbar-text">
-                [[${info.getRole()}]]
-                &nbsp;&gt;&nbsp;
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/session/logout}">Logout</a>
-            </li>
+<!--            <li class="navbar-text">-->
+<!--                [[${info.getEmail()}]]-->
+<!--                &nbsp;&gt;&nbsp;-->
+<!--            </li>-->
+<!--            <li class="navbar-text">-->
+<!--                [[${info.getRole()}]]-->
+<!--                &nbsp;&gt;&nbsp;-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" th:href="@{/session/logout}">Logout</a>-->
+<!--            </li>-->
         </ul>
 
 
@@ -79,7 +104,7 @@
     <script th:src="@{/static/js/app.js}"/></script>
     <script th:src="@{/static/js/papaparse.min.js}"/></script>
     <script th:src="@{/static/js/notify.min.js}"/></script>
-
+    <script th:src="@{/static/js/profile.js}"/></script>
 </footer>
 
 

@@ -12,35 +12,33 @@ function getRoleOfUser(callback){
     callback(userRole);
 }
 
-// functions for AJAX calls
 function addBrand(event){
-	//Set the values to update
 	var $form = $("#brand-form");
 	if($form[0].checkValidity()){
 	    var json = toJson($form);
-        	var url = getBrandUrl();
-        	$.ajax({
-        	   url: url,
-        	   type: 'POST',
-        	   data: json,
-        	   headers: {
-               	'Content-Type': 'application/json'
-               },
-        	   success: function(response) {
-        	   		getBrandList();
-        	   		$("#brand-form input[name=brand]").val('');
-        	   		$("#brand-form input[name=category]").val('');
-        	   		toggleBrandModal();
-        	   		$.notify("Added brand successfully","success");
-
+        var url = getBrandUrl();
+        $.ajax({
+           url: url,
+           type: 'POST',
+           data: json,
+           headers: {
+            'Content-Type': 'application/json'
            },
-        	   error:function(error){
-        	         if(error.status == 403){
-        	             $.notify("You cannot add brand",{className:"error",autoHideDelay: 20000});
-        	         }
-        	        handleAjaxError(error);
-        	   }
-        	});
+           success: function(response) {
+                getBrandList();
+                $("#brand-form input[name=brand]").val('');
+                $("#brand-form input[name=category]").val('');
+                toggleBrandModal();
+                $.notify("Added brand successfully","success");
+
+       },
+           error:function(error){
+                 if(error.status == 403){
+                     $.notify("You cannot add brand",{className:"error",autoHideDelay: 20000});
+                 }
+                handleAjaxError(error);
+           }
+        });
 	    $form.addClass('was-validated');
 	}
 	else{
@@ -64,7 +62,6 @@ function getBrandList(){
 }
 
 function uploadRows(){
-//	updateUploadDialog();
     var url = getBrandUrl() + '/bulk';
     var json = JSON.stringify(fileData);
     if(json.length <= 5000 && json.length > 0){
@@ -133,7 +130,6 @@ function updateBrand(event){
 	return false;
 }
 
-// functions for displaying data
 function displayEditBrand(id){
 	var url = getBrandUrl() + "/" + id;
 	$.ajax({
@@ -178,9 +174,8 @@ function displayUploadData(){
 	$('#upload-brand-modal').modal('toggle');
 }
 
-// helper functions
+
 function resetUploadDialog(){
-	//Reset file name
 	var $file = $('#brandFile');
 	$file.val('');
 	$('#brandFileName').html("Choose File");
@@ -204,7 +199,7 @@ function updateUploadDialog(){
 function updateFileName(){
 	var $file = $('#brandFile');
 	var fileName = $file.val();
-	fileName = fileName.substring(fileName.lastIndexOf("\\") + 1, fileName.length);
+	fileName = removeFakePath(fileName);
 	$('#brandFileName').html(fileName);
 	$("#process-data").prop('disabled',(fileName.length == 0));
 }
@@ -276,6 +271,5 @@ $(document).ready(function() {
     getRoleOfUser(function(role) {
         init();
         getBrandList();
-
     });
 });

@@ -47,8 +47,6 @@ public class OrderDtoTest extends AbstractUnitTest {
     @Autowired
     private InventoryService inventoryService;
 
-    //TODO: Better naming in tests
-
     @Before
     public void init() throws ApiException {
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
@@ -61,7 +59,6 @@ public class OrderDtoTest extends AbstractUnitTest {
         inventoryDto.insertProductInInventory(inventoryForm);
     }
 
-    // TODO : TO TEST HELPERS AND NORMALISE CASES
     @Test
     public void TestInsert() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");

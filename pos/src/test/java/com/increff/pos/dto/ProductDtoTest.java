@@ -42,7 +42,6 @@ public class ProductDtoTest extends AbstractUnitTest {
         brandDto.insertBrand(brandForm);
     }
 
-    // TODO : TO TEST HELPERS AND NORMALISE CASES
     @Test
     public void TestInsert() throws ApiException{
         ProductForm productForm = Helper.createProductForm("barcode 1","brand 1","category 1","product 1",120.12);

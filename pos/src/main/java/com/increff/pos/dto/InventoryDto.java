@@ -71,7 +71,6 @@ public class InventoryDto {
         }
     }
 
-    //TODO: for loops or streams??
     @Transactional(rollbackOn = ApiException.class)
     public void insertInventoryList(List<InventoryForm> inventoryFormList) throws ApiException {
         List<ErrorData> errorDataList = IntStream.range(0, inventoryFormList.size())

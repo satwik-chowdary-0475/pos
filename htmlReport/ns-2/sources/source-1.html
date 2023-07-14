@@ -48,10 +48,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    100%
+    80.6%
   </span>
   <span class="absValue">
-    (25/25)
+    (25/31)
   </span>
 </td>
 </tr>
@@ -68,10 +68,10 @@ Current scope:     <a href="../../index.html">all classes</a>
     <td class="name">BrandDto$$EnhancerBySpringCGLIB$$714600ad$$FastClassBySpringCGLIB$$f4eae60d</td>
   </tr>
   <tr>
-    <td class="name">BrandDto$$EnhancerBySpringCGLIB$$919ab1ff</td>
+    <td class="name">BrandDto$$EnhancerBySpringCGLIB$$87e055ab</td>
   </tr>
   <tr>
-    <td class="name">BrandDto$$EnhancerBySpringCGLIB$$919ab1ff$$FastClassBySpringCGLIB$$cfaa2c7d</td>
+    <td class="name">BrandDto$$EnhancerBySpringCGLIB$$87e055ab$$FastClassBySpringCGLIB$$ed7cb879</td>
   </tr>
   <tr>
     <td class="name">BrandDto$$FastClassBySpringCGLIB$$8dfdea8b</td>
@@ -88,10 +88,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    100%
+    80.6%
   </span>
   <span class="absValue">
-    (25/25)
+    (25/31)
   </span>
 </td>
 </tr>
@@ -132,23 +132,22 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return brandService.insertBrand(brandPojo);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    //TODO:for loops or streams??
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public void insertBrandList(List&lt;BrandForm&gt; brandFormList) throws ApiException {
 <b class="fc">&nbsp;        List&lt;ErrorData&gt; errorDataList = IntStream.range(0, brandFormList.size())</b>
 <b class="fc">&nbsp;                .mapToObj(row -&gt; {</b>
 <b class="fc">&nbsp;                    BrandForm brandForm = brandFormList.get(row);</b>
-&nbsp;                    try {
+<b class="nc">&nbsp;                    try {</b>
 <b class="fc">&nbsp;                        insertBrand(brandForm);</b>
 <b class="fc">&nbsp;                        return null;</b>
 <b class="fc">&nbsp;                    } catch (ApiException e) {</b>
 <b class="fc">&nbsp;                        return HelperDto.convert(row + 1, e.getMessage());</b>
-&nbsp;                    }
+<b class="nc">&nbsp;                    }</b>
 <b class="fc">&nbsp;                }).filter(Objects::nonNull)</b>
 <b class="fc">&nbsp;                .collect(Collectors.toList());</b>
 <b class="fc">&nbsp;        if (!errorDataList.isEmpty()) {</b>
 <b class="fc">&nbsp;            throw new ApiException(errorDataList);</b>
-&nbsp;        }
+<b class="nc">&nbsp;        }</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
@@ -156,13 +155,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        HelperDto.normalise(brandForm);</b>
 <b class="fc">&nbsp;        BrandPojo brandPojo = HelperDto.convert(brandForm);</b>
 <b class="fc">&nbsp;        brandService.updateBrand(id, brandPojo);</b>
-&nbsp;    }
+<b class="nc">&nbsp;    }</b>
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public BrandData getBrandData(int id) throws ApiException {
 <b class="fc">&nbsp;        BrandPojo brandPojo = brandService.getBrandById(id);</b>
 <b class="fc">&nbsp;        return HelperDto.convert(brandPojo);</b>
-&nbsp;    }
+<b class="nc">&nbsp;    }</b>
 &nbsp;
 &nbsp;    @Transactional
 &nbsp;    public List&lt;BrandData&gt; getAllBrandDataList() {
@@ -171,7 +170,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;                .map(HelperDto::convert)</b>
 <b class="fc">&nbsp;                .collect(Collectors.toList());</b>
 <b class="fc">&nbsp;        return brandDataList;</b>
-&nbsp;    }
+<b class="nc">&nbsp;    }</b>
 &nbsp;
 &nbsp;
 &nbsp;}
@@ -198,7 +197,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-13 11:24</div>
+    <div style="float:right;">generated on 2023-07-14 11:25</div>
 </div>
 </body>
 </html>

@@ -40,18 +40,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name">ReportDto</td>
 <td class="coverageStat">
   <span class="percent">
-    86.7%
+    93.3%
   </span>
   <span class="absValue">
-    (13/15)
+    (14/15)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    89.4%
+    84.5%
   </span>
   <span class="absValue">
-    (59/66)
+    (71/84)
   </span>
 </td>
 </tr>
@@ -62,10 +62,10 @@ Current scope:     <a href="../../index.html">all classes</a>
     <td class="name">ReportDto$$EnhancerBySpringCGLIB$$2c295f54$$FastClassBySpringCGLIB$$d4e39429</td>
   </tr>
   <tr>
-    <td class="name">ReportDto$$EnhancerBySpringCGLIB$$4c7e10a6</td>
+    <td class="name">ReportDto$$EnhancerBySpringCGLIB$$42c3b452</td>
   </tr>
   <tr>
-    <td class="name">ReportDto$$EnhancerBySpringCGLIB$$4c7e10a6$$FastClassBySpringCGLIB$$af979c52</td>
+    <td class="name">ReportDto$$EnhancerBySpringCGLIB$$42c3b452$$FastClassBySpringCGLIB$$d7f138de</td>
   </tr>
   <tr>
     <td class="name">ReportDto$$EnhancerBySpringCGLIB$$e20512db</td>
@@ -80,18 +80,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    86.7%
+    93.3%
   </span>
   <span class="absValue">
-    (13/15)
+    (14/15)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    89.4%
+    84.5%
   </span>
   <span class="absValue">
-    (59/66)
+    (71/84)
   </span>
 </td>
 </tr>
@@ -162,7 +162,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        dailySalesReportService.insertDailySalesReport();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    //total db calls -&gt; 1(brands) + 1(inventory) + x(no.of products in inventory)
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public List&lt;InventoryReportData&gt; getInventoryReport() throws ApiException {
 <b class="fc">&nbsp;        List&lt;BrandPojo&gt; brandPojoList = brandService.getAllBrands();</b>
@@ -173,11 +172,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;                    int brandId = brandPojo.getId();</b>
 <b class="fc">&nbsp;                    Integer quantity = brandCategoryMap.getOrDefault(brandId, 0);</b>
 <b class="fc">&nbsp;                    return ReportHelperDto.convert(brandPojo.getBrand(), brandPojo.getCategory(), quantity);</b>
-&nbsp;                })
+<b class="fc">&nbsp;                })</b>
 <b class="fc">&nbsp;                .collect(Collectors.toList());</b>
-&nbsp;
+<b class="fc">&nbsp;</b>
 <b class="fc">&nbsp;        return inventoryReportDataList;</b>
-&nbsp;
+<b class="fc">&nbsp;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    private HashMap&lt;Integer, Integer&gt; getBrandCategoryMap(List&lt;InventoryPojo&gt; inventoryPojoList) throws ApiException {
@@ -186,24 +185,20 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;            ProductPojo productPojo = productService.getProductById(inventoryPojo.getProductId());</b>
 <b class="fc">&nbsp;            int brandCategoryId = productPojo.getBrandCategoryId();</b>
 <b class="fc">&nbsp;            if (brandCategoryMap.containsKey(brandCategoryId)) {</b>
-<b class="nc">&nbsp;                brandCategoryMap.put(brandCategoryId, brandCategoryMap.get(brandCategoryId) + inventoryPojo.getQuantity());</b>
-&nbsp;            } else {
+<b class="fc">&nbsp;                brandCategoryMap.put(brandCategoryId, brandCategoryMap.get(brandCategoryId) + inventoryPojo.getQuantity());</b>
+<b class="nc">&nbsp;            } else {</b>
 <b class="fc">&nbsp;                brandCategoryMap.put(brandCategoryId, inventoryPojo.getQuantity());</b>
-&nbsp;            }
+<b class="fc">&nbsp;            }</b>
 <b class="fc">&nbsp;        }</b>
 <b class="fc">&nbsp;        return brandCategoryMap;</b>
-&nbsp;    }
+<b class="fc">&nbsp;    }</b>
 &nbsp;
-&nbsp;
-&nbsp;    //TODO: WROTE BRUTE FORCE n^2 need to optimise.
-&nbsp;    // DB calls -&gt; 1(brands) + 1(orders) + 1(orderItems) + x(no of brands)
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public List&lt;SalesData&gt; getSalesReport(SalesForm salesForm) throws ApiException {
 <b class="fc">&nbsp;        ReportHelperDto.normalise(salesForm);</b>
 <b class="fc">&nbsp;        Date startTime = Date.valueOf(LocalDate.parse(salesForm.getStartTime()));</b>
 <b class="fc">&nbsp;        Date endTime = Date.valueOf(LocalDate.parse(salesForm.getEndTime()));</b>
 <b class="fc">&nbsp;        List&lt;OrderPojo&gt; orderPojoList = orderService.getOrderByDate(startTime, endTime);</b>
-&nbsp;//        HashMap&lt;Integer, Pair&lt;Integer, Double&gt;&gt; productOrderItemMap = getProductOrderItemMap(orderPojoList);
 <b class="fc">&nbsp;        HashMap&lt;Integer,ReportData&gt; productOrderItemMap = getProductOrderItemMap(orderPojoList);</b>
 <b class="fc">&nbsp;        List&lt;SalesData&gt; salesDataList = brandService.getBrandListByBrandCategory(salesForm.getBrand(), salesForm.getCategory())</b>
 <b class="fc">&nbsp;                .stream()</b>
@@ -212,38 +207,37 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;                    int quantity = getSalesReportQuantity(productPojoList, productOrderItemMap);</b>
 <b class="fc">&nbsp;                    double revenue = getSalesReportRevenue(productPojoList, productOrderItemMap);</b>
 <b class="fc">&nbsp;                    return ReportHelperDto.convert(brandPojo, quantity, revenue);</b>
-&nbsp;                })
+<b class="fc">&nbsp;                })</b>
 <b class="fc">&nbsp;                .collect(Collectors.toList());</b>
-&nbsp;
+<b class="nc">&nbsp;</b>
 <b class="fc">&nbsp;        return salesDataList;</b>
-&nbsp;
+<b class="nc">&nbsp;</b>
 &nbsp;    }
-&nbsp;
+<b class="fc">&nbsp;</b>
 &nbsp;    private double getSalesReportRevenue(List&lt;ProductPojo&gt; productPojoList, HashMap&lt;Integer, ReportData&gt; productOrderItemMap) {
 <b class="fc">&nbsp;        return productPojoList.stream()</b>
 <b class="fc">&nbsp;                .filter(productPojo -&gt; productOrderItemMap.containsKey(productPojo.getId()))</b>
 <b class="fc">&nbsp;                .mapToDouble(productPojo -&gt; productOrderItemMap.get(productPojo.getId()).getRevenue())</b>
 <b class="fc">&nbsp;                .sum();</b>
 &nbsp;    }
-&nbsp;
-&nbsp;    private int getSalesReportQuantity(List&lt;ProductPojo&gt; productPojoList, HashMap&lt;Integer, ReportData&gt; productOrderItemMap) {
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    private int getSalesReportQuantity(List&lt;ProductPojo&gt; productPojoList, HashMap&lt;Integer, ReportData&gt; productOrderItemMap) {</b>
 <b class="fc">&nbsp;        return productPojoList.stream()</b>
 <b class="fc">&nbsp;                .filter(productPojo -&gt; productOrderItemMap.containsKey(productPojo.getId()))</b>
 <b class="fc">&nbsp;                .mapToInt(productPojo -&gt; productOrderItemMap.get(productPojo.getId()).getQuantity())</b>
 <b class="fc">&nbsp;                .sum();</b>
 &nbsp;    }
-&nbsp;
-&nbsp;    // db call = 1
-&nbsp;    public HashMap&lt;Integer, ReportData&gt; getProductOrderItemMap(List&lt;OrderPojo&gt; orderPojoList) {
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    public HashMap&lt;Integer, ReportData&gt; getProductOrderItemMap(List&lt;OrderPojo&gt; orderPojoList) {</b>
 <b class="fc">&nbsp;        List&lt;OrderItemPojo&gt; orderItemPojoList = orderItemService.getAllOrderItemsByOrderList(orderPojoList);</b>
 <b class="fc">&nbsp;        HashMap&lt;Integer, ReportData&gt; productOrderItemMap = orderItemPojoList.stream()</b>
 <b class="fc">&nbsp;                .collect(Collectors.toMap(</b>
 &nbsp;                        OrderItemPojo::getProductId,
 &nbsp;                        orderItemPojo -&gt; {
 <b class="nc">&nbsp;                            Integer quantity = orderItemPojo.getQuantity();</b>
-<b class="nc">&nbsp;                            Double revenue = orderItemPojo.getQuantity() * orderItemPojo.getSellingPrice();</b>
-<b class="nc">&nbsp;                            return ReportHelperDto.convert(quantity,revenue);</b>
-&nbsp;
+<b class="fc">&nbsp;                            Double revenue = orderItemPojo.getQuantity() * orderItemPojo.getSellingPrice();</b>
+<b class="fc">&nbsp;                            return ReportHelperDto.convert(quantity,revenue);</b>
+<b class="fc">&nbsp;</b>
 &nbsp;                        },
 &nbsp;                        (existingPair, newPair) -&gt; {
 <b class="nc">&nbsp;                            Integer updatedQuantity = existingPair.getQuantity() + newPair.getQuantity();</b>
@@ -253,8 +247,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;                        HashMap::new
 &nbsp;                ));
 <b class="fc">&nbsp;        return productOrderItemMap;</b>
-&nbsp;    }
-&nbsp;
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
 &nbsp;
 &nbsp;}
 </code>
@@ -280,7 +274,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-13 11:24</div>
+    <div style="float:right;">generated on 2023-07-14 11:25</div>
 </div>
 </body>
 </html>

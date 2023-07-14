@@ -48,10 +48,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    100%
+    91.9%
   </span>
   <span class="absValue">
-    (34/34)
+    (34/37)
   </span>
 </td>
 </tr>
@@ -68,10 +68,10 @@ Current scope:     <a href="../../index.html">all classes</a>
     <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$828b2d2e$$FastClassBySpringCGLIB$$3e6389ec</td>
   </tr>
   <tr>
-    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$a2dfde80</td>
+    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$9925822c</td>
   </tr>
   <tr>
-    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$a2dfde80$$FastClassBySpringCGLIB$$2cd811cf</td>
+    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$9925822c$$FastClassBySpringCGLIB$$bdb1eb1</td>
   </tr>
   <tr>
     <td class="name">InventoryDto$$FastClassBySpringCGLIB$$d857bf16</td>
@@ -88,10 +88,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    100%
+    91.9%
   </span>
   <span class="absValue">
-    (34/34)
+    (34/37)
   </span>
 </td>
 </tr>
@@ -175,24 +175,23 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
-&nbsp;    //TODO: for loops or streams??
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public void insertInventoryList(List&lt;InventoryForm&gt; inventoryFormList) throws ApiException {
 <b class="fc">&nbsp;        List&lt;ErrorData&gt; errorDataList = IntStream.range(0, inventoryFormList.size())</b>
 <b class="fc">&nbsp;                .mapToObj(row -&gt; {</b>
 <b class="fc">&nbsp;                    InventoryForm inventoryForm = inventoryFormList.get(row);</b>
-&nbsp;                    try {
+<b class="nc">&nbsp;                    try {</b>
 <b class="fc">&nbsp;                        insertProductInInventory(inventoryForm);</b>
 <b class="fc">&nbsp;                        return null;</b>
 <b class="fc">&nbsp;                    } catch (ApiException e) {</b>
 <b class="fc">&nbsp;                        return HelperDto.convert(row + 1, e.getMessage());</b>
-&nbsp;                    }
+<b class="nc">&nbsp;                    }</b>
 &nbsp;                })
 <b class="fc">&nbsp;                .filter(Objects::nonNull)</b>
 <b class="fc">&nbsp;                .collect(Collectors.toList());</b>
 <b class="fc">&nbsp;        if (!errorDataList.isEmpty()) {</b>
 <b class="fc">&nbsp;            throw new ApiException(errorDataList);</b>
-&nbsp;        }
+<b class="nc">&nbsp;        }</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -218,7 +217,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-13 11:24</div>
+    <div style="float:right;">generated on 2023-07-14 11:25</div>
 </div>
 </body>
 </html>

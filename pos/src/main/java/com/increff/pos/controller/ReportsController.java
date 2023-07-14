@@ -52,7 +52,7 @@ public class ReportsController {
 
     @ApiOperation(value = "insert daily sales report")
     @PostMapping(path = "/day-on-day")
-    public void insertDailySaleReport(){
+    public void insertDailySaleReport() {
         reportDto.insertDailySalesReport();
     }
 

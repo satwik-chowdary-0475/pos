@@ -147,16 +147,9 @@ function processErrorData(errorDataList){
 }
 
 function uploadRows(){
-//Update progress
-//	updateUploadDialog();
-
-
 	var json = JSON.stringify(fileData);
-
 	var url = getProductUrl()+'/bulk';
-
     if(json.length <= 5000 && json.length > 0){
-        //Make ajax call
         $.ajax({
         	   url: url,
         	   type: 'POST',
@@ -194,17 +187,14 @@ function resetErrorCount(){
     errorData = [];
 }
 function resetUploadDialog(){
-	//Reset file name
 	var $file = $('#productFile');
 	$file.val('');
 	$('#productFileName').html("Choose File");
-	//Reset various counts
 	processCount = 0;
 	fileData = [];
     resetErrorCount();
     $('#download-errors').prop('disabled',true);
     $('#process-data').prop('disabled',true);
-	//Update counts
 	updateUploadDialog();
 }
 
@@ -216,6 +206,7 @@ function updateUploadDialog(){
 function updateFileName(){
 	var $file = $('#productFile');
 	var fileName = $file.val();
+	fileName = removeFakePath(fileName);
 	$('#productFileName').html(fileName);
 	$("#process-data").prop('disabled',(fileName.length == 0));
 }
@@ -229,7 +220,6 @@ function updateProduct(event){
     if($form[0].checkValidity()){
         var id = $("#product-edit-form input[name=id]").val();
         	var url = getProductUrl() + "/" + id;
-        	//Set the values to update
         	var json = toJson($form);
         	$.ajax({
         	   url: url,

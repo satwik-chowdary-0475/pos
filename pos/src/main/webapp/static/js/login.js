@@ -28,7 +28,7 @@ function showError(message,info){
 }
 
 function validateForm(event) {
-        event.preventDefault(); // Prevent the form from submitting initially
+        event.preventDefault();
 
         var email = document.getElementById("email").value;
         var password = document.getElementById("password").value;
@@ -62,7 +62,6 @@ function getSignupUrl(){
 function login(){
     var url = getLoginUrl();
     var $form = $("#login-form");
-//    var json = $form.serialize();
     var json = toJson($form);
     $.ajax({
            url: url,
@@ -80,6 +79,12 @@ function login(){
         })
 }
 
+function resetFormValues(){
+    container.classList.remove("right-panel-active");
+    $("#init-form input[name=email]").val('');
+    $("#init-form input[name=password]").val('');
+}
+
 function signup(event){
 
     var url = getSignupUrl();
@@ -93,7 +98,7 @@ function signup(event){
                    'Content-Type': 'application/json'
                },
                success: function(response) {
-                    container.classList.remove("right-panel-active");
+                    resetFormValues();
                     $.notify("User added successfully!!","success");
            },
                error:function(error){

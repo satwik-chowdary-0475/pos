@@ -28,7 +28,6 @@ public class BrandDto {
         return brandService.insertBrand(brandPojo);
     }
 
-    //TODO:for loops or streams??
     @Transactional(rollbackOn = ApiException.class)
     public void insertBrandList(List<BrandForm> brandFormList) throws ApiException {
         List<ErrorData> errorDataList = IntStream.range(0, brandFormList.size())

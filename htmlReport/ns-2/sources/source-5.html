@@ -48,19 +48,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    100%
+    83.8%
   </span>
   <span class="absValue">
-    (31/31)
+    (31/37)
   </span>
 </td>
 </tr>
-  <tr>
-    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$57e0787</td>
-  </tr>
-  <tr>
-    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$57e0787$$FastClassBySpringCGLIB$$1110e3d3</td>
-  </tr>
   <tr>
     <td class="name">ProductDto$$EnhancerBySpringCGLIB$$9b0509bc</td>
   </tr>
@@ -72,6 +66,12 @@ Current scope:     <a href="../../index.html">all classes</a>
   </tr>
   <tr>
     <td class="name">ProductDto$$EnhancerBySpringCGLIB$$e5295635$$FastClassBySpringCGLIB$$caee4530</td>
+  </tr>
+  <tr>
+    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$fbc3ab33</td>
+  </tr>
+  <tr>
+    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$fbc3ab33$$FastClassBySpringCGLIB$$d2a56b63</td>
   </tr>
   <tr>
     <td class="name">ProductDto$$FastClassBySpringCGLIB$$1e3a6f63</td>
@@ -88,10 +88,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    100%
+    83.8%
   </span>
   <span class="absValue">
-    (31/31)
+    (31/37)
   </span>
 </td>
 </tr>
@@ -138,24 +138,23 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return productService.insertProduct(productPojo);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    //TODO: for loops or streams
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public void insertProductList(List&lt;ProductForm&gt;productFormList) throws ApiException {
 <b class="fc">&nbsp;        List&lt;ErrorData&gt; errorDataList = IntStream.range(0, productFormList.size())</b>
 <b class="fc">&nbsp;                .mapToObj(row -&gt; {</b>
 <b class="fc">&nbsp;                    ProductForm productForm = productFormList.get(row);</b>
-&nbsp;                    try {
+<b class="nc">&nbsp;                    try {</b>
 <b class="fc">&nbsp;                        insertProduct(productForm);</b>
 <b class="fc">&nbsp;                        return null;</b>
 <b class="fc">&nbsp;                    } catch (ApiException e) {</b>
 <b class="fc">&nbsp;                        return HelperDto.convert(row + 1, e.getMessage());</b>
-&nbsp;                    }
+<b class="nc">&nbsp;                    }</b>
 &nbsp;                })
 <b class="fc">&nbsp;                .filter(Objects::nonNull)</b>
 <b class="fc">&nbsp;                .collect(Collectors.toList());</b>
 <b class="fc">&nbsp;        if (!errorDataList.isEmpty()) {</b>
 <b class="fc">&nbsp;            throw new ApiException(errorDataList);</b>
-&nbsp;        }
+<b class="nc">&nbsp;        }</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
@@ -165,14 +164,14 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        ProductPojo productPojo = HelperDto.convert(form, brandPojo.getId());</b>
 <b class="fc">&nbsp;        ProductPojo existingProductPojo = productService.getProductByBarcode(productPojo.getBarcode());</b>
 <b class="fc">&nbsp;        productService.updateProduct(id,productPojo);</b>
-&nbsp;    }
+<b class="nc">&nbsp;    }</b>
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public ProductData getProduct(int id) throws ApiException{
 <b class="fc">&nbsp;        ProductPojo productPojo = productService.getProductById(id);</b>
 <b class="fc">&nbsp;        BrandPojo brandPojo = brandService.getBrandById(productPojo.getBrandCategoryId());</b>
 <b class="fc">&nbsp;        return HelperDto.convert(productPojo,brandPojo.getBrand(),brandPojo.getCategory());</b>
-&nbsp;    }
+<b class="nc">&nbsp;    }</b>
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public List&lt;ProductData&gt; getAllProducts() throws ApiException{
@@ -183,7 +182,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;            productDataList.add(HelperDto.convert(productPojo,brandPojo.getBrand(), brandPojo.getCategory()));</b>
 <b class="fc">&nbsp;        }</b>
 <b class="fc">&nbsp;        return productDataList;</b>
-&nbsp;    }
+<b class="nc">&nbsp;    }</b>
 &nbsp;}
 </code>
 </pre>
@@ -208,7 +207,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-13 11:24</div>
+    <div style="float:right;">generated on 2023-07-14 11:25</div>
 </div>
 </body>
 </html>

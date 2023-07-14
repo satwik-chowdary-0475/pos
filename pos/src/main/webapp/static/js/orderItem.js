@@ -148,7 +148,6 @@ function displayOrderItemList(data){
 }
 
 function addOrderItem(event){
-	//Set the values to update
 	var $form = $("#orderItem-form");
 	if($form[0].checkValidity()){
 	    var json = toJson($form);

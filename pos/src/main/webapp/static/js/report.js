@@ -68,27 +68,36 @@ function getInventoryReports(){
 
 function getSalesReport(){
     var $form = $("#sales-form");
-    	var json = toJson($form);
-    	var url = getSalesUrl() + '/sales';
-    	$.ajax({
-    	   url: url,
-    	   type: 'POST',
-    	   data: json,
-    	   headers: {
-           	'Content-Type': 'application/json'
+    if($form[0].checkValidity()){
+        var json = toJson($form);
+        var url = getSalesUrl() + '/sales';
+        $.ajax({
+           url: url,
+           type: 'POST',
+           data: json,
+           headers: {
+            'Content-Type': 'application/json'
            },
-    	   success: function(data) {
-    	   		downloadReports(data);
-    	   		$("#sales-form input[name=startTime]").val('');
+           success: function(data) {
+                downloadReports(data);
+                $("#sales-form input[name=startTime]").val('');
                 $("#sales-form input[name=endTime]").val('');
-    	   		$("#sales-form input[name=brand]").val('');
-    	   		$("#sales-form input[name=category]").val('');
-    	   		toggleSalesModal();
-    	   		$.notify("Downloaded Sales Reports successfully","success");
+                $("#sales-form input[name=brand]").val('');
+                $("#sales-form input[name=category]").val('');
+                toggleSalesModal();
+                $.notify("Downloaded Sales Reports successfully","success");
        },
-    	   error:handleAjaxError
-    	});
-    	return false;
+           error:handleAjaxError
+        });
+        $form.addClass('was-validated');
+    }
+    else{
+        event.preventDefault();
+        event.stopPropagation();
+        $form.addClass('was-validated');
+    }
+
+    return false;
 }
 
 function downloadReports(reportData){
@@ -99,12 +108,19 @@ function toggleSalesModal(){
     $('#sales-report-modal').modal('toggle');
 }
 
+function resetSalesModal(){
+     $("#sales-form input[name=startTime]").val('');
+    $("#sales-form input[name=endTime]").val('');
+    $("#sales-form").removeClass("was-validated");
+    toggleSalesModal();
+}
+
 function init(){
     $("#download-brand-report").click(getBrandReports);
     $('#download-daily-sales-report').click(getDailySalesReports);
     $("#download-inventory-report").click(getInventoryReports);
-    $("#download-sales-report").click(getSalesReport)
-    $("#show-filters").click(toggleSalesModal)
+    $("#download-sales-report").click(getSalesReport);
+    $("#show-filters").click(resetSalesModal);
 
 }
 $(document).ready(function() {

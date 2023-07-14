@@ -36,7 +36,7 @@ public class DailySalesReportService {
         Date previousDay = Date.valueOf(previousDate);
         List<OrderPojo> orderPojoList = orderDao.getOrderByDate(previousDay,currentDay, OrderStatus.INVOICED);
         Object[] dailySalesReport = getOrderItemsReport(orderPojoList);
-        Integer totalInvoicedItems = (Integer)(dailySalesReport[0]);
+        Integer totalInvoicedItems = ((Number) dailySalesReport[0]).intValue();
         Double totalRevenue = ((Double) dailySalesReport[1]);
         DailySalesReportPojo dailySalesReportPojo = setDailySalesReport(totalInvoicedItems,totalRevenue,orderPojoList.size());
         dailySalesReportDao.insertDailySalesReport(dailySalesReportPojo);
@@ -44,7 +44,7 @@ public class DailySalesReportService {
 
     private Object[] getOrderItemsReport(List<OrderPojo>orderPojoList){
         if(!orderPojoList.isEmpty()){
-            orderItemDao.getOrderItemsReport(orderPojoList);
+            return orderItemDao.getOrderItemsReport(orderPojoList);
         }
         return new Object[]{0,0.0};
     }

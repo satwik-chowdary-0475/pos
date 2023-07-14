@@ -34,7 +34,6 @@ public class ProductDto {
         return productService.insertProduct(productPojo);
     }
 
-    //TODO: for loops or streams
     @Transactional(rollbackOn = ApiException.class)
     public void insertProductList(List<ProductForm>productFormList) throws ApiException {
         List<ErrorData> errorDataList = IntStream.range(0, productFormList.size())

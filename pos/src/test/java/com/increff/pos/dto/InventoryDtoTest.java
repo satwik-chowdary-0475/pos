@@ -50,7 +50,6 @@ public class InventoryDtoTest extends AbstractUnitTest {
 
     }
 
-    // TODO : TO TEST HELPERS AND NORMALISE CASES
     @Test
     public void TestInsert() throws ApiException {
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1",100);

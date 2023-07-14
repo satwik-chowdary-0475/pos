@@ -39,7 +39,6 @@ public class DbConfig {
 
     @Bean(name = "dataSource")
     public DataSource getDataSource() {
-        //		logger.info("jdbcDriver: " + jdbcDriver + ", jdbcUrl: " + jdbcUrl + ", jdbcUsername: " + jdbcUsername);
         BasicDataSource bean = new BasicDataSource();
         bean.setDriverClassName(jdbcDriver);
         bean.setUrl(jdbcUrl);
@@ -58,7 +57,6 @@ public class DbConfig {
     @Bean(name = "entityManagerFactory")
     @Autowired
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
-        //logger.info("hibernateDialect: " + jdbcDriver + ", hibernateHbm2ddl: " + hibernateHbm2ddl);
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
         bean.setDataSource(dataSource);
         bean.setPackagesToScan(PACKAGE_POJO);

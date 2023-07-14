@@ -33,18 +33,11 @@ public class UserDto {
         if (!authenticated) {
             infoData.setMessage("Invalid username or password");
             throw new ApiException("Invalid username or password");
-//            return new ModelAndView("redirect:/site/login");
         }
-        // Create authentication object
         Authentication authentication = AdminUtil.convert(userPojo);
-        // Create new session
         HttpSession session = request.getSession(true);
-        // Attach Spring SecurityContext to this new session
         SecurityUtil.createContext(session);
-        // Attach Authentication object to the Security Context
         SecurityUtil.setAuthentication(authentication);
-
-//        return new ModelAndView("redirect:/ui/home");
     }
 
     @Transactional(rollbackOn = ApiException.class)

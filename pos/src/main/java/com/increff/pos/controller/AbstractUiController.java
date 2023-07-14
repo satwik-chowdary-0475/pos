@@ -27,11 +27,9 @@ public abstract class AbstractUiController {
     private String baseUrl;
 
     protected ModelAndView mav(String page) {
-        // Get current user
         UserPrincipal principal = SecurityUtil.getPrincipal();
         infoData.setEmail(Objects.isNull(principal) ? "" : principal.getEmail());
         infoData.setRole(AdminUtil.getRole().toLowerCase());
-        // Set info
         ModelAndView mav = new ModelAndView(page);
         mav.addObject("info", infoData);
         mav.addObject("baseUrl", baseUrl);
@@ -39,11 +37,9 @@ public abstract class AbstractUiController {
     }
 
     protected ModelAndView mav(String page, String orderCode) {
-        // Get current user
         UserPrincipal principal = SecurityUtil.getPrincipal();
         infoData.setEmail(Objects.isNull(principal) ? "" : principal.getEmail());
         infoData.setRole(AdminUtil.getRole().toLowerCase());
-        // Set info
         ModelAndView mav = new ModelAndView(page);
         mav.addObject("info", infoData);
         mav.addObject("baseUrl", baseUrl);

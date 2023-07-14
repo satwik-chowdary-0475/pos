@@ -83,3 +83,7 @@ function convertBase64ToPDF(base64String,name) {
   // Clean up
   URL.revokeObjectURL(link.href);
 }
+
+function removeFakePath(path){
+    return path.substring(path.lastIndexOf("\\") + 1, path.length);
+}

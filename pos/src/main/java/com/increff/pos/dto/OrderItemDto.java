@@ -56,7 +56,7 @@ public class OrderItemDto {
     @Transactional(rollbackOn = ApiException.class)
     public OrderItemData getOrderItem(int orderId, int id) throws ApiException {
         OrderPojo orderPojo = orderService.getOrderByOrderId(orderId);
-        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(id);//change
+        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(id);
         ProductPojo productPojo = productService.getProductById(orderItemPojo.getProductId());
         return HelperDto.convert(orderItemPojo, productPojo.getBarcode(), productPojo.getName());
     }

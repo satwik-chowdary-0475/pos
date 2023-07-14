@@ -40,26 +40,26 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name">OrderItemDao</td>
 <td class="coverageStat">
   <span class="percent">
-    80%
+    90%
   </span>
   <span class="absValue">
-    (8/10)
+    (9/10)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    74.3%
+    88.6%
   </span>
   <span class="absValue">
-    (26/35)
+    (31/35)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">OrderItemDao$$EnhancerBySpringCGLIB$$6ddcb31</td>
+    <td class="name">OrderItemDao$$EnhancerBySpringCGLIB$$fd236edd</td>
   </tr>
   <tr>
-    <td class="name">OrderItemDao$$EnhancerBySpringCGLIB$$6ddcb31$$FastClassBySpringCGLIB$$9739a98b</td>
+    <td class="name">OrderItemDao$$EnhancerBySpringCGLIB$$fd236edd$$FastClassBySpringCGLIB$$7229fc56</td>
   </tr>
   <tr>
     <td class="name">OrderItemDao$$FastClassBySpringCGLIB$$4645e5b1</td>
@@ -68,18 +68,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    80%
+    90%
   </span>
   <span class="absValue">
-    (8/10)
+    (9/10)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    74.3%
+    88.6%
   </span>
   <span class="absValue">
-    (26/35)
+    (31/35)
   </span>
 </td>
 </tr>
@@ -137,11 +137,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    @Transactional
 &nbsp;    public Object[] getOrderItemsReport(List&lt;OrderPojo&gt; orderPojoList) {
-<b class="nc">&nbsp;        TypedQuery&lt;Object[]&gt; query = em().createQuery(SELECT_ALL_REPORT, Object[].class);</b>
-<b class="nc">&nbsp;        List&lt;Integer&gt; orderIdsList = orderPojoList.stream().map(OrderPojo::getId).collect(Collectors.toList());</b>
-<b class="nc">&nbsp;        query.setParameter(&quot;orderIdsList&quot;, orderIdsList);</b>
-<b class="nc">&nbsp;        Object[] result = query.getSingleResult();</b>
-<b class="nc">&nbsp;        return result;</b>
+<b class="fc">&nbsp;        TypedQuery&lt;Object[]&gt; query = em().createQuery(SELECT_ALL_REPORT, Object[].class);</b>
+<b class="fc">&nbsp;        List&lt;Integer&gt; orderIdsList = orderPojoList.stream().map(OrderPojo::getId).collect(Collectors.toList());</b>
+<b class="fc">&nbsp;        query.setParameter(&quot;orderIdsList&quot;, orderIdsList);</b>
+<b class="fc">&nbsp;        Object[] result = query.getSingleResult();</b>
+<b class="fc">&nbsp;        return result;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
@@ -196,7 +196,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-13 11:24</div>
+    <div style="float:right;">generated on 2023-07-14 11:25</div>
 </div>
 </body>
 </html>

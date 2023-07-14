@@ -58,7 +58,6 @@ public class ReportDto {
         dailySalesReportService.insertDailySalesReport();
     }
 
-    //total db calls -> 1(brands) + 1(inventory) + x(no.of products in inventory)
     @Transactional(rollbackOn = ApiException.class)
     public List<InventoryReportData> getInventoryReport() throws ApiException {
         List<BrandPojo> brandPojoList = brandService.getAllBrands();
@@ -90,16 +89,12 @@ public class ReportDto {
         return brandCategoryMap;
     }
 
-
-    //TODO: WROTE BRUTE FORCE n^2 need to optimise.
-    // DB calls -> 1(brands) + 1(orders) + 1(orderItems) + x(no of brands)
     @Transactional(rollbackOn = ApiException.class)
     public List<SalesData> getSalesReport(SalesForm salesForm) throws ApiException {
         ReportHelperDto.normalise(salesForm);
         Date startTime = Date.valueOf(LocalDate.parse(salesForm.getStartTime()));
         Date endTime = Date.valueOf(LocalDate.parse(salesForm.getEndTime()));
         List<OrderPojo> orderPojoList = orderService.getOrderByDate(startTime, endTime);
-//        HashMap<Integer, Pair<Integer, Double>> productOrderItemMap = getProductOrderItemMap(orderPojoList);
         HashMap<Integer,ReportData> productOrderItemMap = getProductOrderItemMap(orderPojoList);
         List<SalesData> salesDataList = brandService.getBrandListByBrandCategory(salesForm.getBrand(), salesForm.getCategory())
                 .stream()
@@ -129,7 +124,6 @@ public class ReportDto {
                 .sum();
     }
 
-    // db call = 1
     public HashMap<Integer, ReportData> getProductOrderItemMap(List<OrderPojo> orderPojoList) {
         List<OrderItemPojo> orderItemPojoList = orderItemService.getAllOrderItemsByOrderList(orderPojoList);
         HashMap<Integer, ReportData> productOrderItemMap = orderItemPojoList.stream()

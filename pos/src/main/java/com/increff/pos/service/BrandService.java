@@ -31,7 +31,7 @@ public class BrandService {
         BrandPojo existingBrandPojo = getBrandById(id);
         BrandPojo brandPojoCheck = brandDao.getBrandByBrandCategory(brandPojo.getBrand(), brandPojo.getCategory());
         if (Objects.nonNull(brandPojoCheck) && existingBrandPojo != brandPojoCheck)
-            throw new ApiException("Brand "+ existingBrandPojo.getBrand() + " - category " + existingBrandPojo.getCategory() + " already exist!!");
+            throw new ApiException("Brand "+ brandPojo.getBrand() + " - category " + brandPojo.getCategory() + " already exist!!");
         existingBrandPojo.setBrand(brandPojo.getBrand());
         existingBrandPojo.setCategory(brandPojo.getCategory());
     }
@@ -58,7 +58,6 @@ public class BrandService {
     }
 
 
-    // TODO : need to change here
     @Transactional(rollbackOn = ApiException.class)
     public List<BrandPojo> getBrandListByBrandCategory(String brand, String category) {
         boolean brandExists = Objects.isNull(brand) || brand.equals("");

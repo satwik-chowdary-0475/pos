@@ -28,14 +28,12 @@ public class XMLCreation {
             Instant instant = Instant.ofEpochSecond(Long.parseLong(String.valueOf(orderForm.getInvoicedTime())));
             ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
 
-            // Format ZonedDateTime to desired string format
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z");
             String formattedDate = zonedDateTime.format(formatter);
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.newDocument();
 
-            // Root element
             Element rootElement = doc.createElement("Order");
             doc.appendChild(rootElement);
 
@@ -59,7 +57,6 @@ public class XMLCreation {
             createElementWithText(doc, headingElement, "OrderCode", orderForm.getOrderCode());
 
             OrderItemForm[] orderItems = orderForm.getOrderItems();
-            // Iterate over each order item
             Double totalOrderPrice = new Double(0.0);
             for (OrderItemForm orderItemForm : orderItems) {
                 String barcode = orderItemForm.getBarcode();
@@ -69,11 +66,8 @@ public class XMLCreation {
                 String totalPrice = orderItemForm.getTotalPrice().toString();
                 totalOrderPrice += orderItemForm.getTotalPrice();
 
-                // Order item element
                 Element orderItemElement = doc.createElement("OrderItem");
                 rootElement.appendChild(orderItemElement);
-
-                // Order item details
                 createElementWithText(doc, orderItemElement, "Barcode", barcode);
                 createElementWithText(doc, orderItemElement, "ProductName", productName);
                 createElementWithText(doc, orderItemElement, "Quantity", quantity);
@@ -81,8 +75,6 @@ public class XMLCreation {
                 createElementWithText(doc, orderItemElement, "TotalPrice", totalPrice);
             }
             createElementWithText(doc, rootElement, "TotalOrderPrice", String.valueOf(totalOrderPrice));
-
-            // Save XML document to a file
             File file = new File("orderItemForm.xml");
             FileOutputStream fos = new FileOutputStream(file);
             TransformerFactory transformerFactory = TransformerFactory.newInstance();

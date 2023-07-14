@@ -52,7 +52,7 @@ public class HelperDto {
         if (Objects.isNull(inventoryForm.getBarcode()) || inventoryForm.getBarcode().length() == 0) {
             throw new ApiException("Invalid product barcode!!");
         }
-        if (Objects.isNull(inventoryForm.getQuantity()) || inventoryForm.getQuantity() > 1000000 || inventoryForm.getQuantity() < 0) {
+        if (Objects.isNull(inventoryForm.getQuantity()) || inventoryForm.getQuantity() > 10000000 || inventoryForm.getQuantity() < 0) {
             throw new ApiException("Invalid product quantity");
         }
     }
@@ -93,13 +93,13 @@ public class HelperDto {
         if (Objects.isNull(orderItemForm)) {
             throw new ApiException("Invalid order item form!!");
         }
-        if (Objects.isNull(orderItemForm.getBarcode()) || orderItemForm.getBarcode().length() <= 0) {
+        if (Objects.isNull(orderItemForm.getBarcode()) || orderItemForm.getBarcode().length() == 0) {
             throw new ApiException("Invalid barcode id");
         }
-        if (Objects.isNull(orderItemForm.getQuantity()) || orderItemForm.getQuantity() > 1000000 || orderItemForm.getQuantity() <= 0) {
+        if (Objects.isNull(orderItemForm.getQuantity()) || orderItemForm.getQuantity() > 10000000 || orderItemForm.getQuantity() <= 0) {
             throw new ApiException("Invalid product quantity");
         }
-        if (Objects.isNull(orderItemForm.getSellingPrice()) || orderItemForm.getSellingPrice() <= 0 || orderItemForm.getSellingPrice() > 1000000) {
+        if (Objects.isNull(orderItemForm.getSellingPrice()) || orderItemForm.getSellingPrice() <= 0 || orderItemForm.getSellingPrice() > 10000000) {
             throw new ApiException("Invalid selling price");
         }
     }

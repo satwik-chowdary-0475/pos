@@ -41,7 +41,6 @@ public class ReportDtoTest extends AbstractUnitTest {
     @Autowired
     private OrderService orderService;
 
-    // TODO : TO TEST HELPERS AND NORMALISE CASES
     @Before
     public void init() throws ApiException {
         BrandForm brandForm = Helper.createBrandForm("brand 1", "category 1");

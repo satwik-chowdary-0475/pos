@@ -65,3 +65,58 @@ table th {
   background-color: #FF4B2B;
 }
 
+.dropdown-menu-start {
+    left: -50px !important;
+}
+
+#profile-button{
+    border : 0;
+}
+
+.display-picture{
+  margin-left: auto;
+}
+.display-picture img{
+  width: 50px;
+  border-radius: 50%;
+  border:2px solid #fff;
+}
+.display-picture img:hover{
+border:2px solid #FF4B2B;
+}
+.card-profile{
+  transition: 0.5s ease;
+}
+
+.card-profile ul{
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  background: #FF4B2B;
+  position: absolute;
+  top: 4rem;
+  right:0rem;
+  border-radius: 10px;
+  padding: 10px 50px 10px 20px;
+  z-index:99999;
+}
+.card-profile ul li{
+
+  padding: 5px 0;
+  color: #FFF;
+  font-size: 14px;
+}
+.card-profile ul li a{
+
+  padding: 5px 0;
+  color: #FFF;
+  font-size: 14px;
+}
+
+.hidden{
+  display: none;
+}
+
+.card{
+    z-index:1
+}

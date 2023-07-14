@@ -18,6 +18,7 @@ public class DailySalesReportDao extends AbstractDao {
         em().persist(dailySalesReportPojo);
     }
 
+    @Transactional
     public List<DailySalesReportPojo> getAllDailySalesReport() {
         TypedQuery<DailySalesReportPojo> query = getQuery(SELECT_ALL, DailySalesReportPojo.class);
         return query.getResultList();

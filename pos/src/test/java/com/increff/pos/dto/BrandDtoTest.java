@@ -28,8 +28,6 @@ public class BrandDtoTest extends AbstractUnitTest {
     @Rule
     public ExpectedException exceptionRule = ExpectedException.none();
 
-    // TODO : TO TEST HELPERS AND NORMALISE CASES
-
     @Test
     public void testInsert() throws ApiException {
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
@@ -88,7 +86,7 @@ public class BrandDtoTest extends AbstractUnitTest {
         BrandForm brandForm1 = Helper.createBrandForm("brand 2","category 2");
         int id = brandDto.insertBrand(brandForm1);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Brand brand 2 - category category 2 already exist!!");
+        exceptionRule.expectMessage("Brand brand 1 - category category 1 already exist!!");
         brandDto.updateBrand(id,brandForm);
     }
 
@@ -120,7 +118,6 @@ public class BrandDtoTest extends AbstractUnitTest {
         int id1 = brandDto.insertBrand(brandForm1);
         actualBrandDataList.add(Helper.createBrandData(id1,"brand 2","category 2"));
         List<BrandData>expectedDataList = brandDto.getAllBrandDataList();
-        // TODO: should handle this better way
         assertEquals(expectedDataList.size(), actualBrandDataList.size());
     }
 

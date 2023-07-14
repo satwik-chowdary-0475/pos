@@ -43,7 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         logger.info("Configuration complete");
     }
 
-    // TODO: SHOULD MODIFY THIS, FOR NOW JUST TESTING PURPOSE
     @Override
     public void configure(WebSecurity web) throws Exception {
 //        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**","/api/**","/ui/**");

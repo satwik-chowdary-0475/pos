@@ -9,7 +9,6 @@ function getRoleOfUser(callback){
 }
 
 function addInventory(event){
-	//Set the values to update
 	var $form = $("#inventory-form");
 	if($form[0].checkValidity()){
 	    var json = toJson($form);
@@ -107,17 +106,14 @@ function resetErrorCount(){
 }
 
 function resetUploadDialog(){
-	//Reset file name
 	var $file = $('#inventoryFile');
 	$file.val('');
 	$('#inventoryFileName').html("Choose File");
-	//Reset various counts
 	processCount = 0;
 	fileData = [];
 	resetErrorCount();
 	$('#download-errors').prop('disabled',true);
     $('#process-data').prop('disabled',true);
-	//Update counts
 	updateUploadDialog();
 }
 
@@ -171,13 +167,9 @@ function processErrorData(errorDataList){
 }
 
 function uploadRows(){
-//Update progress
-//	updateUploadDialog();
-
 	var json = JSON.stringify(fileData);
 	var url = getInventoryUrl()+'/bulk';
     if(json.length <= 5000 && json.length > 0){
-        //Make ajax call
         $.ajax({
         	   url: url,
         	   type: 'POST',
@@ -207,11 +199,9 @@ function uploadRows(){
 function updateInventory(event){
 
     var $form = $("#inventory-edit-form");
-	//Get the ID
 	if($form[0].checkValidity()){
 	    var id = $("#inventory-edit-form input[name=id]").val();
         var url = getInventoryUrl() + "/" + id;
-        //Set the values to update
         var json = toJson($form);
         $.ajax({
            url: url,
@@ -247,6 +237,7 @@ function updateInventory(event){
 function updateFileName(){
 	var $file = $('#inventoryFile');
 	var fileName = $file.val();
+	fileName = removeFakePath(fileName);
 	$('#inventoryFileName').html(fileName);
 	$("#process-data").prop('disabled',(fileName.length == 0));
 }
