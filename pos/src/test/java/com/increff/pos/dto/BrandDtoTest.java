@@ -31,8 +31,8 @@ public class BrandDtoTest extends AbstractUnitTest {
     @Test
     public void testInsert() throws ApiException {
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
-        int id = brandDto.insertBrand(brandForm);
-        BrandPojo brandPojo = brandService.getBrandByBrandCategory("brand 1","category 1");
+        int id = brandDto.insert(brandForm);
+        BrandPojo brandPojo = brandService.getByBrandCategory("brand 1","category 1");
         assertNotNull(brandPojo);
         assertEquals(brandPojo.getBrand(),"brand 1");
         assertEquals(brandPojo.getCategory(),"category 1");
@@ -41,20 +41,20 @@ public class BrandDtoTest extends AbstractUnitTest {
     @Test
     public void testDuplicateInsert() throws ApiException{
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
-        int id = brandDto.insertBrand(brandForm);
+        int id = brandDto.insert(brandForm);
         BrandForm duplicateBrandForm = Helper.createBrandForm("brand 1","category 1");
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Brand brand 1 - category category 1 already exist!!");
-        brandDto.insertBrand(duplicateBrandForm);
+        exceptionRule.expectMessage("The brand-category pair brand 1-category 1 already exists");
+        brandDto.insert(duplicateBrandForm);
     }
 
     @Test
     public void testUpdate() throws ApiException{
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
-        int id = brandDto.insertBrand(brandForm);
+        int id = brandDto.insert(brandForm);
         BrandForm updatedBrandForm = Helper.createBrandForm("brand 2","category 2");
-        brandDto.updateBrand(id,updatedBrandForm);
-        BrandPojo brandPojo = brandService.getBrandById(id);
+        brandDto.update(id,updatedBrandForm);
+        BrandPojo brandPojo = brandService.getById(id);
         assertEquals(brandPojo.getBrand(),"brand 2");
         assertEquals(brandPojo.getCategory(),"category 2");
     }
@@ -62,10 +62,10 @@ public class BrandDtoTest extends AbstractUnitTest {
     @Test
     public void testUpdateSameData() throws ApiException{
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
-        int id = brandDto.insertBrand(brandForm);
+        int id = brandDto.insert(brandForm);
         BrandForm updatedBrandForm = Helper.createBrandForm("brand 1","category 1");
-        brandDto.updateBrand(id,updatedBrandForm);
-        BrandPojo brandPojo = brandService.getBrandById(id);
+        brandDto.update(id,updatedBrandForm);
+        BrandPojo brandPojo = brandService.getById(id);
         assertEquals(brandPojo.getBrand(),"brand 1");
         assertEquals(brandPojo.getCategory(),"category 1");
     }
@@ -73,28 +73,28 @@ public class BrandDtoTest extends AbstractUnitTest {
     @Test
     public void testUpdateItemNotExists() throws ApiException{
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
-        int id = brandDto.insertBrand(brandForm);
+        int id = brandDto.insert(brandForm);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Brand item doesn't exist!!");
-        brandDto.updateBrand(id+1,brandForm);
+        exceptionRule.expectMessage("Brand item doesn't exist");
+        brandDto.update(id+1,brandForm);
     }
 
     @Test
     public void testUpdateDuplicateBrandCategory() throws ApiException{
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
-        brandDto.insertBrand(brandForm);
+        brandDto.insert(brandForm);
         BrandForm brandForm1 = Helper.createBrandForm("brand 2","category 2");
-        int id = brandDto.insertBrand(brandForm1);
+        int id = brandDto.insert(brandForm1);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Brand brand 1 - category category 1 already exist!!");
-        brandDto.updateBrand(id,brandForm);
+        exceptionRule.expectMessage("The brand-category pair brand 1-category 1 already exists");
+        brandDto.update(id,brandForm);
     }
 
     @Test
     public void testSelectBrand() throws ApiException{
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
-        int id = brandDto.insertBrand(brandForm);
-        BrandData brandData = brandDto.getBrandData(id);
+        int id = brandDto.insert(brandForm);
+        BrandData brandData = brandDto.getById(id);
         assertEquals(brandData.getId().intValue(),id);
         assertEquals(brandData.getBrand(),"brand 1");
         assertEquals(brandData.getCategory(),"category 1");
@@ -103,8 +103,8 @@ public class BrandDtoTest extends AbstractUnitTest {
     @Test
     public void testSelectBrandNotExists() throws ApiException{
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Brand item doesn't exist!!");
-        brandDto.getBrandData(1);
+        exceptionRule.expectMessage("Brand item doesn't exist");
+        brandDto.getById(1);
     }
 
     @Test
@@ -112,12 +112,12 @@ public class BrandDtoTest extends AbstractUnitTest {
 
         List<BrandData> actualBrandDataList = new ArrayList<BrandData>();
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
-        int id = brandDto.insertBrand(brandForm);
+        int id = brandDto.insert(brandForm);
         actualBrandDataList.add(Helper.createBrandData(id,"brand 1","category 1"));
         BrandForm brandForm1 = Helper.createBrandForm("brand 2","category 2");
-        int id1 = brandDto.insertBrand(brandForm1);
+        int id1 = brandDto.insert(brandForm1);
         actualBrandDataList.add(Helper.createBrandData(id1,"brand 2","category 2"));
-        List<BrandData>expectedDataList = brandDto.getAllBrandDataList();
+        List<BrandData>expectedDataList = brandDto.getAll();
         assertEquals(expectedDataList.size(), actualBrandDataList.size());
     }
 
@@ -128,8 +128,8 @@ public class BrandDtoTest extends AbstractUnitTest {
         brandFormList.add(Helper.createBrandForm("brand 1","category 1"));
         brandFormList.add(Helper.createBrandForm("brand 2","category 2"));
         brandFormList.add(Helper.createBrandForm("brand 3","category 3"));
-        brandDto.insertBrandList(brandFormList);
-        List<BrandPojo>expectedBrandPojoList = brandService.getAllBrands();
+        brandDto.insertList(brandFormList);
+        List<BrandPojo>expectedBrandPojoList = brandService.getAll();
         assertEquals(expectedBrandPojoList.size(),3);
     }
 
@@ -140,11 +140,11 @@ public class BrandDtoTest extends AbstractUnitTest {
         brandFormList.add(Helper.createBrandForm("brand 1","category 1"));
         brandFormList.add(Helper.createBrandForm("brand 1","category 1"));
         try {
-            brandDto.insertBrandList(brandFormList);
+            brandDto.insertList(brandFormList);
         } catch (ApiException e) {
             List<ErrorData>actualErrorDataList = new ArrayList<>();
-            actualErrorDataList.add(Helper.createErrorData(2,"Brand brand 1 - category category 1 already exist!!"));
-            actualErrorDataList.add(Helper.createErrorData(3,"Brand brand 1 - category category 1 already exist!!"));
+            actualErrorDataList.add(Helper.createErrorData(2,"Brand brand 1 - category category 1 already exist"));
+            actualErrorDataList.add(Helper.createErrorData(3,"Brand brand 1 - category category 1 already exist"));
             assertEquals(actualErrorDataList.size(),e.getErrorDataList().size());
         }
     }

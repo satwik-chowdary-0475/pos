@@ -31,17 +31,14 @@ public class AdminUtil {
     }
 
     public static Authentication convert(UserPojo userPojo) {
-        // Create principal
+
         UserPrincipal principal = new UserPrincipal();
         principal.setEmail(userPojo.getEmail());
         principal.setId(userPojo.getId());
 
-        // Create Authorities
         ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority(userPojo.getRole().name()));
-        // you can add more roles if required
 
-        // Create Authentication
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, null,
                 authorities);
         return token;
@@ -49,7 +46,6 @@ public class AdminUtil {
 
     public static String getRole() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ;
         if (Objects.isNull(authentication) || Objects.isNull(authentication.getAuthorities())) return "";
         List<String> authorities = authentication.getAuthorities()
                 .stream()

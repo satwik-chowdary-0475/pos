@@ -24,6 +24,13 @@ public class Helper {
         return brandForm;
     }
 
+    public static ProductUpdateForm createProductUpdateForm(String name,Double mrp){
+        ProductUpdateForm productUpdateForm = new ProductUpdateForm();
+        productUpdateForm.setName(name);
+        productUpdateForm.setMrp(mrp);
+        return productUpdateForm;
+    }
+
     public static BrandData createBrandData(int id, String brand, String category) {
         BrandData brandData = new BrandData();
         brandData.setBrand(brand);
@@ -121,5 +128,18 @@ public class Helper {
         errorData.setRow(row);
         errorData.setErrorMessage(errorMessage);
         return errorData;
+    }
+
+    public static InventoryUpdateForm createInventoryUpdateForm(int quantity) {
+        InventoryUpdateForm inventoryUpdateForm = new InventoryUpdateForm();
+        inventoryUpdateForm.setQuantity(quantity);
+        return inventoryUpdateForm;
+    }
+
+    public static OrderItemUpdateForm createOrderItemUpdateForm(int quantity, Double sellingPrice) {
+        OrderItemUpdateForm orderItemUpdateForm = new OrderItemUpdateForm();
+        orderItemUpdateForm.setSellingPrice(sellingPrice);
+        orderItemUpdateForm.setQuantity(quantity);
+        return orderItemUpdateForm;
     }
 }

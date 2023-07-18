@@ -28,7 +28,7 @@
                         <div class="modal-body">
                             <form class="form needs-validation" style="text-align:justify;" id="orderItem-form" novalidate>
                                 <div class="form-group my-3">
-                                    <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
+                                    <label for="inputBarcode" class="col-sm-2 col-form-label required-label">Barcode<span class="required-asterisk">*</span></label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="barcode" id="inputBarcode" placeholder="Enter Barcode" required>
                                         <div class="invalid-feedback">Please enter a barcode.</div>
@@ -36,7 +36,7 @@
                                 </div>
 
                                 <div class="form-group my-3">
-                                    <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
+                                    <label for="inputQuantity" class="col-sm-2 col-form-label required-label">Quantity<span class="required-asterisk">*</span></label>
                                     <div class="col-sm-10">
                                         <input type="number" class="form-control" name="quantity" id="inputQuantity" placeholder="Enter Quantity" min="1" max="10000000" step="1" required>
                                         <div class="invalid-feedback">Please enter a valid quantity.</div>
@@ -45,9 +45,9 @@
 
 
                                 <div class="form-group my-3">
-                                    <label for="inputSellingPrice" class="col-sm-4 col-form-label">Selling Price</label>
+                                    <label for="inputSellingPrice" class="col-sm-4 col-form-label required-label">Selling Price<span class="required-asterisk">*</span></label>
                                     <div class="col-sm-10">
-                                        <input type="number" class="form-control" name="sellingPrice" id="inputSellingPrice" placeholder="Enter Selling Price" min="0.01" max="10000000" step="any" required>
+                                        <input type="number" class="form-control" name="sellingPrice" id="inputSellingPrice" placeholder="Enter Selling Price" min="0" max="10000000" step="any" required>
                                         <div class="invalid-feedback">Please enter a valid selling price.</div>
                                     </div>
                                 </div>
@@ -133,7 +133,7 @@
                             </div>
                         </div>
                         <div class="form-group my-3">
-                            <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
+                            <label for="inputQuantity" class="col-sm-2 col-form-label required-label">Quantity<span class="required-asterisk">*</span></label>
                             <div class="col-sm-10">
                                 <input type="number" class="form-control" name="quantity" min="1" max="10000000" step="1" required>
                                 <div class="invalid-feedback">Please enter a valid quantity.</div>
@@ -141,9 +141,9 @@
                         </div>
 
                         <div class="form-group my-3">
-                            <label for="inputSellingPrice" class="col-sm-4 col-form-label">Selling Price</label>
+                            <label for="inputSellingPrice" class="col-sm-4 col-form-label required-label">Selling Price<span class="required-asterisk">*</span></label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" name="sellingPrice" min="0.01" max="10000000" step="any" required>
+                                <input type="number" class="form-control" name="sellingPrice" min="0" max="10000000" step="any" required>
                                 <div class="invalid-feedback">Please enter a valid selling price.</div>
                             </div>
                         </div>

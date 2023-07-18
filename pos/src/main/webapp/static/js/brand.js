@@ -227,7 +227,7 @@ function readFileDataCallback(results){
 	else{
 	    resetErrorCount();
 	    updateUploadDialog();
-	    $.notify("Uploaded file not supported. Columns not matched",{className:"error",autoHideDelay: 20000});
+	    $.notify("Uploaded file not supported. Headers not matched",{className:"error",autoHideDelay: 20000});
 	}
 }
 
@@ -243,7 +243,7 @@ function processErrorData(errorDataList){
 }
 
 function downloadErrors(){
-	writeFileData(errorData);
+	writeFileData(errorData,'tsv','brand_errors');
 }
 
 function toggleBrandModal(){

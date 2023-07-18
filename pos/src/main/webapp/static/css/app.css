@@ -120,3 +120,8 @@ border:2px solid #FF4B2B;
 .card{
     z-index:1
 }
+
+.required-asterisk {
+    color: red;
+    margin-left: 3px;
+}

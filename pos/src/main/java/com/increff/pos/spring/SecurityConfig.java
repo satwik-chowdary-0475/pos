@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Match only these URLs
                 .requestMatchers()//
                 .antMatchers("/api/**")//
-                .antMatchers("/ui/**")//
+                .antMatchers("/home","/brands/**","/reports/**","/products/**","/inventory/**","/orders/**")
                 .and().authorizeRequests()//
                 .antMatchers(HttpMethod.GET, "/api/brands/**", "/api/products/**", "/api/inventory/**")
                 .hasAnyAuthority("SUPERVISOR", "OPERATOR")
@@ -35,11 +35,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAuthority("SUPERVISOR")
                 .antMatchers("/api/orders/**").hasAnyAuthority("SUPERVISOR","OPERATOR")
                 .antMatchers("/api/reports/**").hasAuthority("SUPERVISOR")
-                .antMatchers("/ui/reports/**").hasAuthority("SUPERVISOR")
-                .antMatchers("/ui/SUPERVISOR/**").hasAuthority("SUPERVISOR")
-                .antMatchers("/ui/**").hasAnyAuthority("SUPERVISOR", "OPERATOR")
+                .antMatchers("/reports/**").hasAuthority("SUPERVISOR")
+                .antMatchers("/SUPERVISOR/**").hasAuthority("SUPERVISOR")
+                .antMatchers("/home", "/brands/**", "/orders/**", "/product/**", "/inventory/**").hasAnyAuthority("SUPERVISOR", "OPERATOR")
+                .anyRequest().authenticated()//
+                .and()
+                .formLogin()
+                    .loginPage("/login")
+                    .loginProcessingUrl("/session/login")
+                    .defaultSuccessUrl("/home")
+                    .failureUrl("/site/login?error=true")
+                    .permitAll()
+                .and()
+                .logout()
+                    .logoutUrl("/session/logout")
+                    .logoutSuccessUrl("/")
+                    .permitAll()
                 // Ignore CSRF and CORS
-                .and().csrf().disable().cors().disable().exceptionHandling().accessDeniedPage("/site/error-403");
+                .and().csrf().disable().cors().disable();
         logger.info("Configuration complete");
     }
 

@@ -22,51 +22,52 @@ public class BrandDto {
     private BrandService brandService;
 
     @Transactional(rollbackOn = ApiException.class)
-    public int insertBrand(BrandForm brandForm) throws ApiException {
+    public int insert(BrandForm brandForm) throws ApiException {
         HelperDto.normalise(brandForm);
         BrandPojo brandPojo = HelperDto.convert(brandForm);
-        return brandService.insertBrand(brandPojo);
+        return brandService.insert(brandPojo);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void insertBrandList(List<BrandForm> brandFormList) throws ApiException {
-        List<ErrorData> errorDataList = IntStream.range(0, brandFormList.size())
-                .mapToObj(row -> {
-                    BrandForm brandForm = brandFormList.get(row);
-                    try {
-                        insertBrand(brandForm);
-                        return null;
-                    } catch (ApiException e) {
-                        return HelperDto.convert(row + 1, e.getMessage());
-                    }
-                }).filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        if (!errorDataList.isEmpty()) {
-            throw new ApiException(errorDataList);
-        }
-    }
-
-    @Transactional(rollbackOn = ApiException.class)
-    public void updateBrand(int id, BrandForm brandForm) throws ApiException {
+    public void update(int id, BrandForm brandForm) throws ApiException {
         HelperDto.normalise(brandForm);
         BrandPojo brandPojo = HelperDto.convert(brandForm);
-        brandService.updateBrand(id, brandPojo);
+        brandService.update(id, brandPojo);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public BrandData getBrandData(int id) throws ApiException {
-        BrandPojo brandPojo = brandService.getBrandById(id);
+    public BrandData getById(int id) throws ApiException {
+        BrandPojo brandPojo = brandService.getById(id);
         return HelperDto.convert(brandPojo);
     }
 
     @Transactional
-    public List<BrandData> getAllBrandDataList() {
-        List<BrandPojo> brandPojoList = brandService.getAllBrands();
+    public List<BrandData> getAll() {
+        List<BrandPojo> brandPojoList = brandService.getAll();
+
         List<BrandData> brandDataList = brandPojoList.stream()
                 .map(HelperDto::convert)
                 .collect(Collectors.toList());
         return brandDataList;
     }
 
+    @Transactional(rollbackOn = ApiException.class)
+    public void insertList(List<BrandForm> brandFormList) throws ApiException {
+        List<ErrorData> errorDataList = IntStream.range(0, brandFormList.size())
+                .mapToObj(row -> {
+                    BrandForm brandForm = brandFormList.get(row);
+                    try {
+                        insert(brandForm);
+                        return null;
+                    } catch (ApiException e) {
+                        return HelperDto.convert(row + 1, e.getMessage());
+                    }
+                }).filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        if (!errorDataList.isEmpty()) {
+            throw new ApiException(errorDataList);
+        }
+    }
 
 }

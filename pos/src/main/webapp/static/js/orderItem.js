@@ -39,6 +39,7 @@ function getOrderDetails(){
         url:url,
         type: 'GET',
         success: function(data){
+            console.log('data  ',data);
             orderId = data.id;
             orderStatus = data.status;
             customerName = data.customerName;
@@ -46,7 +47,7 @@ function getOrderDetails(){
             handleButtons(orderStatus);
             displayOrderDetails(data);
             handleOrderItemTable(orderStatus);
-            getOrderItemList();
+            displayOrderItemList(data.orderItems);
         },
         error: function(e){
             handleAjaxError(e);
@@ -67,16 +68,18 @@ function handleOrderItemTable(orderStatus){
 }
 
 function getOrderItemList(){
-var url = getOrderItemUrl();
+    var url = getOrderUrl()+"/"+getOrderCode();
 	$.ajax({
-	   url: url,
-	   type: 'GET',
-	   success: function(data) {
-	        orderItems = data;
-	   		displayOrderItemList(data);
-	   },
-	   error: handleAjaxError
-	});
+        url:url,
+        type: 'GET',
+        success: function(data){
+            orderItems = data.orderItems;
+            displayOrderItemList(data.orderItems);
+        },
+        error: function(e){
+            handleAjaxError(e);
+        }
+    });
 }
 
 function displayEditOrderItem(id){
@@ -212,7 +215,6 @@ function updateOrderItem(event){
 
 function generatePdf(data){
     var url = getPdfUrl();
-    console.log(data);
     var customerName = data.customerName;
     var json = {
         customerName: data.customerName,
@@ -247,7 +249,7 @@ function printInvoice(){
         },
          success : function(data){
             if(data.orderItems.length == 0){
-               $.notify("Add order items!!")
+               $.notify("Add order items")
             }
             else{
              setOrderStatus(data,function(){

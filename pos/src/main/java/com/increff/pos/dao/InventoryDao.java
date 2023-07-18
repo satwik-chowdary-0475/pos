@@ -14,19 +14,19 @@ public class InventoryDao extends AbstractDao {
     private static String SELECT_ALL = "select p from InventoryPojo p";
 
     @Transactional
-    public void insertProductInInventory(InventoryPojo inventoryPojo) {
+    public void insert(InventoryPojo inventoryPojo) {
         em().persist(inventoryPojo);
     }
 
     @Transactional
-    public InventoryPojo getProductInventoryById(int id) {
+    public InventoryPojo getById(int id) {
         TypedQuery<InventoryPojo> query = getQuery(SELECT_BY_ID, InventoryPojo.class);
         query.setParameter("id", id);
         return getSingle(query);
     }
 
     @Transactional
-    public List<InventoryPojo> getAllProductsInInventory() {
+    public List<InventoryPojo> getAll() {
         TypedQuery<InventoryPojo> query = getQuery(SELECT_ALL, InventoryPojo.class);
         return query.getResultList();
     }

@@ -24,7 +24,7 @@
                         <div class="modal-body">
                             <form class="form needs-validation" style="text-align:justify;" id="product-form" novalidate>
                                 <div class="form-group my-3">
-                                    <label for="inputProduct" class="col-sm-2 col-form-label">Product</label>
+                                    <label for="inputProduct" class="col-sm-2 col-form-label required-label">Product<span class="required-asterisk">*</span></label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="name" id="inputProduct" placeholder="Enter Product Name" required>
                                         <div class="invalid-feedback">Please enter a name.</div>
@@ -32,7 +32,7 @@
                                 </div>
 
                                 <div class="form-group my-3">
-                                    <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
+                                    <label for="inputBarcode" class="col-sm-2 col-form-label required-label">Barcode<span class="required-asterisk">*</span></label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="barcode" id="inputBarcode" placeholder="Enter Barcode" required>
                                         <div class="invalid-feedback">Please enter a barcode.</div>
@@ -40,7 +40,7 @@
                                 </div>
 
                                 <div class="form-group my-3">
-                                    <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
+                                    <label for="inputBrand" class="col-sm-2 col-form-label required-label">Brand<span class="required-asterisk">*</span></label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="brand" id="inputBrand" placeholder="Enter Brand Name" required>
                                         <div class="invalid-feedback">Please enter a brand.</div>
@@ -48,7 +48,7 @@
                                 </div>
 
                                 <div class="form-group my-3">
-                                    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
+                                    <label for="inputCategory" class="col-sm-2 col-form-label required-label">Category<span class="required-asterisk">*</span></label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="category" id="inputCategory" placeholder="Enter Category" required>
                                         <div class="invalid-feedback">Please enter a category.</div>
@@ -56,7 +56,7 @@
                                 </div>
 
                                 <div class="form-group my-3">
-                                    <label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
+                                    <label for="inputMrp" class="col-sm-2 col-form-label required-label">MRP<span class="required-asterisk">*</span></label>
                                     <div class="col-sm-10">
                                         <input type="number" class="form-control" name="mrp" id="inputMrp" placeholder="Enter MRP" required min="0.01" max="10000000" step=any>
                                         <div class="invalid-feedback">Please enter a valid MRP.</div>
@@ -146,8 +146,6 @@
                         <label class="custom-file-label" for="productFile" id="productFileName">Choose file</label>
                     </div>
                     <br>
-<!--                    Rows: <span id="rowCount">0</span>,-->
-<!--                    Processed: <span id="processCount">0</span>,-->
                     Errors: <span id="errorCount">0</span>
                 </div>
 
@@ -188,7 +186,7 @@
                 <div class="modal-body">
                     <form class="form needs-validation" id="product-edit-form" novalidate>
                         <div class="form-group my-3">
-                            <label for="inputProduct" class="col-sm-2 col-form-label">Product</label>
+                            <label for="inputProduct" class="col-sm-2 col-form-label required-label">Product<span class="required-asterisk">*</span></label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="name" placeholder="Enter Name" required>
                                 <div class="invalid-feedback">Please enter a name.</div>
@@ -213,7 +211,7 @@
                             </div>
                         </div>
                         <div class="form-group my-3">
-                            <label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
+                            <label for="inputMrp" class="col-sm-2 col-form-label required-label">MRP<span class="required-asterisk">*</span></label>
                             <div class="col-sm-10">
                                 <input type="number" class="form-control" name="mrp" placeholder="Enter MRP" min="0.01" max="10000000" step="any" required>
                                 <div class="invalid-feedback">Please enter a valid MRP.</div>

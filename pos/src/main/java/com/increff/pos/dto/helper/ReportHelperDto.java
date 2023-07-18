@@ -1,9 +1,6 @@
 package com.increff.pos.dto.helper;
 
-import com.increff.pos.model.data.DailySalesData;
-import com.increff.pos.model.data.InventoryReportData;
-import com.increff.pos.model.data.ReportData;
-import com.increff.pos.model.data.SalesData;
+import com.increff.pos.model.data.*;
 import com.increff.pos.model.form.SalesForm;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.DailySalesReportPojo;
@@ -12,11 +9,19 @@ import com.increff.pos.service.ApiException;
 import com.increff.pos.util.StringUtil;
 import javafx.util.Pair;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ReportHelperDto {
+
+    public static BrandReportData convert(BrandPojo brandPojo) {
+        BrandReportData brandReportData = new BrandReportData();
+        brandReportData.setBrand(brandPojo.getBrand());
+        brandReportData.setCategory(brandPojo.getCategory());
+        return brandReportData;
+    }
 
     public static InventoryReportData convert(String brand, String category, Integer quantity) {
         InventoryReportData inventoryReportData = new InventoryReportData();
@@ -46,29 +51,39 @@ public class ReportHelperDto {
         return salesData;
     }
 
-    public static ReportData convert(Integer quantity, Double revenue){
+    public static ReportData convert(Integer quantity, Double revenue) {
         ReportData reportData = new ReportData();
         reportData.setRevenue(revenue);
         reportData.setQuantity(quantity);
-        return  reportData;
+        return reportData;
     }
 
     public static void validate(SalesForm salesForm) throws ApiException {
         if (Objects.isNull(salesForm)) {
             throw new ApiException("Invalid sales form details");
         }
-        if(Objects.isNull(salesForm.getStartTime()) || salesForm.getStartTime().length() == 0){
-            throw new ApiException("Invalid start time");
+        validateStringField(salesForm.getStartTime(), "Start date");
+        validateStringField(salesForm.getEndTime(), "End date");
+
+        validateDates(salesForm.getStartTime(), salesForm.getEndTime());
+    }
+
+    private static void validateStringField(String field, String fieldName) throws ApiException {
+        if (Objects.isNull(field) || field.trim().isEmpty()) {
+            throw new ApiException("Invalid " + fieldName.toLowerCase() + ". " + fieldName + " is required.");
         }
-        if(Objects.isNull(salesForm.getEndTime()) || salesForm.getEndTime().length() == 0){
-            throw new ApiException("Invalid end time");
+    }
+
+    private static void validateDates(String startDateString, String endDateString) throws ApiException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startDate = LocalDate.parse(startDateString, formatter);
+        LocalDate endDate = LocalDate.parse(endDateString, formatter);
+        LocalDate currentDate = LocalDate.now();
+        if (startDate.isAfter(endDate)) {
+            throw new ApiException("Start date cannot be greater than end date");
         }
-        if(Objects.isNull(salesForm.getBrand()))
-        {
-            throw new ApiException("Invalid brand name");
-        }
-        if (Objects.isNull(salesForm.getCategory())) {
-            throw new ApiException("Invalid category name");
+        if (startDate.isAfter(currentDate) || endDate.isAfter(currentDate)) {
+            throw new ApiException("Start date and end date cannot be greater than current date");
         }
     }
 
@@ -77,4 +92,5 @@ public class ReportHelperDto {
         salesForm.setCategory(StringUtil.toLowerCase(salesForm.getCategory()));
         ReportHelperDto.validate(salesForm);
     }
+
 }

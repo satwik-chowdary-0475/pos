@@ -20,31 +20,31 @@ public class BrandController {
     @ApiOperation(value = "Inserts a brand")
     @PostMapping(path = "")
     public void insertBrand(@RequestBody BrandForm form) throws ApiException {
-        brandDto.insertBrand(form);
+        brandDto.insert(form);
     }
 
     @ApiOperation(value = "Updates a brand details")
     @PutMapping(path = "/{id}")
     public void updateBrand(@PathVariable int id, @RequestBody BrandForm brandForm) throws ApiException {
-        brandDto.updateBrand(id, brandForm);
+        brandDto.update(id, brandForm);
     }
 
     @ApiOperation(value = "Get list of all brands")
     @GetMapping(path = "")
     public List<BrandData> getAllBrand() {
-        return brandDto.getAllBrandDataList();
+        return brandDto.getAll();
     }
 
     @ApiOperation(value = "Get a brand details")
     @GetMapping(path = "/{id}")
     public BrandData getBrand(@PathVariable int id) throws ApiException {
-        return brandDto.getBrandData(id);
+        return brandDto.getById(id);
     }
 
     @ApiOperation(value = "Add list of brand data")
     @PostMapping(path = "/bulk")
     public void insertBrandList(@RequestBody List<BrandForm> brandFormList) throws ApiException {
-        brandDto.insertBrandList(brandFormList);
+        brandDto.insertList(brandFormList);
     }
 
 }

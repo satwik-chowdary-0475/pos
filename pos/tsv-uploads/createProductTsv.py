@@ -1,6 +1,6 @@
 import csv
 
-with open('/Users/satwikchowdary/Desktop/pos-app/pos/src/main/resources/product.tsv', 'wt') as out_file:
+with open('/product.tsv', 'wt') as out_file:
     tsv_writer = csv.writer(out_file, delimiter='\t')
     tsv_writer.writerow(['name', 'barcode','brand','category','mrp'])
     tsv_writer.writerow(['iphone X','barcode1','apple','mobile','100000'])

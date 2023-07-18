@@ -1,6 +1,5 @@
 package com.increff.pos.dto;
 
-import com.increff.pos.dto.helper.HelperDto;
 import com.increff.pos.dto.helper.ReportHelperDto;
 import com.increff.pos.model.data.*;
 import com.increff.pos.model.form.SalesForm;
@@ -34,35 +33,34 @@ public class ReportDto {
     private OrderService orderService;
 
     @Transactional(rollbackOn = ApiException.class)
-    public List<BrandData> getBrandCategoryReport() {
-        List<BrandPojo> brandPojoList = brandService.getAllBrands();
-        List<BrandData> brandDataList = new ArrayList<BrandData>();
-        for (BrandPojo brandPojo : brandPojoList) {
-            brandDataList.add(HelperDto.convert(brandPojo));
-        }
-        return brandDataList;
+    public List<BrandReportData> getBrandCategoryReport() {
+        List<BrandPojo> brandPojoList = brandService.getAll();
+        List<BrandReportData> brandReportDataList = brandPojoList.stream()
+                .map(ReportHelperDto::convert)
+                .collect(Collectors.toList());
+        return brandReportDataList;
     }
 
     @Transactional(rollbackOn = ApiException.class)
     public List<DailySalesData> getDailySalesReport() {
-        List<DailySalesReportPojo> dailySalesReportPojoList = dailySalesReportService.getAllDailySalesReport();
-        List<DailySalesData> dailySalesData = new ArrayList<DailySalesData>();
-        for (DailySalesReportPojo dailySalesReportPojo : dailySalesReportPojoList) {
-            dailySalesData.add(ReportHelperDto.convert(dailySalesReportPojo));
-        }
+        List<DailySalesReportPojo> dailySalesReportPojoList = dailySalesReportService.getAll();
+        List<DailySalesData> dailySalesData = dailySalesReportPojoList.stream()
+                .map(ReportHelperDto::convert)
+                .collect(Collectors.toList());
         return dailySalesData;
     }
 
     @Transactional(rollbackOn = ApiException.class)
     public void insertDailySalesReport() {
-        dailySalesReportService.insertDailySalesReport();
+        dailySalesReportService.insert();
     }
 
     @Transactional(rollbackOn = ApiException.class)
     public List<InventoryReportData> getInventoryReport() throws ApiException {
-        List<BrandPojo> brandPojoList = brandService.getAllBrands();
-        List<InventoryPojo> inventoryPojoList = inventoryService.getAllProductsInInventory();
+        List<BrandPojo> brandPojoList = brandService.getAll();
+        List<InventoryPojo> inventoryPojoList = inventoryService.getAll();
         HashMap<Integer, Integer> brandCategoryMap = getBrandCategoryMap(inventoryPojoList);
+
         List<InventoryReportData> inventoryReportDataList = brandPojoList.stream()
                 .map(brandPojo -> {
                     int brandId = brandPojo.getId();
@@ -72,14 +70,15 @@ public class ReportDto {
                 .collect(Collectors.toList());
 
         return inventoryReportDataList;
-
     }
 
     private HashMap<Integer, Integer> getBrandCategoryMap(List<InventoryPojo> inventoryPojoList) throws ApiException {
         HashMap<Integer, Integer> brandCategoryMap = new HashMap<>();
+
         for (InventoryPojo inventoryPojo : inventoryPojoList) {
             ProductPojo productPojo = productService.getProductById(inventoryPojo.getProductId());
             int brandCategoryId = productPojo.getBrandCategoryId();
+
             if (brandCategoryMap.containsKey(brandCategoryId)) {
                 brandCategoryMap.put(brandCategoryId, brandCategoryMap.get(brandCategoryId) + inventoryPojo.getQuantity());
             } else {
@@ -94,10 +93,13 @@ public class ReportDto {
         ReportHelperDto.normalise(salesForm);
         Date startTime = Date.valueOf(LocalDate.parse(salesForm.getStartTime()));
         Date endTime = Date.valueOf(LocalDate.parse(salesForm.getEndTime()));
-        List<OrderPojo> orderPojoList = orderService.getOrderByDate(startTime, endTime);
-        HashMap<Integer,ReportData> productOrderItemMap = getProductOrderItemMap(orderPojoList);
-        List<SalesData> salesDataList = brandService.getBrandListByBrandCategory(salesForm.getBrand(), salesForm.getCategory())
+
+        List<OrderPojo> orderPojoList = orderService.getByDate(startTime, endTime);
+        HashMap<Integer, ReportData> productOrderItemMap = getProductOrderItemMap(orderPojoList);
+
+        List<SalesData> salesDataList = brandService.getListByBrandCategory(salesForm.getBrand(), salesForm.getCategory())
                 .stream()
+                .filter(Objects::nonNull)
                 .map(brandPojo -> {
                     List<ProductPojo> productPojoList = productService.getProductByBrandCategoryId(brandPojo.getId());
                     int quantity = getSalesReportQuantity(productPojoList, productOrderItemMap);
@@ -126,22 +128,24 @@ public class ReportDto {
 
     public HashMap<Integer, ReportData> getProductOrderItemMap(List<OrderPojo> orderPojoList) {
         List<OrderItemPojo> orderItemPojoList = orderItemService.getAllOrderItemsByOrderList(orderPojoList);
+
         HashMap<Integer, ReportData> productOrderItemMap = orderItemPojoList.stream()
                 .collect(Collectors.toMap(
                         OrderItemPojo::getProductId,
                         orderItemPojo -> {
                             Integer quantity = orderItemPojo.getQuantity();
                             Double revenue = orderItemPojo.getQuantity() * orderItemPojo.getSellingPrice();
-                            return ReportHelperDto.convert(quantity,revenue);
+                            return ReportHelperDto.convert(quantity, revenue);
 
                         },
                         (existingPair, newPair) -> {
                             Integer updatedQuantity = existingPair.getQuantity() + newPair.getQuantity();
                             Double updatedRevenue = existingPair.getRevenue() + newPair.getRevenue();
-                            return ReportHelperDto.convert(updatedQuantity,updatedRevenue);
+                            return ReportHelperDto.convert(updatedQuantity, updatedRevenue);
                         },
                         HashMap::new
                 ));
+
         return productOrderItemMap;
     }
 

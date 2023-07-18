@@ -50,20 +50,20 @@ public class OrderDtoTest extends AbstractUnitTest {
     @Before
     public void init() throws ApiException {
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
-        brandDto.insertBrand(brandForm);
+        brandDto.insert(brandForm);
         ProductForm productForm = Helper.createProductForm("barcode 1","brand 1","category 1","product 1",120.12);
         productDto.insertProduct(productForm);
         ProductForm productForm1 = Helper.createProductForm("barcode 2","brand 1","category 1","product 2",120.12);
         productDto.insertProduct(productForm1);
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1",200);
-        inventoryDto.insertProductInInventory(inventoryForm);
+        inventoryDto.insert(inventoryForm);
     }
 
     @Test
     public void TestInsert() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.createOrder(orderForm);
-        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
+        String orderCode = orderDto.insert(orderForm);
+        OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
         assertEquals(orderPojo.getOrderCode(),orderCode);
         assertEquals(orderPojo.getStatus(), OrderStatus.CREATED);
         assertEquals(orderPojo.getCustomerName(),"customer 1");
@@ -72,9 +72,9 @@ public class OrderDtoTest extends AbstractUnitTest {
     @Test
     public void TestChangeStatus() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.createOrder(orderForm);
-        orderDto.changeOrderStatus(orderCode);
-        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
+        String orderCode = orderDto.insert(orderForm);
+        orderDto.changeStatus(orderCode);
+        OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
         assertEquals(orderPojo.getStatus(),OrderStatus.INVOICED);
     }
 
@@ -82,28 +82,28 @@ public class OrderDtoTest extends AbstractUnitTest {
     public void TestGetAllOrders() throws ApiException{
         List<OrderData> actualOrderDataList = new ArrayList<OrderData>();
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.createOrder(orderForm);
-        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
+        String orderCode = orderDto.insert(orderForm);
+        OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
         actualOrderDataList.add(Helper.createOrderData(orderPojo));
         OrderForm orderForm1 = Helper.createOrderForm("customer 2");
-        String orderCode1 = orderDto.createOrder(orderForm1);
-        OrderPojo orderPojo1 = orderService.getOrderByOrderCode(orderCode1);
+        String orderCode1 = orderDto.insert(orderForm1);
+        OrderPojo orderPojo1 = orderService.getByOrderCode(orderCode1);
         actualOrderDataList.add(Helper.createOrderData(orderPojo1));
-        List<OrderData> expectedDataList = orderDto.getAllOrders();
+        List<OrderData> expectedDataList = orderDto.getAll();
         assertEquals(expectedDataList.size(),actualOrderDataList.size());
     }
 
     @Test
     public void TestGetAllDetails() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.createOrder(orderForm);
-        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
+        String orderCode = orderDto.insert(orderForm);
+        OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",100,100.12);
-        orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
+        orderItemDto.insert(orderPojo.getId(),orderItemForm);
         ProductPojo productPojo = productService.getProductByBarcode("barcode 1");
         // Optional.ofNullable checks if the object is not null
-        assertEquals(Optional.ofNullable((inventoryService.getProductInventoryByProductId(productPojo.getId()).getQuantity())),Optional.ofNullable(100));
-        List<OrderItemData>orderItemDataList = orderItemDto.getOrderItems(orderPojo.getId());
+        assertEquals(Optional.ofNullable((inventoryService.getById(productPojo.getId()).getQuantity())),Optional.ofNullable(100));
+        List<OrderItemData>orderItemDataList = orderItemDto.getAllByOrderId(orderPojo.getId());
         OrderDetailsData actualOrderDetailsData = Helper.createOrderDetailsData(orderPojo,orderItemDataList);
         OrderDetailsData expectedOrderDetailsData = orderDto.getAllOrderDetails(orderCode);
         assertEquals(actualOrderDetailsData.getStatus(),expectedOrderDetailsData.getStatus());
@@ -117,33 +117,33 @@ public class OrderDtoTest extends AbstractUnitTest {
     @Test
     public void TestStatusChange() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.createOrder(orderForm);
-        orderDto.changeOrderStatus(orderCode);
-        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
+        String orderCode = orderDto.insert(orderForm);
+        orderDto.changeStatus(orderCode);
+        OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
         assertEquals(orderPojo.getStatus(),OrderStatus.INVOICED);
     }
 
     @Test
     public void TestDelete() throws ApiException{
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.createOrder(orderForm);
-        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
+        String orderCode = orderDto.insert(orderForm);
+        OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",100,100.12);
-        orderItemDto.insertOrderItem(orderPojo.getId(),orderItemForm);
+        orderItemDto.insert(orderPojo.getId(),orderItemForm);
         ProductPojo productPojo = productService.getProductByBarcode("barcode 1");
-        assertEquals(Optional.ofNullable(inventoryService.getProductInventoryByProductId(productPojo.getId()).getQuantity()),Optional.ofNullable(100));
+        assertEquals(Optional.ofNullable(inventoryService.getById(productPojo.getId()).getQuantity()),Optional.ofNullable(100));
         //check order delete
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Order doesn't exist!!");
-        orderDto.deleteOrder(orderCode);
-        OrderPojo deletedOrderPojo = orderService.getOrderByOrderCode(orderCode);
+        exceptionRule.expectMessage("Order doesn't exist");
+        orderDto.delete(orderCode);
+        OrderPojo deletedOrderPojo = orderService.getByOrderCode(orderCode);
 
         //check order item delete
-        List<OrderItemData>orderItemDataList = orderItemDto.getOrderItems(orderPojo.getId());
+        List<OrderItemData>orderItemDataList = orderItemDto.getAllByOrderId(orderPojo.getId());
         assertEquals(orderItemDataList.size() , 0);
 
         //check inventory update
-        assertEquals(Optional.ofNullable(inventoryService.getProductInventoryByProductId(productPojo.getId()).getQuantity()),Optional.ofNullable(200));
+        assertEquals(Optional.ofNullable(inventoryService.getById(productPojo.getId()).getQuantity()),Optional.ofNullable(200));
     }
 
 

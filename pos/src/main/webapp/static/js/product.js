@@ -74,7 +74,7 @@ function readFileDataCallback(results){
     else{
         resetErrorCount();
         updateUploadDialog();
-        $.notify("Uploaded file not supported. Columns not matched",{className:"error",autoHideDelay: 20000});
+        $.notify("Uploaded file not supported. Headers not matched",{className:"error",autoHideDelay: 20000});
     }
 }
 
@@ -211,7 +211,7 @@ function updateFileName(){
 	$("#process-data").prop('disabled',(fileName.length == 0));
 }
 function downloadErrors(){
-	writeFileData(errorData);
+	writeFileData(errorData,'tsv','product_errors');
 }
 
 function updateProduct(event){

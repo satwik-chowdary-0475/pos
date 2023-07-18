@@ -4,6 +4,9 @@ import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl;
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class CustomPhysicalNamingStrategy extends PhysicalNamingStrategyStandardImpl {
 
     @Override
@@ -16,18 +19,9 @@ public class CustomPhysicalNamingStrategy extends PhysicalNamingStrategyStandard
     }
 
     private String convertCamelToSnakeCase(String camelCaseName) {
-        StringBuilder snakeCaseName = new StringBuilder();
-        for (int i = 0; i < camelCaseName.length(); i++) {
-            char currentChar = camelCaseName.charAt(i);
-            if (Character.isUpperCase(currentChar)) {
-                if (i > 0) {
-                    snakeCaseName.append("_");
-                }
-                snakeCaseName.append(Character.toLowerCase(currentChar));
-            } else {
-                snakeCaseName.append(currentChar);
-            }
-        }
-        return snakeCaseName.toString();
+        return Arrays.stream(camelCaseName.split("(?=[A-Z])"))
+                .map(String::toLowerCase)
+                .collect(Collectors.joining("_"));
     }
+
 }

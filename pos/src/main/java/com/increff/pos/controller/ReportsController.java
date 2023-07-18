@@ -2,10 +2,7 @@ package com.increff.pos.controller;
 
 import com.increff.pos.dto.BrandDto;
 import com.increff.pos.dto.ReportDto;
-import com.increff.pos.model.data.BrandData;
-import com.increff.pos.model.data.DailySalesData;
-import com.increff.pos.model.data.InventoryReportData;
-import com.increff.pos.model.data.SalesData;
+import com.increff.pos.model.data.*;
 import com.increff.pos.model.form.SalesForm;
 import com.increff.pos.service.ApiException;
 import io.swagger.annotations.Api;
@@ -27,7 +24,7 @@ public class ReportsController {
     private ReportDto reportDto;
 
     @ApiOperation(value = "Get daily sales reports")
-    @GetMapping(path = "/day-on-day")
+    @GetMapping(path = "/daily_sales")
     public List<DailySalesData> getDailySalesReport() {
         return reportDto.getDailySalesReport();
     }
@@ -39,19 +36,19 @@ public class ReportsController {
     }
 
     @ApiOperation(value = "Get brand reports")
-    @GetMapping(path = "/brand-report")
-    public List<BrandData> getBrandReport() {
+    @GetMapping(path = "/brands")
+    public List<BrandReportData> getBrandReport() {
         return reportDto.getBrandCategoryReport();
     }
 
     @ApiOperation(value = "Get inventory reports")
-    @GetMapping(path = "/inventory-report")
+    @GetMapping(path = "/inventory")
     public List<InventoryReportData> getInventoryReport() throws ApiException {
         return reportDto.getInventoryReport();
     }
-
+    //TODO: should remove before presentation
     @ApiOperation(value = "insert daily sales report")
-    @PostMapping(path = "/day-on-day")
+    @PostMapping(path = "/daily_sales")
     public void insertDailySaleReport() {
         reportDto.insertDailySalesReport();
     }

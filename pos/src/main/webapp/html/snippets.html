@@ -19,7 +19,7 @@
 
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-1" th:fragment="name_app_navbar">
-    <a class="navbar-brand" th:href="@{/ui/home}">
+    <a class="navbar-brand" th:href="@{/home}">
         <img th:src="@{/static/images/logo.jpg}" class="d-inline-block align-top" height="50" alt="">
     </a>
 
@@ -29,30 +29,30 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/ui/home}">Home</a>
+                <a class="nav-link" th:href="@{/home}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/ui/brands}">Brand</a>
+                <a class="nav-link" th:href="@{/brands}">Brand</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/ui/products}">Product</a>
+                <a class="nav-link" th:href="@{/products}">Product</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/ui/inventory}">Inventory</a>
+                <a class="nav-link" th:href="@{/inventory}">Inventory</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/ui/orders}">Order</a>
+                <a class="nav-link" th:href="@{/orders}">Order</a>
             </li>
 
             <li class="nav-item" th:if="${info.getRole()!='operator'}">
-                <a class="nav-link" th:href="@{/ui/reports}">Reports</a>
+                <a class="nav-link" th:href="@{/reports}">Reports</a>
             </li>
 
         </ul>
 
         <ul class="navbar-nav ml-auto mr-3">
             <li class="dropdown">
-                <a href="#" class="display-picture"><img th:src="@{/static/images/profile-pic.svg}"></a>
+                <a class="display-picture"><img th:src="@{/static/images/profile-pic.svg}"></a>
                     <div class="card-profile hidden">
                         <ul>
                             <li class="navbar-text" style="color:#FFF">
@@ -66,27 +66,7 @@
                             </li>
                         </ul>
                     </div>
-<!--                    <li class="navbar-text">-->
-<!--                        [[${info.getEmail()}]]-->
-<!--                    </li>-->
-<!--                    <li class="navbar-text">-->
-<!--                        [[${info.getRole()}]]-->
-<!--                    </li>-->
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" th:href="@{/session/logout}">Logout</a>-->
-<!--                    </li>-->
             </li>
-<!--            <li class="navbar-text">-->
-<!--                [[${info.getEmail()}]]-->
-<!--                &nbsp;&gt;&nbsp;-->
-<!--            </li>-->
-<!--            <li class="navbar-text">-->
-<!--                [[${info.getRole()}]]-->
-<!--                &nbsp;&gt;&nbsp;-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" th:href="@{/session/logout}">Logout</a>-->
-<!--            </li>-->
         </ul>
 
 

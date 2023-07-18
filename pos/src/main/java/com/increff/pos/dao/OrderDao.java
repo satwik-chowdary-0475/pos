@@ -22,12 +22,12 @@ public class OrderDao extends AbstractDao {
 
 
     @Transactional
-    public void createOrder(OrderPojo orderPojo) {
+    public void insert(OrderPojo orderPojo) {
         em().persist(orderPojo);
     }
 
     @Transactional
-    public List<OrderPojo> getOrderByDate(Date startTime, Date endTime,OrderStatus status) {
+    public List<OrderPojo> getByDate(Date startTime, Date endTime, OrderStatus status) {
         Query query = em().createQuery(SELECT_BY_DATE);
         query.setParameter("startTime", startTime, TemporalType.TIMESTAMP);
         query.setParameter("endTime", endTime, TemporalType.TIMESTAMP);
@@ -36,27 +36,27 @@ public class OrderDao extends AbstractDao {
     }
 
     @Transactional
-    public OrderPojo getOrderByOrderCode(String orderCode) {
+    public OrderPojo getByOrderCode(String orderCode) {
         TypedQuery<OrderPojo> query = getQuery(SELECT_BY_ORDER_CODE, OrderPojo.class);
         query.setParameter("orderCode", orderCode);
         return getSingle(query);
     }
 
     @Transactional
-    public OrderPojo getOrderByOrderId(int id) {
+    public OrderPojo getByOrderId(int id) {
         TypedQuery<OrderPojo> query = getQuery(SELECT_BY_ID, OrderPojo.class);
         query.setParameter("id", id);
         return getSingle(query);
     }
 
     @Transactional
-    public List<OrderPojo> getAllOrders() {
+    public List<OrderPojo> getAll() {
         TypedQuery<OrderPojo> query = getQuery(SELECT_ALL, OrderPojo.class);
         return query.getResultList();
     }
 
     @Transactional
-    public int deleteOrder(String orderCode) {
+    public int delete(String orderCode) {
         Query query = em().createQuery(DELETE_BY_ORDER_CODE);
         query.setParameter("orderCode", orderCode);
         query.setParameter("status", OrderStatus.CREATED);

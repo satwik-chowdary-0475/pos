@@ -24,22 +24,16 @@
                 </fo:static-content>
                 <fo:flow flow-name="xsl-region-body">
                     <fo:block-container width="100%">
-                        <fo:block font-size="12pt" font-weight="italic" margin-bottom="10pt" width="50%">
+                        <fo:block font-size="12pt" margin-bottom="10pt" width="50%">
                             <xsl:text>Customer Name: </xsl:text>
                             <xsl:value-of select="Order/Heading/CustomerName"/>
                         </fo:block>
-<!--                        <fo:block-container text-align="end" margin-bottom="10pt" width="100%">-->
-<!--                             <fo:block font-size="12pt" font-style="italic" width="50%" >-->
-<!--                                <xsl:text>Address: </xsl:text>-->
-<!--                                <xsl:value-of select="Order/Heading/Address"/>-->
-<!--                             </fo:block>-->
-<!--                         </fo:block-container>-->
                     </fo:block-container>
-                    <fo:block font-size="12pt" font-style="italic" margin-bottom="10pt">
+                    <fo:block font-size="12pt" margin-bottom="10pt">
                         <xsl:text>Invoice Date: </xsl:text>
                         <xsl:value-of select="Order/Heading/InvoicedTime"/>
                     </fo:block>
-                    <fo:block margin-bottom="20pt">
+                    <fo:block font-size="12pt" margin-bottom="20pt">
                         <xsl:text>Order Code: </xsl:text>
                         <xsl:value-of select="Order/Heading/OrderCode"/>
                     </fo:block>

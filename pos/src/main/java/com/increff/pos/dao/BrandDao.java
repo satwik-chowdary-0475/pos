@@ -17,19 +17,19 @@ public class BrandDao extends AbstractDao {
     private static String SELECT_BY_CATEGORY = "select p from BrandPojo p where category=:category";
 
     @Transactional
-    public void insertBrand(BrandPojo brandPojo) {
+    public void insert(BrandPojo brandPojo) {
         em().persist(brandPojo);
     }
 
     @Transactional
-    public BrandPojo getBrandById(int id) {
+    public BrandPojo getById(int id) {
         TypedQuery<BrandPojo> query = getQuery(SELECT_BY_ID, BrandPojo.class);
         query.setParameter("id", id);
         return getSingle(query);
     }
 
     @Transactional
-    public BrandPojo getBrandByBrandCategory(String brand, String category) {
+    public BrandPojo getByBrandCategory(String brand, String category) {
         TypedQuery<BrandPojo> query = getQuery(SELECT_BY_BRAND_CATEGORY, BrandPojo.class);
         query.setParameter("brand", brand);
         query.setParameter("category", category);
@@ -37,21 +37,21 @@ public class BrandDao extends AbstractDao {
     }
 
     @Transactional
-    public List<BrandPojo> getBrandByBrand(String brand) {
+    public List<BrandPojo> getByBrand(String brand) {
         TypedQuery<BrandPojo> query = getQuery(SELECT_BY_BRAND, BrandPojo.class);
         query.setParameter("brand", brand);
         return query.getResultList();
     }
 
     @Transactional
-    public List<BrandPojo> getBrandByCategory(String category) {
+    public List<BrandPojo> getByCategory(String category) {
         TypedQuery<BrandPojo> query = getQuery(SELECT_BY_CATEGORY, BrandPojo.class);
         query.setParameter("category", category);
         return query.getResultList();
     }
 
     @Transactional
-    public List<BrandPojo> getAllBrands() {
+    public List<BrandPojo> getAll() {
         TypedQuery<BrandPojo> query = getQuery(SELECT_ALL, BrandPojo.class);
         return query.getResultList();
     }

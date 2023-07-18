@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j
@@ -23,82 +24,81 @@ public class OrderItemService {
     private InventoryService inventoryService;
 
     @Transactional(rollbackOn = ApiException.class)
-    public int insertOrderItem(OrderItemPojo orderItemPojo, InventoryPojo inventoryPojo) throws ApiException {
+    public int insert(OrderItemPojo orderItemPojo, InventoryPojo inventoryPojo, String barcode) throws ApiException {
         int requiredQuantity = orderItemPojo.getQuantity();
         int inventoryQuantity = inventoryPojo.getQuantity();
-        checkInventory(requiredQuantity, inventoryQuantity,inventoryPojo.getProductId());
-        OrderItemPojo existingOrderItemPojo = orderItemDao.getOrderItemByProductId(orderItemPojo.getOrderId(), orderItemPojo.getProductId());
+        checkInventory(requiredQuantity, inventoryQuantity, barcode);
+
+        OrderItemPojo existingOrderItemPojo = orderItemDao.getByProductId(orderItemPojo.getOrderId(), orderItemPojo.getProductId());
         if (Objects.nonNull(existingOrderItemPojo)) {
-            return insertExistingOrderItem(existingOrderItemPojo, orderItemPojo);
-        } else {
-            return insertNewOrderItem(orderItemPojo);
+            return update(existingOrderItemPojo, orderItemPojo);
         }
-    }
-
-    @Transactional(rollbackOn = ApiException.class)
-    public OrderItemPojo getOrderItemById(int id) throws ApiException {
-        OrderItemPojo orderItemPojo = orderItemDao.getOrderItemById(id);
-        if (Objects.isNull(orderItemPojo)) {
-            throw new ApiException("Order item doesn't exist!!");
-        }
-        return orderItemPojo;
-    }
-
-
-    @Transactional
-    public List<OrderItemPojo> getAllOrderItems(int orderId) {
-        return orderItemDao.getAllOrderItems(orderId);
-    }
-
-    @Transactional(rollbackOn = ApiException.class)
-    public void updateOrderItem(int id, OrderItemPojo updatedOrderItemPojo, InventoryPojo inventoryPojo) throws ApiException {
-        OrderItemPojo existingOrderItemPojo = orderItemDao.getOrderItemById(id);
-        int requiredQuantity = updatedOrderItemPojo.getQuantity();
-        int inventoryQuantity = inventoryPojo.getQuantity() + existingOrderItemPojo.getQuantity();
-        checkInventory(requiredQuantity, inventoryQuantity,inventoryPojo.getProductId());
-        existingOrderItemPojo.setQuantity(requiredQuantity);
-        existingOrderItemPojo.setSellingPrice(updatedOrderItemPojo.getSellingPrice());
-    }
-
-    @Transactional(rollbackOn = ApiException.class)
-    public void deleteOrderItem(int id) throws ApiException {
-        OrderItemPojo orderItemPojo = orderItemDao.getOrderItemById(id);
-        if (Objects.isNull(orderItemPojo)) {
-            throw new ApiException("Order item doesn't exist!!");
-        }
-        orderItemDao.deleteOrderItem(id);
+        return insert(orderItemPojo);
     }
 
     @Transactional
-    public void deleteOrderItemsByOrder(int orderId) {
-        orderItemDao.deleteAllOrderItems(orderId);
-    }
-
-    @Transactional
-    private void checkInventory(int requiredQuantity, int inventoryQuantity, int productId) throws ApiException {
-        if (requiredQuantity > inventoryQuantity) {
-            throw new ApiException("Insufficient inventory for the product!!");
-        }
-    }
-
-    @Transactional
-    private Integer insertNewOrderItem(OrderItemPojo orderItemPojo) {
-        orderItemDao.insertOrderItem(orderItemPojo);
+    private Integer insert(OrderItemPojo orderItemPojo) {
+        orderItemDao.insert(orderItemPojo);
         return orderItemPojo.getId();
     }
 
-    @Transactional
-    private Integer insertExistingOrderItem(OrderItemPojo existingOrderItemPojo, OrderItemPojo orderItemPojo) {
+    private Integer update(OrderItemPojo existingOrderItemPojo, OrderItemPojo orderItemPojo) {
         existingOrderItemPojo.setSellingPrice(orderItemPojo.getSellingPrice());
         existingOrderItemPojo.setQuantity(orderItemPojo.getQuantity() + existingOrderItemPojo.getQuantity());
         return existingOrderItemPojo.getId();
     }
 
+    @Transactional(rollbackOn = ApiException.class)
+    public OrderItemPojo getById(int id) throws ApiException {
+        OrderItemPojo orderItemPojo = orderItemDao.getById(id);
+        if (Objects.isNull(orderItemPojo)) {
+            throw new ApiException("Order item doesn't exist");
+        }
+        return orderItemPojo;
+    }
+
+    @Transactional
+    public List<OrderItemPojo> getAllByOrderId(int orderId) {
+        return orderItemDao.getAllByOrderId(orderId);
+    }
+
+    @Transactional(rollbackOn = ApiException.class)
+    public void update(int id, OrderItemPojo updatedOrderItemPojo, InventoryPojo inventoryPojo, String barcode) throws ApiException {
+        OrderItemPojo existingOrderItemPojo = orderItemDao.getById(id);
+        int requiredQuantity = updatedOrderItemPojo.getQuantity();
+        int inventoryQuantity = inventoryPojo.getQuantity() + existingOrderItemPojo.getQuantity();
+        checkInventory(requiredQuantity, inventoryQuantity, barcode);
+
+        existingOrderItemPojo.setQuantity(requiredQuantity);
+        existingOrderItemPojo.setSellingPrice(updatedOrderItemPojo.getSellingPrice());
+    }
+
+    @Transactional(rollbackOn = ApiException.class)
+    public void delete(int orderId, int id) throws ApiException {
+        OrderItemPojo orderItemPojo = orderItemDao.getById(id);
+        if (Objects.isNull(orderItemPojo)) {
+            throw new ApiException("Order item doesn't exist");
+        }
+        orderItemDao.delete(orderId, id);
+    }
+
+    @Transactional
+    public void deleteByOrderId(int orderId) {
+        orderItemDao.deleteByOrderId(orderId);
+    }
+
     @Transactional
     public List<OrderItemPojo> getAllOrderItemsByOrderList(List<OrderPojo> orderPojoList) {
-        if(!orderPojoList.isEmpty()) {
-            return orderItemDao.getAllOrderItemsByOrderList(orderPojoList);
+        if (!orderPojoList.isEmpty()) {
+            List<Integer> orderIdsList = orderPojoList.stream().map(OrderPojo::getId).collect(Collectors.toList());
+            return orderItemDao.getAllByOrderList(orderIdsList);
         }
         return new ArrayList<>();
+    }
+
+    private void checkInventory(int requiredQuantity, int inventoryQuantity, String barcode) throws ApiException {
+        if (requiredQuantity > inventoryQuantity) {
+            throw new ApiException("Insufficient inventory for the product with barcode " + barcode);
+        }
     }
 }

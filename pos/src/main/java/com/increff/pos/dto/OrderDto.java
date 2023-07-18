@@ -33,16 +33,17 @@ public class OrderDto {
     private ProductService productService;
 
     @Transactional(rollbackOn = ApiException.class)
-    public String createOrder(OrderForm orderForm) throws ApiException {
+    public String insert(OrderForm orderForm) throws ApiException {
         HelperDto.normalise(orderForm);
         OrderPojo orderPojo = HelperDto.convert(orderForm);
-        orderService.createOrder(orderPojo);
+        orderService.insert(orderPojo);
         return orderPojo.getOrderCode();
     }
 
     @Transactional
-    public List<OrderData> getAllOrders() {
-        List<OrderPojo> orderPojoList = orderService.getAllOrders();
+    public List<OrderData> getAll() {
+        List<OrderPojo> orderPojoList = orderService.getAll();
+
         List<OrderData> orderDataList = orderPojoList.stream()
                 .map(HelperDto::convert)
                 .collect(Collectors.toList());
@@ -50,18 +51,19 @@ public class OrderDto {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void deleteOrder(String orderCode) throws ApiException {
-        Integer orderId = orderService.deleteOrder(orderCode);
-        List<OrderItemPojo> orderItemPojoList = orderItemService.getAllOrderItems(orderId);
+    public void delete(String orderCode) throws ApiException {
+        Integer orderId = orderService.delete(orderCode);
+
+        List<OrderItemPojo> orderItemPojoList = orderItemService.getAllByOrderId(orderId);
         for (OrderItemPojo orderItemPojo : orderItemPojoList) {
-            updateProductInInventory(orderItemPojo);
+            updateInventory(orderItemPojo);
         }
-        orderItemService.deleteOrderItemsByOrder(orderId);
+        orderItemService.deleteByOrderId(orderId);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void changeOrderStatus(String orderCode) throws ApiException {
-        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
+    public void changeStatus(String orderCode) throws ApiException {
+        OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
         if (orderPojo.getStatus().equals(OrderStatus.CREATED)) {
             orderService.changeStatus(orderCode,OrderStatus.INVOICED);
         }
@@ -69,20 +71,23 @@ public class OrderDto {
 
     @Transactional(rollbackOn = ApiException.class)
     public OrderDetailsData getAllOrderDetails(String orderCode) throws ApiException {
-        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
-        List<OrderItemPojo> orderItemPojoList = orderItemService.getAllOrderItems(orderPojo.getId());
+        OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
+        List<OrderItemPojo> orderItemPojoList = orderItemService.getAllByOrderId(orderPojo.getId());
+
         List<OrderItemData> orderItemDataList = new ArrayList<OrderItemData>();
         for (OrderItemPojo orderItemPojo : orderItemPojoList) {
             ProductPojo productPojo = productService.getProductById(orderItemPojo.getProductId());
             orderItemDataList.add(HelperDto.convert(orderItemPojo, productPojo.getBarcode(), productPojo.getName()));
         }
+
         return HelperDto.convert(orderPojo, orderItemDataList);
     }
 
-    private void updateProductInInventory(OrderItemPojo orderItemPojo) throws ApiException {
-        InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId());
+    @Transactional(rollbackOn = ApiException.class)
+    private void updateInventory(OrderItemPojo orderItemPojo) throws ApiException {
+        InventoryPojo inventoryPojo = inventoryService.getById(orderItemPojo.getProductId());
         int updatedQuantity = inventoryPojo.getQuantity() + orderItemPojo.getQuantity();
-        inventoryService.updateProductInInventory(inventoryPojo, updatedQuantity);
+        inventoryService.update(inventoryPojo, updatedQuantity);
     }
 
 }

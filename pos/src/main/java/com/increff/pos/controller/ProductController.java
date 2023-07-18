@@ -4,6 +4,7 @@ package com.increff.pos.controller;
 import com.increff.pos.dto.ProductDto;
 import com.increff.pos.model.data.ProductData;
 import com.increff.pos.model.form.ProductForm;
+import com.increff.pos.model.form.ProductUpdateForm;
 import com.increff.pos.service.ApiException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,14 +23,14 @@ public class ProductController {
 
     @ApiOperation(value = "Inserts a product")
     @PostMapping(path = "")
-    public void insertProduct(@RequestBody ProductForm form) throws ApiException {
-        productDto.insertProduct(form);
+    public void insertProduct(@RequestBody ProductForm productForm) throws ApiException {
+        productDto.insertProduct(productForm);
     }
 
     @ApiOperation(value = "Update a product")
     @PutMapping(path = "/{id}")
-    public void updateProduct(@PathVariable int id, @RequestBody ProductForm form) throws ApiException {
-        productDto.updateProduct(id, form);
+    public void updateProduct(@PathVariable int id, @RequestBody ProductUpdateForm productUpdateForm) throws ApiException {
+        productDto.updateProduct(id, productUpdateForm);
 
     }
 

@@ -29,11 +29,13 @@ public class UserDto {
     @Transactional(rollbackOn = ApiException.class)
     public void login(HttpServletRequest request, LoginForm loginForm) throws ApiException {
         UserPojo userPojo = userService.getUserByEmail(loginForm.getEmail());
+
         boolean authenticated = (Objects.nonNull(userPojo) && Objects.equals(userPojo.getPassword(), loginForm.getPassword()));
         if (!authenticated) {
             infoData.setMessage("Invalid username or password");
             throw new ApiException("Invalid username or password");
         }
+
         Authentication authentication = AdminUtil.convert(userPojo);
         HttpSession session = request.getSession(true);
         SecurityUtil.createContext(session);

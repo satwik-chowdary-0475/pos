@@ -14,12 +14,12 @@ public class DailySalesReportDao extends AbstractDao {
     private static String SELECT_ALL = "select p from DailySalesReportPojo p";
 
     @Transactional
-    public void insertDailySalesReport(DailySalesReportPojo dailySalesReportPojo) {
+    public void insert(DailySalesReportPojo dailySalesReportPojo) {
         em().persist(dailySalesReportPojo);
     }
 
     @Transactional
-    public List<DailySalesReportPojo> getAllDailySalesReport() {
+    public List<DailySalesReportPojo> getAll() {
         TypedQuery<DailySalesReportPojo> query = getQuery(SELECT_ALL, DailySalesReportPojo.class);
         return query.getResultList();
     }

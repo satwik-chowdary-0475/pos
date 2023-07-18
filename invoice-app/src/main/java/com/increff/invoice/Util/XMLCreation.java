@@ -28,7 +28,7 @@ public class XMLCreation {
             Instant instant = Instant.ofEpochSecond(Long.parseLong(String.valueOf(orderForm.getInvoicedTime())));
             ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             String formattedDate = zonedDateTime.format(formatter);
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();

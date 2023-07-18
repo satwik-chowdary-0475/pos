@@ -1,10 +1,7 @@
 package com.increff.pos.dto;
 
 import com.increff.pos.Helper;
-import com.increff.pos.model.data.BrandData;
-import com.increff.pos.model.data.DailySalesData;
-import com.increff.pos.model.data.InventoryReportData;
-import com.increff.pos.model.data.SalesData;
+import com.increff.pos.model.data.*;
 import com.increff.pos.model.form.*;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.service.ApiException;
@@ -44,28 +41,28 @@ public class ReportDtoTest extends AbstractUnitTest {
     @Before
     public void init() throws ApiException {
         BrandForm brandForm = Helper.createBrandForm("brand 1", "category 1");
-        brandDto.insertBrand(brandForm);
+        brandDto.insert(brandForm);
         BrandForm brandForm1 = Helper.createBrandForm("brand 2", "category 1");
-        brandDto.insertBrand(brandForm1);
+        brandDto.insert(brandForm1);
         BrandForm brandForm2 = Helper.createBrandForm("brand 1", "category 2");
-        brandDto.insertBrand(brandForm2);
+        brandDto.insert(brandForm2);
         ProductForm productForm = Helper.createProductForm("barcode 1", "brand 1", "category 1", "product 1", 120.12);
         productDto.insertProduct(productForm);
         ProductForm productForm1 = Helper.createProductForm("barcode 2", "brand 1", "category 1", "product 2", 120.12);
         productDto.insertProduct(productForm1);
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1", 200);
-        inventoryDto.insertProductInInventory(inventoryForm);
+        inventoryDto.insert(inventoryForm);
         OrderForm orderForm = Helper.createOrderForm("customer 1");
-        String orderCode = orderDto.createOrder(orderForm);
-        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);
+        String orderCode = orderDto.insert(orderForm);
+        OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1", 10, 120.12);
-        orderItemDto.insertOrderItem(orderPojo.getId(), orderItemForm);
-        orderDto.changeOrderStatus(orderCode);
+        orderItemDto.insert(orderPojo.getId(), orderItemForm);
+        orderDto.changeStatus(orderCode);
     }
 
     @Test
     public void TestBrandCategoryReport() throws ApiException {
-        List<BrandData> brandDataList = reportDto.getBrandCategoryReport();
+        List<BrandReportData> brandDataList = reportDto.getBrandCategoryReport();
         assertEquals(brandDataList.size(), 3);
     }
 

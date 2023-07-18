@@ -128,7 +128,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        if (Objects.isNull(inventoryForm.getBarcode()) || inventoryForm.getBarcode().length() == 0) {</b>
 <b class="nc">&nbsp;            throw new ApiException(&quot;Invalid product barcode!!&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(inventoryForm.getQuantity()) || inventoryForm.getQuantity() &gt; 1000000 || inventoryForm.getQuantity() &lt; 0) {</b>
+<b class="fc">&nbsp;        if (Objects.isNull(inventoryForm.getQuantity()) || inventoryForm.getQuantity() &gt; 10000000 || inventoryForm.getQuantity() &lt; 0) {</b>
 <b class="nc">&nbsp;            throw new ApiException(&quot;Invalid product quantity&quot;);</b>
 &nbsp;        }
 &nbsp;    }
@@ -169,13 +169,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        if (Objects.isNull(orderItemForm)) {</b>
 <b class="nc">&nbsp;            throw new ApiException(&quot;Invalid order item form!!&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(orderItemForm.getBarcode()) || orderItemForm.getBarcode().length() &lt;= 0) {</b>
+<b class="fc">&nbsp;        if (Objects.isNull(orderItemForm.getBarcode()) || orderItemForm.getBarcode().length() == 0) {</b>
 <b class="nc">&nbsp;            throw new ApiException(&quot;Invalid barcode id&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(orderItemForm.getQuantity()) || orderItemForm.getQuantity() &gt; 1000000 || orderItemForm.getQuantity() &lt;= 0) {</b>
+<b class="fc">&nbsp;        if (Objects.isNull(orderItemForm.getQuantity()) || orderItemForm.getQuantity() &gt; 10000000 || orderItemForm.getQuantity() &lt;= 0) {</b>
 <b class="nc">&nbsp;            throw new ApiException(&quot;Invalid product quantity&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(orderItemForm.getSellingPrice()) || orderItemForm.getSellingPrice() &lt;= 0 || orderItemForm.getSellingPrice() &gt; 1000000) {</b>
+<b class="fc">&nbsp;        if (Objects.isNull(orderItemForm.getSellingPrice()) || orderItemForm.getSellingPrice() &lt;= 0 || orderItemForm.getSellingPrice() &gt; 10000000) {</b>
 <b class="nc">&nbsp;            throw new ApiException(&quot;Invalid selling price&quot;);</b>
 &nbsp;        }
 &nbsp;    }
@@ -372,7 +372,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 11:25</div>
+    <div style="float:right;">generated on 2023-07-14 16:32</div>
 </div>
 </body>
 </html>

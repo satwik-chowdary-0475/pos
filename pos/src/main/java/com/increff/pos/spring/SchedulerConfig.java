@@ -17,7 +17,7 @@ public class SchedulerConfig {
 
     @Scheduled(cron = "0 0 12 * * ?")
     public void createDailySalesReport() {
-        dailySalesReportService.insertDailySalesReport();
+        dailySalesReportService.insert();
     }
 
 }

@@ -4,6 +4,7 @@ import com.increff.pos.dto.helper.HelperDto;
 import com.increff.pos.model.data.ErrorData;
 import com.increff.pos.model.data.ProductData;
 import com.increff.pos.model.form.ProductForm;
+import com.increff.pos.model.form.ProductUpdateForm;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
@@ -29,9 +30,37 @@ public class ProductDto {
     @Transactional(rollbackOn = ApiException.class)
     public int insertProduct(ProductForm form) throws ApiException {
         HelperDto.normalise(form);
-        BrandPojo brandPojo = brandService.getBrandByBrandCategory(form.getBrand(),form.getCategory());
+        BrandPojo brandPojo = brandService.getByBrandCategory(form.getBrand(),form.getCategory());
         ProductPojo productPojo = HelperDto.convert(form,brandPojo.getId());
         return productService.insertProduct(productPojo);
+    }
+
+    @Transactional(rollbackOn = ApiException.class)
+    public void updateProduct(int id, ProductUpdateForm productUpdateForm) throws ApiException{
+        HelperDto.normalise(productUpdateForm);
+        ProductPojo productPojo = HelperDto.convert(productUpdateForm);
+        productService.getProductById(id);
+        productService.updateProduct(id,productPojo);
+    }
+
+    @Transactional(rollbackOn = ApiException.class)
+    public ProductData getProduct(int id) throws ApiException{
+        ProductPojo productPojo = productService.getProductById(id);
+        BrandPojo brandPojo = brandService.getById(productPojo.getBrandCategoryId());
+        return HelperDto.convert(productPojo,brandPojo.getBrand(),brandPojo.getCategory());
+    }
+
+    @Transactional(rollbackOn = ApiException.class)
+    public List<ProductData> getAllProducts() throws ApiException{
+        List<ProductPojo> productPojoList = productService.getAllProducts();
+
+        List<ProductData> productDataList = new ArrayList<ProductData>();
+        for(ProductPojo productPojo : productPojoList){
+            BrandPojo brandPojo = brandService.getById(productPojo.getBrandCategoryId());
+            productDataList.add(HelperDto.convert(productPojo,brandPojo.getBrand(), brandPojo.getCategory()));
+        }
+
+        return productDataList;
     }
 
     @Transactional(rollbackOn = ApiException.class)
@@ -48,35 +77,9 @@ public class ProductDto {
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+
         if (!errorDataList.isEmpty()) {
             throw new ApiException(errorDataList);
         }
-    }
-
-    @Transactional(rollbackOn = ApiException.class)
-    public void updateProduct(int id, ProductForm form) throws ApiException{
-        HelperDto.normalise(form);
-        BrandPojo brandPojo = brandService.getBrandByBrandCategory(form.getBrand(),form.getCategory());
-        ProductPojo productPojo = HelperDto.convert(form, brandPojo.getId());
-        ProductPojo existingProductPojo = productService.getProductByBarcode(productPojo.getBarcode());
-        productService.updateProduct(id,productPojo);
-    }
-
-    @Transactional(rollbackOn = ApiException.class)
-    public ProductData getProduct(int id) throws ApiException{
-        ProductPojo productPojo = productService.getProductById(id);
-        BrandPojo brandPojo = brandService.getBrandById(productPojo.getBrandCategoryId());
-        return HelperDto.convert(productPojo,brandPojo.getBrand(),brandPojo.getCategory());
-    }
-
-    @Transactional(rollbackOn = ApiException.class)
-    public List<ProductData> getAllProducts() throws ApiException{
-        List<ProductPojo> productPojoList = productService.getAllProducts();
-        List<ProductData> productDataList = new ArrayList<ProductData>();
-        for(ProductPojo productPojo : productPojoList){
-            BrandPojo brandPojo = brandService.getBrandById(productPojo.getBrandCategoryId());
-            productDataList.add(HelperDto.convert(productPojo,brandPojo.getBrand(), brandPojo.getCategory()));
-        }
-        return productDataList;
     }
 }

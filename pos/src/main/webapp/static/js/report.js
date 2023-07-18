@@ -27,12 +27,12 @@ function getSalesUrl(){
 
 
 function getDailySalesReports(){
-    var url = getDailySalesUrl() + '/day-on-day';
+    var url = getDailySalesUrl() + '/daily_sales';
     $.ajax({
     	   url: url,
     	   type: 'GET',
     	   success: function(data) {
-    	   		downloadReports(data);
+    	   		downloadReports(data,'daily_sales_report');
     	   		$.notify("Downloaded Daily Sales Reports successfully","success");
     	   },
     	   error: handleAjaxError
@@ -40,12 +40,12 @@ function getDailySalesReports(){
 }
 
 function getBrandReports(){
-    var url = getBrandUrl() + '/brand-report';
+    var url = getBrandUrl() + '/brands';
     $.ajax({
     	   url: url,
     	   type: 'GET',
     	   success: function(data) {
-    	   		downloadReports(data);
+    	   		downloadReports(data,'brand_report');
     	   		$.notify("Downloaded Brand Reports successfully","success");
     	   },
     	   error: handleAjaxError
@@ -54,16 +54,27 @@ function getBrandReports(){
 
 function getInventoryReports(){
 
-    var url = getInventoryUrl() + '/inventory-report';
+    var url = getInventoryUrl() + '/inventory';
     $.ajax({
     	   url: url,
     	   type: 'GET',
     	   success: function(data) {
-    	        downloadReports(data);
+    	        downloadReports(data,'inventory_report');
     	        $.notify("Downloaded Inventory Reports successfully","success");
     	   },
     	   error: handleAjaxError
     	});
+}
+
+function validateDate(){
+    const startDate = new Date(inputStartTime.value);
+    const endDate = new Date(inputEndTime.value);
+    if (startDate > endDate) {
+        inputStartTime.setCustomValidity('Start Date must be before End Date.');
+        return false;
+    }
+   inputStartTime.setCustomValidity('');
+   return true;
 }
 
 function getSalesReport(){
@@ -79,7 +90,7 @@ function getSalesReport(){
             'Content-Type': 'application/json'
            },
            success: function(data) {
-                downloadReports(data);
+                downloadReports(data,'sales_report');
                 $("#sales-form input[name=startTime]").val('');
                 $("#sales-form input[name=endTime]").val('');
                 $("#sales-form input[name=brand]").val('');
@@ -100,8 +111,8 @@ function getSalesReport(){
     return false;
 }
 
-function downloadReports(reportData){
-	writeFileData(reportData,'csv');
+function downloadReports(reportData,fileName){
+	writeFileData(reportData,'csv',fileName);
 }
 
 function toggleSalesModal(){
@@ -121,7 +132,8 @@ function init(){
     $("#download-inventory-report").click(getInventoryReports);
     $("#download-sales-report").click(getSalesReport);
     $("#show-filters").click(resetSalesModal);
-
+    $("#inputStartTime").change(validateDate);
+    $("#inputEndTime").change(validateDate);
 }
 $(document).ready(function() {
     getRoleOfUser(function(role) {

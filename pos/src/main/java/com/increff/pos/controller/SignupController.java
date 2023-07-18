@@ -19,11 +19,9 @@ public class SignupController extends AbstractUiController {
 
     @Autowired
     private UserDto userDto;
-    @Autowired
-    private InfoData infoData;
 
     @ApiOperation(value = "Initializes application")
-    @RequestMapping(path = "/site/signup", method = RequestMethod.POST)
+    @RequestMapping(path = "/signup", method = RequestMethod.POST)
     public ModelAndView signupSite(@RequestBody UserForm userForm) throws ApiException {
         userDto.signup(userForm);
         return mav("login.html");

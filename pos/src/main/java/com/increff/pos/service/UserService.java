@@ -17,19 +17,20 @@ public class UserService {
     @Transactional(rollbackOn = ApiException.class)
     public void insertUser(UserPojo userPojo) throws ApiException {
         UserPojo existingUserPojo = userDao.getUserByEmail(userPojo.getEmail());
-        if(Objects.nonNull(existingUserPojo)){
+        if (Objects.nonNull(existingUserPojo)) {
             throw new ApiException("Email already exists");
         }
+
         userDao.insertUser(userPojo);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public UserPojo getUserByEmail(String email){
+    public UserPojo getUserByEmail(String email) {
         return userDao.getUserByEmail(email);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public List<UserPojo> getAllUsers(){
+    public List<UserPojo> getAllUsers() {
         return userDao.getAllUsers();
     }
 

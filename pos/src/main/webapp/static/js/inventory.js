@@ -151,7 +151,7 @@ function readFileDataCallback(results){
     else{
         resetErrorCount();
         updateUploadDialog();
-        $.notify("Uploaded file not supported. Columns not matched",{className:"error",autoHideDelay: 20000});
+        $.notify("Uploaded file not supported. Headers not matched",{className:"error",autoHideDelay: 20000});
     }
 }
 
@@ -213,7 +213,7 @@ function updateInventory(event){
            success: function(response) {
                 getInventoryList();
                 $('#edit-inventory-modal').modal('toggle');
-                $.notify("Product updated successfully","success")
+                $.notify("Product inventory updated successfully","success")
 
            },
            error: function(response){
@@ -242,7 +242,7 @@ function updateFileName(){
 	$("#process-data").prop('disabled',(fileName.length == 0));
 }
 function downloadErrors(){
-	writeFileData(errorData);
+	writeFileData(errorData,'tsv','inventory_errors');
 }
 
 function toggleInventoryModal(){

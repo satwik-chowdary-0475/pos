@@ -32,7 +32,7 @@ function readFileData(file, callback){
 	Papa.parse(file, config);
 }
 
-function writeFileData(arr, format) {
+function writeFileData(arr, format, fileName) {
   var config = {
     quoteChar: '"',
     escapeChar: '"',
@@ -46,16 +46,17 @@ function writeFileData(arr, format) {
   var fileUrl = null;
 
   if (navigator.msSaveBlob) {
-    fileUrl = navigator.msSaveBlob(blob, 'download.' + fileExtension);
+    fileUrl = navigator.msSaveBlob(blob, fileName + '.' + fileExtension);
   } else {
     fileUrl = window.URL.createObjectURL(blob);
   }
 
   var tempLink = document.createElement('a');
   tempLink.href = fileUrl;
-  tempLink.setAttribute('download', 'download.' + fileExtension);
+  tempLink.setAttribute('download', fileName + '.' + fileExtension);
   tempLink.click();
 }
+
 
 function convertBase64ToPDF(base64String,name) {
   // Remove data URL prefix

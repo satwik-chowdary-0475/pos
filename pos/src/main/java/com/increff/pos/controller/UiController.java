@@ -18,42 +18,42 @@ public class UiController extends AbstractUiController {
         return mav("index.html");
     }
 
-    @RequestMapping(value = "/site/login")
+    @RequestMapping(value = "/login")
     public ModelAndView login() {
         return mav("login.html");
     }
 
-    @RequestMapping(value = "/ui/home")
+    @RequestMapping(value = "/home")
     public ModelAndView home() {
         return mav("home.html");
     }
 
-    @RequestMapping(value = "/ui/brands")
+    @RequestMapping(value = "/brands")
     public ModelAndView brand() {
         return mav("brand.html");
     }
 
-    @RequestMapping(value = "/ui/products")
+    @RequestMapping(value = "/products")
     public ModelAndView product() {
         return mav("product.html");
     }
 
-    @RequestMapping(value = "/ui/inventory")
+    @RequestMapping(value = "/inventory")
     public ModelAndView inventory() {
         return mav("inventory.html");
     }
 
-    @RequestMapping(value = "/ui/orders")
+    @RequestMapping(value = "/orders")
     public ModelAndView order() {
         return mav("order.html");
     }
 
-    @RequestMapping(value = "/ui/orders/{orderCode}/order-items")
+    @RequestMapping(value = "/orders/{orderCode}")
     public ModelAndView orderItem(@PathVariable String orderCode) {
         return mav("order-item.html", orderCode);
     }
 
-    @RequestMapping(value = "/ui/reports")
+    @RequestMapping(value = "/reports")
     public ModelAndView reports() {
         return mav("reports.html");
     }

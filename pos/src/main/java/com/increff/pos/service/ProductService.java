@@ -17,32 +17,32 @@ public class ProductService {
     @Transactional(rollbackOn = ApiException.class)
     public int insertProduct(ProductPojo productPojo) throws ApiException {
         ProductPojo existingProductPojo = productDao.getProductByBarcode(productPojo.getBarcode());
-        if(Objects.nonNull(existingProductPojo)){
-            throw new ApiException("Product with same barcode exists!!");
+        if (Objects.nonNull(existingProductPojo)) {
+            throw new ApiException("Product with barcode " + productPojo.getBarcode() + " already exists");
         }
+
         productDao.insertProduct(productPojo);
         return productPojo.getId();
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void updateProduct(int id, ProductPojo updatedProductPojo) throws ApiException{
+    public void updateProduct(int id, ProductPojo updatedProductPojo) throws ApiException {
         ProductPojo existingProductPojo = productDao.getProductById(id);
         ProductPojo productPojoCheck = productDao.getProductByBarcode(updatedProductPojo.getBarcode());
-        if(Objects.nonNull(productPojoCheck) && existingProductPojo != productPojoCheck){
-            throw new ApiException("Product with same barcode exists!!");
+        if (Objects.nonNull(productPojoCheck) && existingProductPojo != productPojoCheck) {
+            throw new ApiException("Product with barcode " + productPojoCheck.getBarcode() + " already exists");
         }
-        existingProductPojo.setBarcode(updatedProductPojo.getBarcode());
+
         existingProductPojo.setName(updatedProductPojo.getName());
         existingProductPojo.setMrp(updatedProductPojo.getMrp());
-        existingProductPojo.setBrandCategoryId(updatedProductPojo.getBrandCategoryId());
     }
 
 
     @Transactional(rollbackOn = ApiException.class)
     public ProductPojo getProductById(int id) throws ApiException {
         ProductPojo productPojo = productDao.getProductById(id);
-        if(Objects.isNull(productPojo)){
-            throw new ApiException("Product doesn't exist!!");
+        if (Objects.isNull(productPojo)) {
+            throw new ApiException("Product doesn't exist");
         }
         return productPojo;
     }
@@ -50,19 +50,19 @@ public class ProductService {
     @Transactional(rollbackOn = ApiException.class)
     public ProductPojo getProductByBarcode(String barcode) throws ApiException {
         ProductPojo productPojo = productDao.getProductByBarcode(barcode);
-        if(Objects.isNull(productPojo)){
-            throw new ApiException("Product with barcode "+barcode + " doesn't exist!!");
+        if (Objects.isNull(productPojo)) {
+            throw new ApiException("Product with barcode " + barcode + " doesn't exist");
         }
         return productPojo;
     }
 
     @Transactional
-    public List<ProductPojo> getAllProducts(){
+    public List<ProductPojo> getAllProducts() {
         return productDao.getAllProducts();
     }
 
     @Transactional
-    public List<ProductPojo> getProductByBrandCategoryId(int brandCategoryId){
+    public List<ProductPojo> getProductByBrandCategoryId(int brandCategoryId) {
         return productDao.getProductByBrandCategoryId(brandCategoryId);
     }
 }

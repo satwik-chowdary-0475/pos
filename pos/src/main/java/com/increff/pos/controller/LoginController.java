@@ -33,14 +33,17 @@ import io.swagger.annotations.ApiOperation;
 public class LoginController {
 
     @Autowired
-    private UserService userService;
-    @Autowired
     private UserDto userDto;
 
     @ApiOperation(value = "Logs in a user")
     @RequestMapping(path = "/session/login", method = RequestMethod.POST)
     public void login(HttpServletRequest request, @RequestBody LoginForm loginForm) throws ApiException {
         userDto.login(request, loginForm);
+    }
+
+    @RequestMapping(path = "/session/logout", method = RequestMethod.GET)
+    public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
+        return userDto.logout(request);
     }
 
 }

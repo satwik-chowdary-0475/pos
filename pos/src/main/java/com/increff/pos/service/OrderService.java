@@ -20,57 +20,57 @@ public class OrderService {
     private OrderDao orderDao;
 
     @Transactional
-    public void createOrder(OrderPojo orderPojo) {
-        orderDao.createOrder(orderPojo);
+    public void insert(OrderPojo orderPojo) {
+        orderDao.insert(orderPojo);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public OrderPojo getOrderByOrderCode(String orderCode) throws ApiException {
-        OrderPojo orderPojo = orderDao.getOrderByOrderCode(orderCode);
+    public OrderPojo getByOrderCode(String orderCode) throws ApiException {
+        OrderPojo orderPojo = orderDao.getByOrderCode(orderCode);
         checkOrder(orderPojo);
         return orderPojo;
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public OrderPojo getOrderByOrderId(int orderId) throws ApiException {
-        OrderPojo orderPojo = orderDao.getOrderByOrderId(orderId);
+    public OrderPojo getByOrderId(int orderId) throws ApiException {
+        OrderPojo orderPojo = orderDao.getByOrderId(orderId);
         checkOrder(orderPojo);
         return orderPojo;
     }
 
     @Transactional
-    public List<OrderPojo> getAllOrders() {
-        return orderDao.getAllOrders();
+    public List<OrderPojo> getAll() {
+        return orderDao.getAll();
     }
 
     @Transactional
-    public List<OrderPojo> getOrderByDate(Date startTime, Date endTime) {
-        return orderDao.getOrderByDate(startTime, endTime,OrderStatus.INVOICED);
+    public List<OrderPojo> getByDate(Date startTime, Date endTime) {
+        return orderDao.getByDate(startTime, endTime, OrderStatus.INVOICED);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public Integer deleteOrder(String orderCode) throws ApiException {
-        OrderPojo orderPojo = orderDao.getOrderByOrderCode(orderCode);
+    public Integer delete(String orderCode) throws ApiException {
+        OrderPojo orderPojo = orderDao.getByOrderCode(orderCode);
         if (Objects.nonNull(orderPojo)) {
             if (orderPojo.getStatus().equals(OrderStatus.INVOICED)) {
-                throw new ApiException("Cannot delete order!!");
+                throw new ApiException("Cannot delete order");
             }
-            orderDao.deleteOrder(orderCode);
+            orderDao.delete(orderCode);
             return orderPojo.getId();
         }
         return null;
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void changeStatus(String orderCode,OrderStatus status) throws ApiException {
-        OrderPojo orderPojo = orderDao.getOrderByOrderCode(orderCode);
+    public void changeStatus(String orderCode, OrderStatus status) throws ApiException {
+        OrderPojo orderPojo = orderDao.getByOrderCode(orderCode);
         checkOrder(orderPojo);
         orderPojo.setStatus(status);
     }
 
     private void checkOrder(OrderPojo orderPojo) throws ApiException {
         if (Objects.isNull(orderPojo)) {
-            throw new ApiException("Order doesn't exist!!");
+            throw new ApiException("Order doesn't exist");
         }
     }
 }

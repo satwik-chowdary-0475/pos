@@ -14,105 +14,102 @@ import java.util.Objects;
 public class HelperDto {
     public static void validate(ProductForm productForm) throws ApiException {
         if (Objects.isNull(productForm)) {
-            throw new ApiException("Invalid input form product details!!!");
+            throw new ApiException("Invalid input form product details");
         }
-        if (Objects.isNull(productForm.getName()) || productForm.getName().length() == 0) {
-            throw new ApiException("Invalid product name");
+        validateStringField(productForm.getName(), "Product name");
+        validateStringField(productForm.getBarcode(), "Barcode");
+        validateStringField(productForm.getBrand(), "Brand");
+        validateStringField(productForm.getCategory(), "Category");
+        validateMRP(productForm.getMrp());
+    }
+
+    public static void validate(ProductUpdateForm productUpdateForm) throws ApiException {
+        if (Objects.isNull(productUpdateForm)) {
+            throw new ApiException("Invalid input form product details");
         }
-        if (Objects.isNull(productForm.getBarcode()) || (productForm.getBarcode().length() == 0)) {
-            throw new ApiException("Invalid product barcode");
-        }
-        if (Objects.isNull(productForm.getBrand()) || productForm.getBrand().length() == 0) {
-            throw new ApiException("Invalid brand name!!");
-        }
-        if (Objects.isNull(productForm.getCategory()) || productForm.getCategory().length() == 0) {
-            throw new ApiException("Invalid brand category!!");
-        }
-        if (Objects.isNull(productForm.getMrp()) || productForm.getMrp() > 10000000 || productForm.getMrp() <= 0) {
-            throw new ApiException("Invalid product Mrp");
-        }
-        if (productForm.getName().length() > 30) {
-            throw new ApiException("Product name cannot be more than 30 characters");
-        }
-        if (productForm.getBarcode().length() > 30) {
-            throw new ApiException("Barcode cannot be more than 30 characters");
-        }
-        if (productForm.getBrand().length() > 30) {
-            throw new ApiException("Brand cannot be more than 30 characters");
-        }
-        if (productForm.getCategory().length() > 30) {
-            throw new ApiException("Category cannot be more than 30 characters");
-        }
+        validateStringField(productUpdateForm.getName(), "Product name");
+        validateMRP(productUpdateForm.getMrp());
     }
 
     public static void validate(InventoryForm inventoryForm) throws ApiException {
         if (Objects.isNull(inventoryForm)) {
             throw new ApiException("Invalid inventory form details");
         }
-        if (Objects.isNull(inventoryForm.getBarcode()) || inventoryForm.getBarcode().length() == 0) {
-            throw new ApiException("Invalid product barcode!!");
-        }
-        if (Objects.isNull(inventoryForm.getQuantity()) || inventoryForm.getQuantity() > 10000000 || inventoryForm.getQuantity() < 0) {
-            throw new ApiException("Invalid product quantity");
-        }
+        validateStringField(inventoryForm.getBarcode(), "Product barcode");
+        validateQuantity(inventoryForm.getQuantity(), false);
     }
 
+    public static void validate(InventoryUpdateForm inventoryUpdateForm) throws ApiException {
+        if (Objects.isNull(inventoryUpdateForm)) {
+            throw new ApiException("Invalid inventory form details");
+        }
+        validateQuantity(inventoryUpdateForm.getQuantity(), true);
+    }
 
     public static void validate(BrandForm brandForm) throws ApiException {
         if (Objects.isNull(brandForm)) {
-            throw new ApiException("Invalid input form brand details!!!");
+            throw new ApiException("Invalid input form brand details");
         }
-        if (Objects.isNull(brandForm.getBrand()) || (brandForm.getBrand().length() == 0)) {
-            throw new ApiException("Invalid brand name");
-        }
-        if (Objects.isNull(brandForm.getCategory()) || (brandForm.getCategory().length() == 0)) {
-            throw new ApiException("Invalid category name");
-        }
-
-        if (brandForm.getBrand().length() > 30) {
-            throw new ApiException("Brand name cannot have more than 30 characters");
-        }
-        if (brandForm.getCategory().length() > 30) {
-            throw new ApiException("Category name cannot have more than 30 characters");
-        }
+        validateStringField(brandForm.getBrand(), "Brand name");
+        validateStringField(brandForm.getCategory(), "Category name");
     }
 
     public static void validate(OrderForm orderForm) throws ApiException {
         if (Objects.isNull(orderForm)) {
             throw new ApiException("Invalid order form details");
         }
-        if (Objects.isNull(orderForm.getCustomerName()) || orderForm.getCustomerName().length() == 0) {
-            throw new ApiException("Invalid order name!!!");
-        }
-        if (orderForm.getCustomerName().length() > 30) {
-            throw new ApiException("Customer name cannot have more than 30 characters");
-        }
+        validateStringField(orderForm.getCustomerName(), "Customer name");
     }
 
     public static void validate(OrderItemForm orderItemForm) throws ApiException {
         if (Objects.isNull(orderItemForm)) {
-            throw new ApiException("Invalid order item form!!");
+            throw new ApiException("Invalid order item form");
         }
-        if (Objects.isNull(orderItemForm.getBarcode()) || orderItemForm.getBarcode().length() == 0) {
-            throw new ApiException("Invalid barcode id");
+        validateStringField(orderItemForm.getBarcode(), "Barcode");
+        validateQuantity(orderItemForm.getQuantity(), true);
+        validateSellingPrice(orderItemForm.getSellingPrice());
+    }
+
+    public static void validate(OrderItemUpdateForm orderItemUpdateForm) throws ApiException {
+        if (Objects.isNull(orderItemUpdateForm)) {
+            throw new ApiException("Invalid order item form");
         }
-        if (Objects.isNull(orderItemForm.getQuantity()) || orderItemForm.getQuantity() > 10000000 || orderItemForm.getQuantity() <= 0) {
-            throw new ApiException("Invalid product quantity");
-        }
-        if (Objects.isNull(orderItemForm.getSellingPrice()) || orderItemForm.getSellingPrice() <= 0 || orderItemForm.getSellingPrice() > 10000000) {
-            throw new ApiException("Invalid selling price");
-        }
+        validateQuantity(orderItemUpdateForm.getQuantity(), true);
+        validateSellingPrice(orderItemUpdateForm.getSellingPrice());
     }
 
     public static void validate(UserForm userForm) throws ApiException {
         if (Objects.isNull(userForm)) {
             throw new ApiException("Invalid user form");
         }
-        if (Objects.isNull(userForm.getEmail()) || userForm.getEmail().length() == 0) {
-            throw new ApiException("Invalid email");
+        validateStringField(userForm.getEmail(), "Email");
+        validateStringField(userForm.getPassword(), "Password");
+    }
+
+    private static void validateStringField(String field, String fieldName) throws ApiException {
+        if (Objects.isNull(field) || field.trim().isEmpty()) {
+            throw new ApiException("Invalid " + fieldName.toLowerCase() + ". " + fieldName + " is required.");
         }
-        if (Objects.isNull(userForm.getPassword()) || userForm.getPassword().length() == 0) {
-            throw new ApiException("Invalid Password");
+        if (field.length() > 30) {
+            throw new ApiException(fieldName + " cannot be more than 30 characters.");
+        }
+    }
+
+    private static void validateMRP(Double mrp) throws ApiException {
+        if (Objects.isNull(mrp) || mrp <= 0 || mrp > 10000000) {
+            throw new ApiException("Invalid product MRP.");
+        }
+    }
+
+    private static void validateSellingPrice(Double sellingPrice) throws ApiException {
+        if (Objects.isNull(sellingPrice) || sellingPrice <= 0 || sellingPrice > 10000000) {
+            throw new ApiException("Invalid product selling price.");
+        }
+    }
+
+    private static void validateQuantity(Integer quantity, boolean allowZero) throws ApiException {
+        if (Objects.isNull(quantity) || (quantity < 0 && !allowZero) || quantity > 10000000) {
+            throw new ApiException("Invalid product quantity.");
         }
     }
 
@@ -148,6 +145,13 @@ public class HelperDto {
         return productPojo;
     }
 
+    public static ProductPojo convert(ProductUpdateForm productUpdateForm) {
+        ProductPojo productPojo = new ProductPojo();
+        productPojo.setMrp(productUpdateForm.getMrp());
+        productPojo.setName(productUpdateForm.getName());
+        return productPojo;
+    }
+
     public static InventoryData convert(InventoryPojo inventoryPojo, String barcode, String productName) throws ApiException {
         InventoryData inventoryData = new InventoryData();
         inventoryData.setProductName(productName);
@@ -157,10 +161,17 @@ public class HelperDto {
         return inventoryData;
     }
 
-    public static InventoryPojo convert(InventoryForm inventoryForm, int id) {
+    public static InventoryPojo convert(InventoryForm inventoryForm, int productId) {
         InventoryPojo inventoryPojo = new InventoryPojo();
         inventoryPojo.setQuantity(inventoryForm.getQuantity());
-        inventoryPojo.setProductId(id);
+        inventoryPojo.setProductId(productId);
+        return inventoryPojo;
+    }
+
+    public static InventoryPojo convert(InventoryUpdateForm inventoryUpdateForm, Integer productId) {
+        InventoryPojo inventoryPojo = new InventoryPojo();
+        inventoryPojo.setQuantity(inventoryUpdateForm.getQuantity());
+        inventoryPojo.setProductId(productId);
         return inventoryPojo;
     }
 
@@ -219,6 +230,14 @@ public class HelperDto {
         return orderItemPojo;
     }
 
+    public static OrderItemPojo convert(OrderItemUpdateForm orderItemUpdateForm, int orderId) {
+        OrderItemPojo orderItemPojo = new OrderItemPojo();
+        orderItemPojo.setOrderId(orderId);
+        orderItemPojo.setSellingPrice(orderItemUpdateForm.getSellingPrice());
+        orderItemPojo.setQuantity(orderItemUpdateForm.getQuantity());
+        return orderItemPojo;
+    }
+
     public static OrderItemData convert(OrderItemPojo orderItemPojo, String barcode, String productName) {
         OrderItemData orderItemData = new OrderItemData();
         orderItemData.setId(orderItemPojo.getId());
@@ -231,7 +250,8 @@ public class HelperDto {
         return orderItemData;
     }
 
-    public static ErrorData convert(int row,String errorMessage){
+
+    public static ErrorData convert(int row, String errorMessage) {
         ErrorData errorData = new ErrorData();
         errorData.setErrorMessage(errorMessage);
         errorData.setRow(row);
@@ -243,9 +263,13 @@ public class HelperDto {
         productForm.setCategory(StringUtil.toLowerCase(productForm.getCategory()));
         productForm.setMrp(RoundUtil.round(productForm.getMrp()));
         productForm.setName(StringUtil.toLowerCase(productForm.getName()));
-        productForm.setBrand(StringUtil.toLowerCase(productForm.getBrand()));
-        productForm.setCategory(StringUtil.toLowerCase(productForm.getCategory()));
         HelperDto.validate(productForm);
+    }
+
+    public static void normalise(ProductUpdateForm productUpdateForm) throws ApiException {
+        productUpdateForm.setName(StringUtil.toLowerCase(productUpdateForm.getName()));
+        productUpdateForm.setMrp(RoundUtil.round(productUpdateForm.getMrp()));
+        HelperDto.validate(productUpdateForm);
     }
 
 
@@ -265,11 +289,14 @@ public class HelperDto {
         HelperDto.validate(orderItemForm);
     }
 
+    public static void normalise(OrderItemUpdateForm orderItemUpdateForm) throws ApiException {
+        orderItemUpdateForm.setSellingPrice(RoundUtil.round(orderItemUpdateForm.getSellingPrice()));
+        HelperDto.validate(orderItemUpdateForm);
+    }
+
     public static void normalise(UserForm userForm) throws ApiException {
         userForm.setRole(StringUtil.toLowerCase(userForm.getRole()));
         userForm.setEmail(StringUtil.toLowerCase(userForm.getEmail()));
         HelperDto.validate(userForm);
     }
-
-
 }

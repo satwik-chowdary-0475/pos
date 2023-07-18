@@ -56,7 +56,7 @@ function getLoginUrl(){
 }
 
 function getSignupUrl(){
-    return getBaseUrl() + '/site/signup';
+    return getBaseUrl() + '/signup';
 }
 
 function login(){
@@ -71,7 +71,7 @@ function login(){
                'Content-Type': 'application/json'
            },
            success: function(response) {
-                window.location.href = getBaseUrl() + "/ui/home";
+                window.location.href = getBaseUrl() + "/home";
        },
            error:function(error){
                 handleAjaxError(error);
@@ -99,7 +99,7 @@ function signup(event){
                },
                success: function(response) {
                     resetFormValues();
-                    $.notify("User added successfully!!","success");
+                    $.notify("User added successfully","success");
            },
                error:function(error){
                     handleAjaxError(error);
