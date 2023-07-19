@@ -118,7 +118,7 @@ function getOrderList(){
 }
 
 function redirectToOrderItem(orderCode){
-    window.location.href = "/pos/orders/"+orderCode+"/order-items"
+    window.location.href = "/pos/orders/"+orderCode;
 }
 
 function createOrder(event){

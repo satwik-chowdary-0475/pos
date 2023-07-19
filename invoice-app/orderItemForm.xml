@@ -5,15 +5,15 @@
         <Logo src="/Users/satwikchowdary/Desktop/pos-app/invoice-app/src/main/resources"/>
         <Address>Address</Address>
         <CustomerName>astel</CustomerName>
-        <InvoicedTime>2023/07/14 16:09:54</InvoicedTime>
-        <OrderCode>7caebb9b07</OrderCode>
+        <InvoicedTime>2023/07/18 15:12:43</InvoicedTime>
+        <OrderCode>421edb8264</OrderCode>
     </Heading>
     <OrderItem>
         <Barcode>bc1</Barcode>
         <ProductName>uspa checked shirt</ProductName>
-        <Quantity>1</Quantity>
-        <SellingPrice>1.0</SellingPrice>
-        <TotalPrice>1.0</TotalPrice>
+        <Quantity>20</Quantity>
+        <SellingPrice>50.0</SellingPrice>
+        <TotalPrice>1000.0</TotalPrice>
     </OrderItem>
-    <TotalOrderPrice>1.0</TotalOrderPrice>
+    <TotalOrderPrice>1000.0</TotalOrderPrice>
 </Order>

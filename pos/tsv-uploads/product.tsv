@@ -1,4 +1,4 @@
-name	barcode	brand	category	mrp
-iphone X	barcode1	apple	mobile	100000
-NIke Air	barcode2	nike	  shoe	5000
-dabur honey	barcode3	 nestle	dairy	100.23
+barcode	brand	category	name	mrp x   y   z   w
+barcode1	amul	milk	shakti 200ml	26
+barcode2	samsung	mobile	note 10 pro	249.99
+barcode3	amul	milk	gold 200ml	29

@@ -8,10 +8,20 @@ function getRoleOfUser(callback){
     callback(userRole);
 }
 
+function scientificNumberReviver(value) {
+  if (typeof value === 'string' && /^[-+]?(\d+(\.\d*)?|\.\d+)(e[-+]?\d+)$/i.test(value)) {
+    return parseFloat(value); // Parse as a float to preserve scientific notation
+  }
+  return value;
+}
+
 function addInventory(event){
 	var $form = $("#inventory-form");
 	if($form[0].checkValidity()){
 	    var json = toJson($form);
+	    var jsonObj = JSON.parse(json);
+	    jsonObj.quantity = scientificNumberReviver(jsonObj.quantity);
+	    json = JSON.stringify(jsonObj);
         var url = getInventoryUrl();
         $.ajax({
            url: url,
@@ -169,7 +179,7 @@ function processErrorData(errorDataList){
 function uploadRows(){
 	var json = JSON.stringify(fileData);
 	var url = getInventoryUrl()+'/bulk';
-    if(json.length <= 5000 && json.length > 0){
+    if(JSON.parse(json).length <= 5000 && JSON.parse(json).length > 0){
         $.ajax({
         	   url: url,
         	   type: 'POST',

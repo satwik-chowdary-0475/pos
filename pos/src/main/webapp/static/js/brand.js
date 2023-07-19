@@ -64,7 +64,8 @@ function getBrandList(){
 function uploadRows(){
     var url = getBrandUrl() + '/bulk';
     var json = JSON.stringify(fileData);
-    if(json.length <= 5000 && json.length > 0){
+    console.log("length" ,JSON.parse(json).length);
+    if(JSON.parse(json).length <= 5000 && JSON.parse(json).length > 0){
         $.ajax({
                 url:url,
                 type:'POST',

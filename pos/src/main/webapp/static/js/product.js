@@ -17,6 +17,7 @@ function addProduct(event){
     if($form[0].checkValidity()){
         var json = toJson($form);
         var url = getProductUrl();
+        console.log('json ',json);
         $.ajax({
            url: url,
            type: 'POST',
@@ -55,6 +56,7 @@ function addProduct(event){
 function processData(){
     resetErrorCount();
 	var file = $('#productFile')[0].files[0];
+	console.log("file ",file);
 	readFileData(file, readFileDataCallback);
 }
 
@@ -149,7 +151,7 @@ function processErrorData(errorDataList){
 function uploadRows(){
 	var json = JSON.stringify(fileData);
 	var url = getProductUrl()+'/bulk';
-    if(json.length <= 5000 && json.length > 0){
+    if(JSON.parse(json).length <= 5000 && JSON.parse(json).length > 0){
         $.ajax({
         	   url: url,
         	   type: 'POST',
