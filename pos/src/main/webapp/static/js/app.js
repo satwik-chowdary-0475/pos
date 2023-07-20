@@ -11,8 +11,24 @@ function toJson($form){
     return json;
 }
 
-function showError(message){
+function removeExistingNotification() {
+  $('.notifyjs-wrapper').fadeOut(function() {
+      $(this).remove();
+  });
+}
 
+function showSuccessNotification(message) {
+    removeExistingNotification();
+    $.notify(message,"success");
+}
+
+function showErrorNotification(message) {
+    removeExistingNotification();
+    $.notify(message,{className:"error",autoHideDelay: 20000});
+}
+
+function showError(message){
+    removeExistingNotification();
     $.notify(message,{className:"error",autoHideDelay: 20000});
 }
 

@@ -34,8 +34,7 @@ function getDailySalesReports(){
     	   type: 'GET',
     	   success: function(data) {
     	   		downloadReports(data,'daily_sales_report');
-
-    	   		$.notify("Downloaded Daily Sales Reports successfully","success");
+                showSuccessNotification("Downloaded Daily Sales Reports successfully");
     	   },
     	   error: handleAjaxError,
            complete: function(){
@@ -52,7 +51,7 @@ function getBrandReports(){
     	   type: 'GET',
     	   success: function(data) {
     	   		downloadReports(data,'brand_report');
-    	   		$.notify("Downloaded Brand Reports successfully","success");
+    	   		showSuccessNotification("Downloaded Brand Reports successfully");
     	   },
     	   error: handleAjaxError,
     	   complete: function(){
@@ -69,8 +68,7 @@ function getInventoryReports(){
     	   type: 'GET',
     	   success: function(data) {
     	        downloadReports(data,'inventory_report');
-
-    	        $.notify("Downloaded Inventory Reports successfully","success");
+                showSuccessNotification("Downloaded Inventory Reports successfully");
     	   },
     	   error: handleAjaxError,
            complete: function(){
@@ -110,8 +108,7 @@ function getSalesReport(){
                 $("#sales-form input[name=brand]").val('');
                 $("#sales-form input[name=category]").val('');
                 toggleSalesModal();
-
-                $.notify("Downloaded Sales Reports successfully","success");
+                showSuccessNotification("Downloaded Sales Reports successfully");
        },
            error:handleAjaxError,
            complete: function(){

@@ -44,12 +44,10 @@ function generatePdf(data){
        },
         success : function(data){
             convertBase64ToPDF(data,customerName);
-
-            $.notify("PDF for "+customerName+" generated successfully","success");
+            showSuccessNotification("PDF for "+customerName+" generated successfully");
         },
         error: function(e){
-
-            $.notify("PDF generation failed",{className:"error",autoHideDelay: 20000});
+            showErrorNotification("PDF generation failed");
         }
     });
 }
@@ -266,13 +264,11 @@ function init(){
         const encodedData = window.location.hash.split('?')[1];
         const decodedData = decodeURIComponent(encodedData);
         const data = JSON.parse(decodedData);
-
-        $.notify("PDF for "+data.customerName+" generated successfully","success");
+        showSuccessNotification("PDF for "+data.customerName+" generated successfully");
         removeHash();
     }
     else if(window.location.hash.includes("#error")){
-
-         $.notify("PDF generation failed",{className:"error",autoHideDelay: 20000});
+         showErrorNotification("PDF generation failed");
          removeHash();
     }
 }

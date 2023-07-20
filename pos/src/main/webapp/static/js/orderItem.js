@@ -259,12 +259,11 @@ function printInvoice(){
         },
          success : function(data){
             if(data.orderItems.length == 0){
-
-               $.notify("Add order items")
+               showErrorNotification("Add order items");
             }
             else{
              setOrderStatus(data,function(){
-                    generatePdf(data);
+                generatePdf(data);
              });
             }
          },

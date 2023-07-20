@@ -5,6 +5,8 @@ const rowsPerPage = 10;
 var totalRows = 0;
 var currentPage = 1;
 
+var activeNotification = null;
+
 function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brands";
@@ -32,16 +34,16 @@ function addBrand(event){
                 $("#brand-form input[name=brand]").val('');
                 $("#brand-form input[name=category]").val('');
                 toggleBrandModal();
-
-                $.notify("Added brand successfully","success");
-                console.log("Window ",window.currentNotification);
+                showSuccessNotification("Added brand successfully");
        },
            error:function(error){
                  if(error.status == 403){
-
-                     $.notify("You cannot add brand",{className:"error",autoHideDelay: 20000});
+                        activeNotification = showErrorNotification("You cannot add brand");
                  }
-                handleAjaxError(error);
+                 else{
+                    activeNotification = handleAjaxError(error);
+                 }
+
            }
         });
 	    $form.addClass('was-validated');
@@ -80,14 +82,12 @@ function uploadRows(){
                 },
                 success: function(response){
                     getBrandList(currentPage);
-
-                    $.notify("Uploaded data successfully","success");
+                    showSuccessNotification("Uploaded data successfully")
                     updateUploadDialog();
                 },
                 error: function(response){
                     if(response.status == 403){
-
-                         $.notify("You cannot upload brand",{className:"error",autoHideDelay: 20000});
+                        showErrorNotification("You cannot upload brand");
                     }
                     processErrorData(JSON.parse(response.responseText).errorDataList);
                 },
@@ -97,7 +97,7 @@ function uploadRows(){
             })
     }
     else{
-        (json.length>5000)?( $.notify("Cannot upload more than 5000 rows",{className:"error",autoHideDelay: 20000})):($.notify("Empty file uploaded",{className:"error",autoHideDelay:20000}));
+        (json.length>5000)?( showErrorNotification("Cannot upload more than 5000 rows")):(showErrorNotification("Empty file uploaded"));
     }
 }
 
@@ -119,13 +119,11 @@ function updateBrand(event){
            success: function(response) {
                 getBrandList(currentPage);
                 $('#edit-brand-modal').modal('toggle');
-
-                $.notify("Updated brand successfully","success");
+                showSuccessNotification("Updated brand successfully");
            },
            error: function(response){
                 if(response.status == 403){
-
-                 $.notify("You cannot update brand",{className:"error",autoHideDelay: 20000});
+                   showErrorNotification("You cannot update brand");
                 }
                 handleAjaxError(response);
            }
@@ -315,15 +313,13 @@ function readFileDataCallback(results){
 	else{
 	    resetErrorCount();
 	    updateUploadDialog();
-
-	    $.notify("Uploaded file not supported. Headers not matched",{className:"error",autoHideDelay: 20000});
+        showErrorNotification("Uploaded file not supported. Headers not matched");
 	}
 }
 
 function processErrorData(errorDataList){
     if(errorDataList!=null && errorDataList.length > 0){
-
-        $.notify("Failed to upload the data",{className:"error",autoHideDelay: 20000});
+        showErrorNotification("Failed to upload the data");
         $.each(errorDataList, function(index) {
           var row = {"row":errorDataList[index].row,"error":errorDataList[index].errorMessage};
           errorData.push(row);

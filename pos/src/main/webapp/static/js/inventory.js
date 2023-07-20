@@ -38,13 +38,11 @@ function addInventory(event){
                 $('#inventory-form input[name=barcode]').val('');
                 $('#inventory-form input[name=quantity]').val('');
                 toggleInventoryModal();
-
-                $.notify("Added product in inventory successfully","success");
+                showSuccessNotification("Added product in inventory successfully");
        },
            error: function(response){
                 if(response.status == 403){
-
-                    $.notify("You cannot add the data",{className:"error",autoHideDelay: 20000});
+                showErrorNotification("You cannot add the data");
                 }
                 handleAjaxError(response);
            }
@@ -242,15 +240,13 @@ function readFileDataCallback(results){
     else{
         resetErrorCount();
         updateUploadDialog();
-
-        $.notify("Uploaded file not supported. Headers not matched",{className:"error",autoHideDelay: 20000});
+        showErrorNotification("Uploaded file not supported. Headers not matched");
     }
 }
 
 function processErrorData(errorDataList){
     if(errorDataList!=null && errorDataList.length > 0){
-
-            $.notify("Failed to upload the data",{className:"error",autoHideDelay: 20000});
+            showErrorNotification("Failed to upload the data");
             $.each(errorDataList, function(index) {
               var row = {"row":errorDataList[index].row,"error":errorDataList[index].errorMessage};
               errorData.push(row);
@@ -273,14 +269,12 @@ function uploadRows(){
                },
         	   success: function(response) {
         	   		getInventoryList(currentPage);
-
-                    $.notify("Uploaded data successfully","success");
+                    showSuccessNotification("Uploaded data successfully");
                     updateUploadDialog();
         	   },
         	   error: function(response){
                     if(response.status == 403){
-
-                        $.notify("You cannot upload the data",{className:"error",autoHideDelay: 20000});
+                        showErrorNotification("You cannot upload the data");
                     }
                     processErrorData(JSON.parse(response.responseText).errorDataList);
         	   },
@@ -290,7 +284,7 @@ function uploadRows(){
         	});
     }
     else{
-        (json.length>5000)?($.notify("Cannot upload more than 5000 rows",{className:"error",autoHideDelay: 20000})):($.notify("Empty file uploaded",{className:"error",autoHideDelay:20000}));
+        (json.length>5000)?(showErrorNotification("Cannot upload more than 5000 rows")):(showErrorNotification("Empty file uploaded"));
     }
 
 }
@@ -312,14 +306,11 @@ function updateInventory(event){
            success: function(response) {
                 getInventoryList(currentPage);
                 $('#edit-inventory-modal').modal('toggle');
-
-                $.notify("Product inventory updated successfully","success")
-
+                showSuccessNotification("Product inventory updated successfully");
            },
            error: function(response){
                 if(response.status == 403){
-
-                      $.notify("You cannot update the data",{className:"error",autoHideDelay: 20000});
+                    showErrorNotification("You cannot update the data");
                   }
                   handleAjaxError(response);
            }

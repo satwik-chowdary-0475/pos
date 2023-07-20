@@ -23,8 +23,7 @@ function validatePassword(password){
 function showError(message,info){
     if(info!=null && info.length > 0)
     message = message + ' : ' + info;
-
-    $.notify(message,{className:"error",autoHideDelay: 20000});
+    showErrorNotification(message);
 
 }
 
@@ -100,8 +99,7 @@ function signup(event){
                },
                success: function(response) {
                     resetFormValues();
-
-                    $.notify("User added successfully","success");
+                    showSuccessNotification("User added successfully");
            },
                error:function(error){
                     handleAjaxError(error);
