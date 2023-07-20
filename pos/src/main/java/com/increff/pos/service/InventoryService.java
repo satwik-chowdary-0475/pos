@@ -52,6 +52,16 @@ public class InventoryService {
         return inventoryDao.getAll();
     }
 
+    @Transactional
+    public List<InventoryPojo> getAll(int page, int rowsPerPage) {
+        return inventoryDao.getAll(page, rowsPerPage);
+    }
+
+    @Transactional
+    public Integer getCount() {
+        return inventoryDao.getCount();
+    }
+
     @Transactional(rollbackOn = ApiException.class)
     public void update(InventoryPojo updatedInventoryPojo, String barcode) throws ApiException {
         InventoryPojo existingInventoryPojo = inventoryDao.getById(updatedInventoryPojo.getProductId());

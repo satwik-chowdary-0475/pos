@@ -3,6 +3,7 @@ package com.increff.pos.controller;
 
 import com.increff.pos.dto.BrandDto;
 import com.increff.pos.model.data.BrandData;
+import com.increff.pos.model.data.PaginatedData;
 import com.increff.pos.model.form.BrandForm;
 import com.increff.pos.service.ApiException;
 import io.swagger.annotations.ApiOperation;
@@ -31,8 +32,8 @@ public class BrandController {
 
     @ApiOperation(value = "Get list of all brands")
     @GetMapping(path = "")
-    public List<BrandData> getAllBrand() {
-        return brandDto.getAll();
+    public PaginatedData getAllBrand(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int rowsPerPage) {
+        return brandDto.getAll(page,rowsPerPage);
     }
 
     @ApiOperation(value = "Get a brand details")

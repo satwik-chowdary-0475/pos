@@ -27,19 +27,25 @@ function getSalesUrl(){
 
 
 function getDailySalesReports(){
+    $("#download-daily-sales-report").prop("disabled", true).find(".fa-spinner").show();
     var url = getDailySalesUrl() + '/daily_sales';
     $.ajax({
     	   url: url,
     	   type: 'GET',
     	   success: function(data) {
     	   		downloadReports(data,'daily_sales_report');
+
     	   		$.notify("Downloaded Daily Sales Reports successfully","success");
     	   },
-    	   error: handleAjaxError
+    	   error: handleAjaxError,
+           complete: function(){
+                $("#download-daily-sales-report").prop("disabled", false).find(".fa-spinner").hide();
+           }
     	});
 }
 
 function getBrandReports(){
+    $("#download-brand-report").prop("disabled", true).find(".fa-spinner").show();
     var url = getBrandUrl() + '/brands';
     $.ajax({
     	   url: url,
@@ -48,21 +54,28 @@ function getBrandReports(){
     	   		downloadReports(data,'brand_report');
     	   		$.notify("Downloaded Brand Reports successfully","success");
     	   },
-    	   error: handleAjaxError
+    	   error: handleAjaxError,
+    	   complete: function(){
+    	        $("#download-brand-report").prop("disabled", false).find(".fa-spinner").hide();
+    	   }
     	});
 }
 
 function getInventoryReports(){
-
+     $("#download-inventory-report").prop("disabled", true).find(".fa-spinner").show();
     var url = getInventoryUrl() + '/inventory';
     $.ajax({
     	   url: url,
     	   type: 'GET',
     	   success: function(data) {
     	        downloadReports(data,'inventory_report');
+
     	        $.notify("Downloaded Inventory Reports successfully","success");
     	   },
-    	   error: handleAjaxError
+    	   error: handleAjaxError,
+           complete: function(){
+                $("#download-inventory-report").prop("disabled", false).find(".fa-spinner").hide();
+           }
     	});
 }
 
@@ -82,6 +95,7 @@ function getSalesReport(){
     if($form[0].checkValidity()){
         var json = toJson($form);
         var url = getSalesUrl() + '/sales';
+         $("#download-sales-report").prop("disabled", true).find(".fa-spinner").show();
         $.ajax({
            url: url,
            type: 'POST',
@@ -96,9 +110,13 @@ function getSalesReport(){
                 $("#sales-form input[name=brand]").val('');
                 $("#sales-form input[name=category]").val('');
                 toggleSalesModal();
+
                 $.notify("Downloaded Sales Reports successfully","success");
        },
-           error:handleAjaxError
+           error:handleAjaxError,
+           complete: function(){
+                $("#download-sales-report").prop("disabled", false).find(".fa-spinner").hide();
+           }
         });
         $form.addClass('was-validated');
     }

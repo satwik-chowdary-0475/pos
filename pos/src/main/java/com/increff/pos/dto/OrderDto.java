@@ -4,6 +4,7 @@ import com.increff.pos.dto.helper.HelperDto;
 import com.increff.pos.model.data.OrderData;
 import com.increff.pos.model.data.OrderDetailsData;
 import com.increff.pos.model.data.OrderItemData;
+import com.increff.pos.model.data.PaginatedData;
 import com.increff.pos.model.form.OrderForm;
 import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.OrderItemPojo;
@@ -13,6 +14,7 @@ import com.increff.pos.service.*;
 import com.increff.pos.pojo.OrderStatus;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -41,13 +43,14 @@ public class OrderDto {
     }
 
     @Transactional
-    public List<OrderData> getAll() {
-        List<OrderPojo> orderPojoList = orderService.getAll();
+    public PaginatedData getAll(int page, int rowsPerPage) {
+        List<OrderPojo> orderPojoList = orderService.getAll(page,rowsPerPage);
+        Integer totalCount = orderService.getCount();
 
         List<OrderData> orderDataList = orderPojoList.stream()
                 .map(HelperDto::convert)
                 .collect(Collectors.toList());
-        return orderDataList;
+        return new PaginatedData(orderDataList,totalCount);
     }
 
     @Transactional(rollbackOn = ApiException.class)
@@ -76,7 +79,7 @@ public class OrderDto {
 
         List<OrderItemData> orderItemDataList = new ArrayList<OrderItemData>();
         for (OrderItemPojo orderItemPojo : orderItemPojoList) {
-            ProductPojo productPojo = productService.getProductById(orderItemPojo.getProductId());
+            ProductPojo productPojo = productService.getById(orderItemPojo.getProductId());
             orderItemDataList.add(HelperDto.convert(orderItemPojo, productPojo.getBarcode(), productPojo.getName()));
         }
 

@@ -17,5 +17,4 @@ public class OrderDetailsData {
     private String customerName;
     private String orderCode;
     private List<OrderItemData> orderItems;
-
 }

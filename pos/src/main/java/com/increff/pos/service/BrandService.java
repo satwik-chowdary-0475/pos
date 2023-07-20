@@ -55,7 +55,17 @@ public class BrandService {
     }
 
     @Transactional
-    public List<BrandPojo> getAll() {
+    public List<BrandPojo> getAll(int page,int rowsPerPage) {
+        return brandDao.getAll(page,rowsPerPage);
+    }
+
+    @Transactional
+    public Integer getCount(){
+        return brandDao.getCount();
+    }
+
+    @Transactional
+    public List<BrandPojo> getAll(){
         return brandDao.getAll();
     }
 

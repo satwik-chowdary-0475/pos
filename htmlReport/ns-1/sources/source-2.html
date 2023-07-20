@@ -43,7 +43,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (8/8)
+    (10/10)
   </span>
 </td>
 <td class="coverageStat">
@@ -51,15 +51,15 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (22/22)
+    (29/29)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">BrandDao$$EnhancerBySpringCGLIB$$3e7dba1f</td>
+    <td class="name">BrandDao$$EnhancerBySpringCGLIB$$66f93de9</td>
   </tr>
   <tr>
-    <td class="name">BrandDao$$EnhancerBySpringCGLIB$$3e7dba1f$$FastClassBySpringCGLIB$$2465e21</td>
+    <td class="name">BrandDao$$EnhancerBySpringCGLIB$$66f93de9$$FastClassBySpringCGLIB$$d1658a46</td>
   </tr>
   <tr>
     <td class="name">BrandDao$$FastClassBySpringCGLIB$$8104a3eb</td>
@@ -71,7 +71,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (8/8)
+    (10/10)
   </span>
 </td>
 <td class="coverageStat">
@@ -79,7 +79,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (22/22)
+    (29/29)
   </span>
 </td>
 </tr>
@@ -107,21 +107,22 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;    private static String SELECT_BY_BRAND_CATEGORY = &quot;select p from BrandPojo p where brand=:brand and category=:category&quot;;</b>
 <b class="fc">&nbsp;    private static String SELECT_BY_BRAND = &quot;select p from BrandPojo p where brand=:brand&quot;;</b>
 <b class="fc">&nbsp;    private static String SELECT_BY_CATEGORY = &quot;select p from BrandPojo p where category=:category&quot;;</b>
+<b class="fc">&nbsp;    private static String SELECT_ALL_COUNT = &quot;select COUNT(p) from BrandPojo p&quot;;</b>
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public void insertBrand(BrandPojo brandPojo) {
+&nbsp;    public void insert(BrandPojo brandPojo) {
 <b class="fc">&nbsp;        em().persist(brandPojo);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public BrandPojo getBrandById(int id) {
+&nbsp;    public BrandPojo getById(int id) {
 <b class="fc">&nbsp;        TypedQuery&lt;BrandPojo&gt; query = getQuery(SELECT_BY_ID, BrandPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;id&quot;, id);</b>
 <b class="fc">&nbsp;        return getSingle(query);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public BrandPojo getBrandByBrandCategory(String brand, String category) {
+&nbsp;    public BrandPojo getByBrandCategory(String brand, String category) {
 <b class="fc">&nbsp;        TypedQuery&lt;BrandPojo&gt; query = getQuery(SELECT_BY_BRAND_CATEGORY, BrandPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;brand&quot;, brand);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;category&quot;, category);</b>
@@ -129,23 +130,37 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public List&lt;BrandPojo&gt; getBrandByBrand(String brand) {
+&nbsp;    public List&lt;BrandPojo&gt; getByBrand(String brand) {
 <b class="fc">&nbsp;        TypedQuery&lt;BrandPojo&gt; query = getQuery(SELECT_BY_BRAND, BrandPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;brand&quot;, brand);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public List&lt;BrandPojo&gt; getBrandByCategory(String category) {
+&nbsp;    public List&lt;BrandPojo&gt; getByCategory(String category) {
 <b class="fc">&nbsp;        TypedQuery&lt;BrandPojo&gt; query = getQuery(SELECT_BY_CATEGORY, BrandPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;category&quot;, category);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public List&lt;BrandPojo&gt; getAllBrands() {
+&nbsp;    public List&lt;BrandPojo&gt; getAll(int page,int rowsPerPage) {
+<b class="fc">&nbsp;        TypedQuery&lt;BrandPojo&gt; query = getQuery(SELECT_ALL, BrandPojo.class);</b>
+<b class="fc">&nbsp;        query.setFirstResult((page-1)*rowsPerPage);</b>
+<b class="fc">&nbsp;        query.setMaxResults(rowsPerPage);</b>
+<b class="fc">&nbsp;        return query.getResultList();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public List&lt;BrandPojo&gt; getAll(){
 <b class="fc">&nbsp;        TypedQuery&lt;BrandPojo&gt; query = getQuery(SELECT_ALL, BrandPojo.class);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public Integer getCount(){
+<b class="fc">&nbsp;        TypedQuery&lt;Number&gt; query = getQuery(SELECT_ALL_COUNT, Number.class);</b>
+<b class="fc">&nbsp;        return query.getSingleResult().intValue();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;
@@ -173,7 +188,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

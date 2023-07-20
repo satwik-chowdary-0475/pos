@@ -3,6 +3,7 @@ package com.increff.pos.controller;
 
 import com.increff.pos.dto.InventoryDto;
 import com.increff.pos.model.data.InventoryData;
+import com.increff.pos.model.data.PaginatedData;
 import com.increff.pos.model.form.InventoryForm;
 import com.increff.pos.model.form.InventoryUpdateForm;
 import com.increff.pos.service.ApiException;
@@ -35,8 +36,8 @@ public class InventoryController {
 
     @ApiOperation(value = "Get list of all products in inventory")
     @GetMapping(path = "")
-    public List<InventoryData> getAllProducts() throws ApiException {
-        return inventoryDto.getAll();
+    public PaginatedData getAllProducts(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int rowsPerPage) throws ApiException {
+        return inventoryDto.getAll(page,rowsPerPage);
     }
 
     @ApiOperation(value = "Get a product from inventory")

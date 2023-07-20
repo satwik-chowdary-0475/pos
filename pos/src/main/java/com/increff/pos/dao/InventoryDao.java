@@ -12,6 +12,7 @@ import java.util.List;
 public class InventoryDao extends AbstractDao {
     private static String SELECT_BY_ID = "select p from InventoryPojo p where id=:id";
     private static String SELECT_ALL = "select p from InventoryPojo p";
+    private static String SELECT_ALL_COUNT = "select COUNT(p) from InventoryPojo p";
 
     @Transactional
     public void insert(InventoryPojo inventoryPojo) {
@@ -30,4 +31,19 @@ public class InventoryDao extends AbstractDao {
         TypedQuery<InventoryPojo> query = getQuery(SELECT_ALL, InventoryPojo.class);
         return query.getResultList();
     }
+
+    @Transactional
+    public List<InventoryPojo> getAll(int page, int rowsPerPage) {
+        TypedQuery<InventoryPojo> query = getQuery(SELECT_ALL, InventoryPojo.class);
+        query.setFirstResult((page-1)*rowsPerPage);
+        query.setMaxResults(rowsPerPage);
+        return query.getResultList();
+    }
+
+    @Transactional
+    public Integer getCount(){
+        TypedQuery<Number> query = getQuery(SELECT_ALL_COUNT, Number.class);
+        return query.getSingleResult().intValue();
+    }
+
 }

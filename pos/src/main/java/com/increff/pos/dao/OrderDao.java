@@ -19,7 +19,7 @@ public class OrderDao extends AbstractDao {
     private static String SELECT_BY_ORDER_CODE = "select p from OrderPojo p where orderCode=:orderCode";
     private static String SELECT_ALL = "select p from OrderPojo p ORDER BY p.id DESC";
     private static String SELECT_BY_DATE = "select p from OrderPojo p where p.status =:status and DAY(p.updatedAt) >= DAY(:startTime) and DAY(p.updatedAt) <= DAY(:endTime)";
-
+    private static String SELECT_ALL_COUNT = "select COUNT(p) from OrderPojo p";
 
     @Transactional
     public void insert(OrderPojo orderPojo) {
@@ -56,6 +56,14 @@ public class OrderDao extends AbstractDao {
     }
 
     @Transactional
+    public List<OrderPojo> getAll(int page,int rowsPerPage) {
+        TypedQuery<OrderPojo> query = getQuery(SELECT_ALL, OrderPojo.class);
+        query.setFirstResult((page-1)*rowsPerPage);
+        query.setMaxResults(rowsPerPage);
+        return query.getResultList();
+    }
+
+    @Transactional
     public int delete(String orderCode) {
         Query query = em().createQuery(DELETE_BY_ORDER_CODE);
         query.setParameter("orderCode", orderCode);
@@ -63,4 +71,9 @@ public class OrderDao extends AbstractDao {
         return query.executeUpdate();
     }
 
+    @Transactional
+    public Integer getCount() {
+        TypedQuery<Number> query = em().createQuery(SELECT_ALL_COUNT,Number.class);
+        return query.getSingleResult().intValue();
+    }
 }

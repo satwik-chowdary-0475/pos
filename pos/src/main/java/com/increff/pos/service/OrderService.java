@@ -44,6 +44,11 @@ public class OrderService {
     }
 
     @Transactional
+    public List<OrderPojo> getAll(int page,int rowsPerPage) {
+        return orderDao.getAll(page,rowsPerPage);
+    }
+
+    @Transactional
     public List<OrderPojo> getByDate(Date startTime, Date endTime) {
         return orderDao.getByDate(startTime, endTime, OrderStatus.INVOICED);
     }
@@ -68,9 +73,16 @@ public class OrderService {
         orderPojo.setStatus(status);
     }
 
+    @Transactional
+    public Integer getCount() {
+        return orderDao.getCount();
+    }
+
     private void checkOrder(OrderPojo orderPojo) throws ApiException {
         if (Objects.isNull(orderPojo)) {
             throw new ApiException("Order doesn't exist");
         }
     }
+
+
 }

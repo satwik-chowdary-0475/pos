@@ -51,18 +51,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    96%
+    97.3%
   </span>
   <span class="absValue">
-    (24/25)
+    (36/37)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    81.9%
+    91.4%
   </span>
   <span class="absValue">
-    (127/155)
+    (149/163)
   </span>
 </td>
 </tr>
@@ -90,105 +90,102 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;public class HelperDto {</b>
 &nbsp;    public static void validate(ProductForm productForm) throws ApiException {
 <b class="fc">&nbsp;        if (Objects.isNull(productForm)) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid input form product details!!!&quot;);</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid input form product details&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(productForm.getName()) || productForm.getName().length() == 0) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid product name&quot;);</b>
+<b class="fc">&nbsp;        validateStringField(productForm.getName(), &quot;Product name&quot;);</b>
+<b class="fc">&nbsp;        validateStringField(productForm.getBarcode(), &quot;Barcode&quot;);</b>
+<b class="fc">&nbsp;        validateStringField(productForm.getBrand(), &quot;Brand&quot;);</b>
+<b class="fc">&nbsp;        validateStringField(productForm.getCategory(), &quot;Category&quot;);</b>
+<b class="fc">&nbsp;        validateMRP(productForm.getMrp());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void validate(ProductUpdateForm productUpdateForm) throws ApiException {
+<b class="fc">&nbsp;        if (Objects.isNull(productUpdateForm)) {</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid input form product details&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(productForm.getBarcode()) || (productForm.getBarcode().length() == 0)) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid product barcode&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(productForm.getBrand()) || productForm.getBrand().length() == 0) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid brand name!!&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(productForm.getCategory()) || productForm.getCategory().length() == 0) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid brand category!!&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(productForm.getMrp()) || productForm.getMrp() &gt; 10000000 || productForm.getMrp() &lt;= 0) {</b>
-<b class="fc">&nbsp;            throw new ApiException(&quot;Invalid product Mrp&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        if (productForm.getName().length() &gt; 30) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Product name cannot be more than 30 characters&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        if (productForm.getBarcode().length() &gt; 30) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Barcode cannot be more than 30 characters&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        if (productForm.getBrand().length() &gt; 30) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Brand cannot be more than 30 characters&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        if (productForm.getCategory().length() &gt; 30) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Category cannot be more than 30 characters&quot;);</b>
-&nbsp;        }
+<b class="fc">&nbsp;        validateStringField(productUpdateForm.getName(), &quot;Product name&quot;);</b>
+<b class="fc">&nbsp;        validateMRP(productUpdateForm.getMrp());</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public static void validate(InventoryForm inventoryForm) throws ApiException {
 <b class="fc">&nbsp;        if (Objects.isNull(inventoryForm)) {</b>
 <b class="nc">&nbsp;            throw new ApiException(&quot;Invalid inventory form details&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(inventoryForm.getBarcode()) || inventoryForm.getBarcode().length() == 0) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid product barcode!!&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(inventoryForm.getQuantity()) || inventoryForm.getQuantity() &gt; 10000000 || inventoryForm.getQuantity() &lt; 0) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid product quantity&quot;);</b>
-&nbsp;        }
+<b class="fc">&nbsp;        validateStringField(inventoryForm.getBarcode(), &quot;Product barcode&quot;);</b>
+<b class="fc">&nbsp;        validateQuantity(inventoryForm.getQuantity(), false);</b>
 &nbsp;    }
 &nbsp;
+&nbsp;    public static void validate(InventoryUpdateForm inventoryUpdateForm) throws ApiException {
+<b class="fc">&nbsp;        if (Objects.isNull(inventoryUpdateForm)) {</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid inventory form details&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        validateQuantity(inventoryUpdateForm.getQuantity(), true);</b>
+&nbsp;    }
 &nbsp;
 &nbsp;    public static void validate(BrandForm brandForm) throws ApiException {
 <b class="fc">&nbsp;        if (Objects.isNull(brandForm)) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid input form brand details!!!&quot;);</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid input form brand details&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(brandForm.getBrand()) || (brandForm.getBrand().length() == 0)) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid brand name&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(brandForm.getCategory()) || (brandForm.getCategory().length() == 0)) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid category name&quot;);</b>
-&nbsp;        }
-&nbsp;
-<b class="fc">&nbsp;        if (brandForm.getBrand().length() &gt; 30) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Brand name cannot have more than 30 characters&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        if (brandForm.getCategory().length() &gt; 30) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Category name cannot have more than 30 characters&quot;);</b>
-&nbsp;        }
+<b class="fc">&nbsp;        validateStringField(brandForm.getBrand(), &quot;Brand name&quot;);</b>
+<b class="fc">&nbsp;        validateStringField(brandForm.getCategory(), &quot;Category name&quot;);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public static void validate(OrderForm orderForm) throws ApiException {
 <b class="fc">&nbsp;        if (Objects.isNull(orderForm)) {</b>
 <b class="nc">&nbsp;            throw new ApiException(&quot;Invalid order form details&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(orderForm.getCustomerName()) || orderForm.getCustomerName().length() == 0) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid order name!!!&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        if (orderForm.getCustomerName().length() &gt; 30) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Customer name cannot have more than 30 characters&quot;);</b>
-&nbsp;        }
+<b class="fc">&nbsp;        validateStringField(orderForm.getCustomerName(), &quot;Customer name&quot;);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public static void validate(OrderItemForm orderItemForm) throws ApiException {
 <b class="fc">&nbsp;        if (Objects.isNull(orderItemForm)) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid order item form!!&quot;);</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid order item form&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(orderItemForm.getBarcode()) || orderItemForm.getBarcode().length() == 0) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid barcode id&quot;);</b>
+<b class="fc">&nbsp;        validateStringField(orderItemForm.getBarcode(), &quot;Barcode&quot;);</b>
+<b class="fc">&nbsp;        validateQuantity(orderItemForm.getQuantity(), true);</b>
+<b class="fc">&nbsp;        validateSellingPrice(orderItemForm.getSellingPrice(),true);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void validate(OrderItemUpdateForm orderItemUpdateForm) throws ApiException {
+<b class="fc">&nbsp;        if (Objects.isNull(orderItemUpdateForm)) {</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid order item form&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(orderItemForm.getQuantity()) || orderItemForm.getQuantity() &gt; 10000000 || orderItemForm.getQuantity() &lt;= 0) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid product quantity&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(orderItemForm.getSellingPrice()) || orderItemForm.getSellingPrice() &lt;= 0 || orderItemForm.getSellingPrice() &gt; 10000000) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid selling price&quot;);</b>
-&nbsp;        }
+<b class="fc">&nbsp;        validateQuantity(orderItemUpdateForm.getQuantity(), true);</b>
+<b class="fc">&nbsp;        validateSellingPrice(orderItemUpdateForm.getSellingPrice(),true);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public static void validate(UserForm userForm) throws ApiException {
 <b class="fc">&nbsp;        if (Objects.isNull(userForm)) {</b>
 <b class="nc">&nbsp;            throw new ApiException(&quot;Invalid user form&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(userForm.getEmail()) || userForm.getEmail().length() == 0) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid email&quot;);</b>
+<b class="fc">&nbsp;        validateStringField(userForm.getEmail(), &quot;Email&quot;);</b>
+<b class="fc">&nbsp;        validateStringField(userForm.getPassword(), &quot;Password&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void validateStringField(String field, String fieldName) throws ApiException {
+<b class="fc">&nbsp;        if (Objects.isNull(field) || field.trim().isEmpty()) {</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid &quot; + fieldName.toLowerCase() + &quot;. &quot; + fieldName + &quot; is required.&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(userForm.getPassword()) || userForm.getPassword().length() == 0) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid Password&quot;);</b>
+<b class="fc">&nbsp;        if (field.length() &gt; 30) {</b>
+<b class="nc">&nbsp;            throw new ApiException(fieldName + &quot; cannot be more than 30 characters.&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void validateMRP(Double mrp) throws ApiException {
+<b class="fc">&nbsp;        if (Objects.isNull(mrp) || mrp &lt;= 0 || mrp &gt; 10000000) {</b>
+<b class="fc">&nbsp;            throw new ApiException(&quot;Invalid product MRP.&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void validateSellingPrice(Double sellingPrice, boolean allowZero) throws ApiException {
+<b class="fc">&nbsp;        if (Objects.isNull(sellingPrice) || (sellingPrice &lt; 0 &amp;&amp; !allowZero) || sellingPrice &gt; 10000000) {</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid product selling price.&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void validateQuantity(Integer quantity, boolean allowZero) throws ApiException {
+<b class="fc">&nbsp;        if (Objects.isNull(quantity) || (quantity &lt; 0 &amp;&amp; !allowZero) || quantity &gt; 10000000) {</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid product quantity.&quot;);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
@@ -224,6 +221,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return productPojo;</b>
 &nbsp;    }
 &nbsp;
+&nbsp;    public static ProductPojo convert(ProductUpdateForm productUpdateForm) {
+<b class="fc">&nbsp;        ProductPojo productPojo = new ProductPojo();</b>
+<b class="fc">&nbsp;        productPojo.setMrp(productUpdateForm.getMrp());</b>
+<b class="fc">&nbsp;        productPojo.setName(productUpdateForm.getName());</b>
+<b class="fc">&nbsp;        return productPojo;</b>
+&nbsp;    }
+&nbsp;
 &nbsp;    public static InventoryData convert(InventoryPojo inventoryPojo, String barcode, String productName) throws ApiException {
 <b class="fc">&nbsp;        InventoryData inventoryData = new InventoryData();</b>
 <b class="fc">&nbsp;        inventoryData.setProductName(productName);</b>
@@ -233,10 +237,17 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return inventoryData;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public static InventoryPojo convert(InventoryForm inventoryForm, int id) {
+&nbsp;    public static InventoryPojo convert(InventoryForm inventoryForm, int productId) {
 <b class="fc">&nbsp;        InventoryPojo inventoryPojo = new InventoryPojo();</b>
 <b class="fc">&nbsp;        inventoryPojo.setQuantity(inventoryForm.getQuantity());</b>
-<b class="fc">&nbsp;        inventoryPojo.setProductId(id);</b>
+<b class="fc">&nbsp;        inventoryPojo.setProductId(productId);</b>
+<b class="fc">&nbsp;        return inventoryPojo;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static InventoryPojo convert(InventoryUpdateForm inventoryUpdateForm, Integer productId) {
+<b class="fc">&nbsp;        InventoryPojo inventoryPojo = new InventoryPojo();</b>
+<b class="fc">&nbsp;        inventoryPojo.setQuantity(inventoryUpdateForm.getQuantity());</b>
+<b class="fc">&nbsp;        inventoryPojo.setProductId(productId);</b>
 <b class="fc">&nbsp;        return inventoryPojo;</b>
 &nbsp;    }
 &nbsp;
@@ -295,6 +306,14 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return orderItemPojo;</b>
 &nbsp;    }
 &nbsp;
+&nbsp;    public static OrderItemPojo convert(OrderItemUpdateForm orderItemUpdateForm, int orderId) {
+<b class="fc">&nbsp;        OrderItemPojo orderItemPojo = new OrderItemPojo();</b>
+<b class="fc">&nbsp;        orderItemPojo.setOrderId(orderId);</b>
+<b class="fc">&nbsp;        orderItemPojo.setSellingPrice(orderItemUpdateForm.getSellingPrice());</b>
+<b class="fc">&nbsp;        orderItemPojo.setQuantity(orderItemUpdateForm.getQuantity());</b>
+<b class="fc">&nbsp;        return orderItemPojo;</b>
+&nbsp;    }
+&nbsp;
 &nbsp;    public static OrderItemData convert(OrderItemPojo orderItemPojo, String barcode, String productName) {
 <b class="fc">&nbsp;        OrderItemData orderItemData = new OrderItemData();</b>
 <b class="fc">&nbsp;        orderItemData.setId(orderItemPojo.getId());</b>
@@ -307,7 +326,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return orderItemData;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public static ErrorData convert(int row,String errorMessage){
+&nbsp;
+&nbsp;    public static ErrorData convert(int row, String errorMessage) {
 <b class="fc">&nbsp;        ErrorData errorData = new ErrorData();</b>
 <b class="fc">&nbsp;        errorData.setErrorMessage(errorMessage);</b>
 <b class="fc">&nbsp;        errorData.setRow(row);</b>
@@ -319,9 +339,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        productForm.setCategory(StringUtil.toLowerCase(productForm.getCategory()));</b>
 <b class="fc">&nbsp;        productForm.setMrp(RoundUtil.round(productForm.getMrp()));</b>
 <b class="fc">&nbsp;        productForm.setName(StringUtil.toLowerCase(productForm.getName()));</b>
-<b class="fc">&nbsp;        productForm.setBrand(StringUtil.toLowerCase(productForm.getBrand()));</b>
-<b class="fc">&nbsp;        productForm.setCategory(StringUtil.toLowerCase(productForm.getCategory()));</b>
 <b class="fc">&nbsp;        HelperDto.validate(productForm);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void normalise(ProductUpdateForm productUpdateForm) throws ApiException {
+<b class="fc">&nbsp;        productUpdateForm.setName(StringUtil.toLowerCase(productUpdateForm.getName()));</b>
+<b class="fc">&nbsp;        productUpdateForm.setMrp(RoundUtil.round(productUpdateForm.getMrp()));</b>
+<b class="fc">&nbsp;        HelperDto.validate(productUpdateForm);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;
@@ -341,13 +365,16 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        HelperDto.validate(orderItemForm);</b>
 &nbsp;    }
 &nbsp;
+&nbsp;    public static void normalise(OrderItemUpdateForm orderItemUpdateForm) throws ApiException {
+<b class="fc">&nbsp;        orderItemUpdateForm.setSellingPrice(RoundUtil.round(orderItemUpdateForm.getSellingPrice()));</b>
+<b class="fc">&nbsp;        HelperDto.validate(orderItemUpdateForm);</b>
+&nbsp;    }
+&nbsp;
 &nbsp;    public static void normalise(UserForm userForm) throws ApiException {
 <b class="fc">&nbsp;        userForm.setRole(StringUtil.toLowerCase(userForm.getRole()));</b>
 <b class="fc">&nbsp;        userForm.setEmail(StringUtil.toLowerCase(userForm.getEmail()));</b>
 <b class="fc">&nbsp;        HelperDto.validate(userForm);</b>
 &nbsp;    }
-&nbsp;
-&nbsp;
 &nbsp;}
 </code>
 </pre>
@@ -372,7 +399,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

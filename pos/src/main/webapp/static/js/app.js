@@ -12,6 +12,7 @@ function toJson($form){
 }
 
 function showError(message){
+
     $.notify(message,{className:"error",autoHideDelay: 20000});
 }
 

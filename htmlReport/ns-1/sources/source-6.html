@@ -48,18 +48,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    88.6%
+    90.9%
   </span>
   <span class="absValue">
-    (31/35)
+    (30/33)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">OrderItemDao$$EnhancerBySpringCGLIB$$6ddcb31</td>
+    <td class="name">OrderItemDao$$EnhancerBySpringCGLIB$$2f594efb</td>
   </tr>
   <tr>
-    <td class="name">OrderItemDao$$EnhancerBySpringCGLIB$$6ddcb31$$FastClassBySpringCGLIB$$9739a98b</td>
+    <td class="name">OrderItemDao$$EnhancerBySpringCGLIB$$2f594efb$$FastClassBySpringCGLIB$$c7ab83ed</td>
   </tr>
   <tr>
     <td class="name">OrderItemDao$$FastClassBySpringCGLIB$$4645e5b1</td>
@@ -76,10 +76,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    88.6%
+    90.9%
   </span>
   <span class="absValue">
-    (31/35)
+    (30/33)
   </span>
 </td>
 </tr>
@@ -93,42 +93,37 @@ Current scope:     <a href="../../index.html">all classes</a>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.dao;
 &nbsp;
 &nbsp;import com.increff.pos.pojo.OrderItemPojo;
-&nbsp;import com.increff.pos.pojo.OrderPojo;
-&nbsp;import lombok.extern.log4j.Log4j;
 &nbsp;import org.springframework.stereotype.Repository;
 &nbsp;
 &nbsp;import javax.persistence.Query;
 &nbsp;import javax.persistence.TypedQuery;
 &nbsp;import javax.transaction.Transactional;
-&nbsp;import java.util.ArrayList;
 &nbsp;import java.util.List;
-&nbsp;import java.util.stream.Collectors;
 &nbsp;
 &nbsp;@Repository
-<b class="fc">&nbsp;@Log4j</b>
 <b class="fc">&nbsp;public class OrderItemDao extends AbstractDao {</b>
 <b class="fc">&nbsp;    private static String SELECT_BY_ID = &quot;select p from OrderItemPojo p where id=:id&quot;;</b>
 <b class="fc">&nbsp;    private static String SELECT_BY_PRODUCT_ID = &quot;select p from OrderItemPojo p where orderId=:orderId and productId=:productId&quot;;</b>
 <b class="fc">&nbsp;    private static String SELECT_ALL = &quot;select p from OrderItemPojo p where orderId=:orderId&quot;;</b>
-<b class="fc">&nbsp;    private static String DELETE_BY_ID = &quot;delete from OrderItemPojo p where id=:id&quot;;</b>
+<b class="fc">&nbsp;    private static String DELETE_BY_ID = &quot;delete from OrderItemPojo p where orderId=:orderId and id=:id&quot;;</b>
 <b class="fc">&nbsp;    private static String DELETE_BY_ORDER_ID = &quot;delete from OrderItemPojo p where orderId=:orderId&quot;;</b>
 <b class="fc">&nbsp;    private static String SELECT_ALL_REPORT = &quot;SELECT SUM(p.quantity), SUM(p.quantity * p.sellingPrice) FROM OrderItemPojo p WHERE p.orderId IN :orderIdsList&quot;;</b>
 <b class="fc">&nbsp;    private static String SELECT_BY_ORDER_LIST = &quot;select p from OrderItemPojo p where p.orderId IN :orderIdsList&quot;;</b>
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public void insertOrderItem(OrderItemPojo orderItemPojo) {
+&nbsp;    public void insert(OrderItemPojo orderItemPojo) {
 <b class="fc">&nbsp;        em().persist(orderItemPojo);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public OrderItemPojo getOrderItemById(int id) {
+&nbsp;    public OrderItemPojo getById(int id) {
 <b class="fc">&nbsp;        TypedQuery&lt;OrderItemPojo&gt; query = getQuery(SELECT_BY_ID, OrderItemPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;id&quot;, id);</b>
 <b class="fc">&nbsp;        return getSingle(query);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public OrderItemPojo getOrderItemByProductId(int orderId, int productId) {
+&nbsp;    public OrderItemPojo getByProductId(int orderId, int productId) {
 <b class="fc">&nbsp;        TypedQuery&lt;OrderItemPojo&gt; query = getQuery(SELECT_BY_PRODUCT_ID, OrderItemPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;orderId&quot;, orderId);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;productId&quot;, productId);</b>
@@ -136,42 +131,42 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public Object[] getOrderItemsReport(List&lt;OrderPojo&gt; orderPojoList) {
+&nbsp;    public Object[] getOrderItemsReport(List&lt;Integer&gt; orderIdsList) {
 <b class="fc">&nbsp;        TypedQuery&lt;Object[]&gt; query = em().createQuery(SELECT_ALL_REPORT, Object[].class);</b>
-<b class="fc">&nbsp;        List&lt;Integer&gt; orderIdsList = orderPojoList.stream().map(OrderPojo::getId).collect(Collectors.toList());</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;orderIdsList&quot;, orderIdsList);</b>
 <b class="fc">&nbsp;        Object[] result = query.getSingleResult();</b>
 <b class="fc">&nbsp;        return result;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public List&lt;OrderItemPojo&gt; getAllOrderItems(int orderId) {
+&nbsp;    public List&lt;OrderItemPojo&gt; getAllByOrderId(int orderId) {
 <b class="fc">&nbsp;        TypedQuery&lt;OrderItemPojo&gt; query = getQuery(SELECT_ALL, OrderItemPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;orderId&quot;, orderId);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;
 &nbsp;    @Transactional
-&nbsp;    public int deleteOrderItem( int id) {
+&nbsp;    public int delete(int orderId,int id) {
 <b class="fc">&nbsp;        Query query = em().createQuery(DELETE_BY_ID);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;id&quot;, id);</b>
+<b class="fc">&nbsp;        query.setParameter(&quot;orderId&quot;,orderId);</b>
 <b class="fc">&nbsp;        return query.executeUpdate();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public int deleteAllOrderItems(int orderId) {
+&nbsp;    public int deleteByOrderId(int orderId) {
 <b class="fc">&nbsp;        Query query = em().createQuery(DELETE_BY_ORDER_ID);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;orderId&quot;, orderId);</b>
 <b class="fc">&nbsp;        return query.executeUpdate();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public List&lt;OrderItemPojo&gt; getAllOrderItemsByOrderList(List&lt;OrderPojo&gt; orderPojoList) {
-<b class="nc">&nbsp;        List&lt;Integer&gt; orderIdsList = orderPojoList.stream().map(OrderPojo::getId).collect(Collectors.toList());</b>
+&nbsp;    @Transactional
+&nbsp;    public List&lt;OrderItemPojo&gt; getAllByOrderList(List&lt;Integer&gt; orderIdsList) {
 <b class="nc">&nbsp;        TypedQuery&lt;OrderItemPojo&gt; query = getQuery(SELECT_BY_ORDER_LIST, OrderItemPojo.class);</b>
 <b class="nc">&nbsp;        query.setParameter(&quot;orderIdsList&quot;, orderIdsList);</b>
 <b class="nc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
+&nbsp;
 &nbsp;}
 </code>
 </pre>
@@ -196,7 +191,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

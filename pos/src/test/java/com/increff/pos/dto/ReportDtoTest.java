@@ -47,9 +47,9 @@ public class ReportDtoTest extends AbstractUnitTest {
         BrandForm brandForm2 = Helper.createBrandForm("brand 1", "category 2");
         brandDto.insert(brandForm2);
         ProductForm productForm = Helper.createProductForm("barcode 1", "brand 1", "category 1", "product 1", 120.12);
-        productDto.insertProduct(productForm);
+        productDto.insert(productForm);
         ProductForm productForm1 = Helper.createProductForm("barcode 2", "brand 1", "category 1", "product 2", 120.12);
-        productDto.insertProduct(productForm1);
+        productDto.insert(productForm1);
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1", 200);
         inventoryDto.insert(inventoryForm);
         OrderForm orderForm = Helper.createOrderForm("customer 1");

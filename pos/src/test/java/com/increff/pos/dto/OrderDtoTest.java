@@ -4,6 +4,7 @@ import com.increff.pos.Helper;
 import com.increff.pos.model.data.OrderData;
 import com.increff.pos.model.data.OrderDetailsData;
 import com.increff.pos.model.data.OrderItemData;
+import com.increff.pos.model.data.PaginatedData;
 import com.increff.pos.model.form.*;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.ProductPojo;
@@ -14,10 +15,12 @@ import com.increff.pos.service.ProductService;
 import com.increff.pos.spring.AbstractUnitTest;
 import com.increff.pos.pojo.OrderStatus;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +55,9 @@ public class OrderDtoTest extends AbstractUnitTest {
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
         brandDto.insert(brandForm);
         ProductForm productForm = Helper.createProductForm("barcode 1","brand 1","category 1","product 1",120.12);
-        productDto.insertProduct(productForm);
+        productDto.insert(productForm);
         ProductForm productForm1 = Helper.createProductForm("barcode 2","brand 1","category 1","product 2",120.12);
-        productDto.insertProduct(productForm1);
+        productDto.insert(productForm1);
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1",200);
         inventoryDto.insert(inventoryForm);
     }
@@ -89,8 +92,9 @@ public class OrderDtoTest extends AbstractUnitTest {
         String orderCode1 = orderDto.insert(orderForm1);
         OrderPojo orderPojo1 = orderService.getByOrderCode(orderCode1);
         actualOrderDataList.add(Helper.createOrderData(orderPojo1));
-        List<OrderData> expectedDataList = orderDto.getAll();
-        assertEquals(expectedDataList.size(),actualOrderDataList.size());
+        PaginatedData actualPaginatedData = new PaginatedData(actualOrderDataList, orderService.getCount());
+        PaginatedData expectedPaginatedData = orderDto.getAll(1,10);
+        assertEquals(actualPaginatedData.getDataList().size(),expectedPaginatedData.getDataList().size());
     }
 
     @Test
@@ -100,7 +104,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",100,100.12);
         orderItemDto.insert(orderPojo.getId(),orderItemForm);
-        ProductPojo productPojo = productService.getProductByBarcode("barcode 1");
+        ProductPojo productPojo = productService.getByBarcode("barcode 1");
         // Optional.ofNullable checks if the object is not null
         assertEquals(Optional.ofNullable((inventoryService.getById(productPojo.getId()).getQuantity())),Optional.ofNullable(100));
         List<OrderItemData>orderItemDataList = orderItemDto.getAllByOrderId(orderPojo.getId());
@@ -130,7 +134,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",100,100.12);
         orderItemDto.insert(orderPojo.getId(),orderItemForm);
-        ProductPojo productPojo = productService.getProductByBarcode("barcode 1");
+        ProductPojo productPojo = productService.getByBarcode("barcode 1");
         assertEquals(Optional.ofNullable(inventoryService.getById(productPojo.getId()).getQuantity()),Optional.ofNullable(100));
         //check order delete
         exceptionRule.expect(ApiException.class);

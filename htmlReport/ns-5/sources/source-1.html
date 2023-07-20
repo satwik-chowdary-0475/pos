@@ -107,17 +107,14 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public static Authentication convert(UserPojo userPojo) {
-&nbsp;        // Create principal
+&nbsp;
 <b class="nc">&nbsp;        UserPrincipal principal = new UserPrincipal();</b>
 <b class="nc">&nbsp;        principal.setEmail(userPojo.getEmail());</b>
 <b class="nc">&nbsp;        principal.setId(userPojo.getId());</b>
 &nbsp;
-&nbsp;        // Create Authorities
 <b class="nc">&nbsp;        ArrayList&lt;SimpleGrantedAuthority&gt; authorities = new ArrayList&lt;SimpleGrantedAuthority&gt;();</b>
 <b class="nc">&nbsp;        authorities.add(new SimpleGrantedAuthority(userPojo.getRole().name()));</b>
-&nbsp;        // you can add more roles if required
 &nbsp;
-&nbsp;        // Create Authentication
 <b class="nc">&nbsp;        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, null,</b>
 &nbsp;                authorities);
 <b class="nc">&nbsp;        return token;</b>
@@ -125,7 +122,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    public static String getRole() {
 <b class="nc">&nbsp;        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();</b>
-&nbsp;        ;
 <b class="nc">&nbsp;        if (Objects.isNull(authentication) || Objects.isNull(authentication.getAuthorities())) return &quot;&quot;;</b>
 <b class="nc">&nbsp;        List&lt;String&gt; authorities = authentication.getAuthorities()</b>
 <b class="nc">&nbsp;                .stream()</b>
@@ -160,7 +156,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

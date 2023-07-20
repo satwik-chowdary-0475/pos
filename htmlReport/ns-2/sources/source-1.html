@@ -48,30 +48,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    80.6%
+    100%
   </span>
   <span class="absValue">
-    (25/31)
+    (26/26)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">BrandDto$$EnhancerBySpringCGLIB$$2721b434</td>
+    <td class="name">BrandDto$$EnhancerBySpringCGLIB$$ba1635c9</td>
   </tr>
   <tr>
-    <td class="name">BrandDto$$EnhancerBySpringCGLIB$$2721b434$$FastClassBySpringCGLIB$$27510645</td>
-  </tr>
-  <tr>
-    <td class="name">BrandDto$$EnhancerBySpringCGLIB$$714600ad</td>
-  </tr>
-  <tr>
-    <td class="name">BrandDto$$EnhancerBySpringCGLIB$$714600ad$$FastClassBySpringCGLIB$$f4eae60d</td>
-  </tr>
-  <tr>
-    <td class="name">BrandDto$$EnhancerBySpringCGLIB$$919ab1ff</td>
-  </tr>
-  <tr>
-    <td class="name">BrandDto$$EnhancerBySpringCGLIB$$919ab1ff$$FastClassBySpringCGLIB$$cfaa2c7d</td>
+    <td class="name">BrandDto$$EnhancerBySpringCGLIB$$ba1635c9$$FastClassBySpringCGLIB$$4dcb71ca</td>
   </tr>
   <tr>
     <td class="name">BrandDto$$FastClassBySpringCGLIB$$8dfdea8b</td>
@@ -88,10 +76,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    80.6%
+    100%
   </span>
   <span class="absValue">
-    (25/31)
+    (26/26)
   </span>
 </td>
 </tr>
@@ -107,6 +95,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import com.increff.pos.dto.helper.HelperDto;
 &nbsp;import com.increff.pos.model.data.BrandData;
 &nbsp;import com.increff.pos.model.data.ErrorData;
+&nbsp;import com.increff.pos.model.data.PaginatedData;
 &nbsp;import com.increff.pos.model.form.BrandForm;
 &nbsp;import com.increff.pos.pojo.BrandPojo;
 &nbsp;import com.increff.pos.service.ApiException;
@@ -126,53 +115,55 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    private BrandService brandService;
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public int insertBrand(BrandForm brandForm) throws ApiException {
+&nbsp;    public int insert(BrandForm brandForm) throws ApiException {
 <b class="fc">&nbsp;        HelperDto.normalise(brandForm);</b>
 <b class="fc">&nbsp;        BrandPojo brandPojo = HelperDto.convert(brandForm);</b>
-<b class="fc">&nbsp;        return brandService.insertBrand(brandPojo);</b>
+<b class="fc">&nbsp;        return brandService.insert(brandPojo);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public void insertBrandList(List&lt;BrandForm&gt; brandFormList) throws ApiException {
+&nbsp;    public void update(int id, BrandForm brandForm) throws ApiException {
+<b class="fc">&nbsp;        HelperDto.normalise(brandForm);</b>
+<b class="fc">&nbsp;        BrandPojo brandPojo = HelperDto.convert(brandForm);</b>
+<b class="fc">&nbsp;        brandService.update(id, brandPojo);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public BrandData getById(int id) throws ApiException {
+<b class="fc">&nbsp;        BrandPojo brandPojo = brandService.getById(id);</b>
+<b class="fc">&nbsp;        return HelperDto.convert(brandPojo);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public PaginatedData getAll(int page, int rowsPerPage) {
+<b class="fc">&nbsp;        List&lt;BrandPojo&gt; brandPojoList = brandService.getAll(page,rowsPerPage);</b>
+<b class="fc">&nbsp;        Integer totalCount = brandService.getCount();</b>
+&nbsp;
+<b class="fc">&nbsp;        List&lt;BrandData&gt; brandDataList = brandPojoList.stream()</b>
+<b class="fc">&nbsp;                .map(brandPojo -&gt; HelperDto.convert(brandPojo))</b>
+<b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;
+<b class="fc">&nbsp;        return new PaginatedData(brandDataList,totalCount);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public void insertList(List&lt;BrandForm&gt; brandFormList) throws ApiException {
 <b class="fc">&nbsp;        List&lt;ErrorData&gt; errorDataList = IntStream.range(0, brandFormList.size())</b>
 <b class="fc">&nbsp;                .mapToObj(row -&gt; {</b>
 <b class="fc">&nbsp;                    BrandForm brandForm = brandFormList.get(row);</b>
-<b class="nc">&nbsp;                    try {</b>
-<b class="fc">&nbsp;                        insertBrand(brandForm);</b>
+&nbsp;                    try {
+<b class="fc">&nbsp;                        insert(brandForm);</b>
 <b class="fc">&nbsp;                        return null;</b>
 <b class="fc">&nbsp;                    } catch (ApiException e) {</b>
 <b class="fc">&nbsp;                        return HelperDto.convert(row + 1, e.getMessage());</b>
-<b class="nc">&nbsp;                    }</b>
+&nbsp;                    }
 <b class="fc">&nbsp;                }).filter(Objects::nonNull)</b>
 <b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;
 <b class="fc">&nbsp;        if (!errorDataList.isEmpty()) {</b>
 <b class="fc">&nbsp;            throw new ApiException(errorDataList);</b>
-<b class="nc">&nbsp;        }</b>
+&nbsp;        }
 &nbsp;    }
-&nbsp;
-&nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public void updateBrand(int id, BrandForm brandForm) throws ApiException {
-<b class="fc">&nbsp;        HelperDto.normalise(brandForm);</b>
-<b class="fc">&nbsp;        BrandPojo brandPojo = HelperDto.convert(brandForm);</b>
-<b class="fc">&nbsp;        brandService.updateBrand(id, brandPojo);</b>
-<b class="nc">&nbsp;    }</b>
-&nbsp;
-&nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public BrandData getBrandData(int id) throws ApiException {
-<b class="fc">&nbsp;        BrandPojo brandPojo = brandService.getBrandById(id);</b>
-<b class="fc">&nbsp;        return HelperDto.convert(brandPojo);</b>
-<b class="nc">&nbsp;    }</b>
-&nbsp;
-&nbsp;    @Transactional
-&nbsp;    public List&lt;BrandData&gt; getAllBrandDataList() {
-<b class="fc">&nbsp;        List&lt;BrandPojo&gt; brandPojoList = brandService.getAllBrands();</b>
-<b class="fc">&nbsp;        List&lt;BrandData&gt; brandDataList = brandPojoList.stream()</b>
-<b class="fc">&nbsp;                .map(HelperDto::convert)</b>
-<b class="fc">&nbsp;                .collect(Collectors.toList());</b>
-<b class="fc">&nbsp;        return brandDataList;</b>
-<b class="nc">&nbsp;    }</b>
-&nbsp;
-&nbsp;
 &nbsp;}
 </code>
 </pre>
@@ -197,7 +188,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

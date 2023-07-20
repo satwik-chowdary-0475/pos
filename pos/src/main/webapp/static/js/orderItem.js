@@ -16,7 +16,6 @@ function handleButtons(status){
         $('#orderItem-form').hide();
         $('#add-modal-orderItem').hide();
     }
-
 }
 
 function getPdfUrl(){
@@ -39,7 +38,6 @@ function getOrderDetails(){
         url:url,
         type: 'GET',
         success: function(data){
-            console.log('data  ',data);
             orderId = data.id;
             orderStatus = data.status;
             customerName = data.customerName;
@@ -150,10 +148,20 @@ function displayOrderItemList(data){
 
 }
 
+function scientificNumberReviver(value) {
+  if (typeof value === 'string' && /^[-+]?(\d+(\.\d*)?|\.\d+)(e[-+]?\d+)$/i.test(value)) {
+    return parseFloat(value); // Parse as a float to preserve scientific notation
+  }
+  return value;
+}
+
 function addOrderItem(event){
 	var $form = $("#orderItem-form");
 	if($form[0].checkValidity()){
-	    var json = toJson($form);
+	   var json = toJson($form);
+        var jsonObj = JSON.parse(json);
+        jsonObj.quantity = scientificNumberReviver(jsonObj.quantity);
+        json = JSON.stringify(jsonObj);
         var url = getOrderItemUrl();
         $.ajax({
            url: url,
@@ -232,10 +240,12 @@ function generatePdf(data){
        },
         success : function(data){
             convertBase64ToPDF(data,customerName);
-            window.location=document.referrer;
-            $.notify("PDF for "+customerName+" generated successfully","success");
+            const encodedData = encodeURIComponent(JSON.stringify({customerName:customerName}));
+            window.location.href = '/pos/orders/#success?'+encodedData;
         },
-        error: handleAjaxError
+        error: function(e){
+            window.location.href = '/pos/orders/#error';
+        }
     });
 }
 
@@ -249,6 +259,7 @@ function printInvoice(){
         },
          success : function(data){
             if(data.orderItems.length == 0){
+
                $.notify("Add order items")
             }
             else{

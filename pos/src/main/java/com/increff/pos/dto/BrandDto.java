@@ -3,6 +3,7 @@ package com.increff.pos.dto;
 import com.increff.pos.dto.helper.HelperDto;
 import com.increff.pos.model.data.BrandData;
 import com.increff.pos.model.data.ErrorData;
+import com.increff.pos.model.data.PaginatedData;
 import com.increff.pos.model.form.BrandForm;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.service.ApiException;
@@ -42,13 +43,15 @@ public class BrandDto {
     }
 
     @Transactional
-    public List<BrandData> getAll() {
-        List<BrandPojo> brandPojoList = brandService.getAll();
+    public PaginatedData getAll(int page, int rowsPerPage) {
+        List<BrandPojo> brandPojoList = brandService.getAll(page,rowsPerPage);
+        Integer totalCount = brandService.getCount();
 
         List<BrandData> brandDataList = brandPojoList.stream()
-                .map(HelperDto::convert)
+                .map(brandPojo -> HelperDto.convert(brandPojo))
                 .collect(Collectors.toList());
-        return brandDataList;
+
+        return new PaginatedData(brandDataList,totalCount);
     }
 
     @Transactional(rollbackOn = ApiException.class)
@@ -69,5 +72,4 @@ public class BrandDto {
             throw new ApiException(errorDataList);
         }
     }
-
 }

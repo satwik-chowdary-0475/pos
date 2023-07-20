@@ -4,16 +4,16 @@
     <Heading>
         <Logo src="/Users/satwikchowdary/Desktop/pos-app/invoice-app/src/main/resources"/>
         <Address>Address</Address>
-        <CustomerName>astel</CustomerName>
-        <InvoicedTime>2023/07/18 15:12:43</InvoicedTime>
-        <OrderCode>421edb8264</OrderCode>
+        <CustomerName>fdsafdasfsadf</CustomerName>
+        <InvoicedTime>2023/07/20 11:33:24</InvoicedTime>
+        <OrderCode>f6e69fe8ff</OrderCode>
     </Heading>
     <OrderItem>
-        <Barcode>bc1</Barcode>
-        <ProductName>uspa checked shirt</ProductName>
-        <Quantity>20</Quantity>
-        <SellingPrice>50.0</SellingPrice>
-        <TotalPrice>1000.0</TotalPrice>
+        <Barcode>a</Barcode>
+        <ProductName>a</ProductName>
+        <Quantity>12</Quantity>
+        <SellingPrice>1223.32</SellingPrice>
+        <TotalPrice>14679.84</TotalPrice>
     </OrderItem>
-    <TotalOrderPrice>1000.0</TotalOrderPrice>
+    <TotalOrderPrice>14679.84</TotalOrderPrice>
 </Order>

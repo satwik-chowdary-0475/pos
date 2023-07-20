@@ -76,7 +76,7 @@ public class ReportDto {
         HashMap<Integer, Integer> brandCategoryMap = new HashMap<>();
 
         for (InventoryPojo inventoryPojo : inventoryPojoList) {
-            ProductPojo productPojo = productService.getProductById(inventoryPojo.getProductId());
+            ProductPojo productPojo = productService.getById(inventoryPojo.getProductId());
             int brandCategoryId = productPojo.getBrandCategoryId();
 
             if (brandCategoryMap.containsKey(brandCategoryId)) {
@@ -101,7 +101,7 @@ public class ReportDto {
                 .stream()
                 .filter(Objects::nonNull)
                 .map(brandPojo -> {
-                    List<ProductPojo> productPojoList = productService.getProductByBrandCategoryId(brandPojo.getId());
+                    List<ProductPojo> productPojoList = productService.getByBrandCategoryId(brandPojo.getId());
                     int quantity = getSalesReportQuantity(productPojoList, productOrderItemMap);
                     double revenue = getSalesReportRevenue(productPojoList, productOrderItemMap);
                     return ReportHelperDto.convert(brandPojo, quantity, revenue);

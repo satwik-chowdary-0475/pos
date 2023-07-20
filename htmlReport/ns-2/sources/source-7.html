@@ -40,32 +40,26 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name">UserDto</td>
 <td class="coverageStat">
   <span class="percent">
-    75%
+    50%
   </span>
   <span class="absValue">
-    (3/4)
+    (2/4)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    22.7%
+    31.2%
   </span>
   <span class="absValue">
-    (5/22)
+    (5/16)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">UserDto$$EnhancerBySpringCGLIB$$22d2e856</td>
+    <td class="name">UserDto$$EnhancerBySpringCGLIB$$b5c769eb</td>
   </tr>
   <tr>
-    <td class="name">UserDto$$EnhancerBySpringCGLIB$$6cf734cf</td>
-  </tr>
-  <tr>
-    <td class="name">UserDto$$EnhancerBySpringCGLIB$$8d4be621</td>
-  </tr>
-  <tr>
-    <td class="name">UserDto$$EnhancerBySpringCGLIB$$8d4be621$$FastClassBySpringCGLIB$$bcb766a2</td>
+    <td class="name">UserDto$$EnhancerBySpringCGLIB$$b5c769eb$$FastClassBySpringCGLIB$$5f2468ff</td>
   </tr>
   <tr>
     <td class="name">UserDto$$FastClassBySpringCGLIB$$dad35e01</td>
@@ -74,18 +68,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    75%
+    50%
   </span>
   <span class="absValue">
-    (3/4)
+    (2/4)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    22.7%
+    31.2%
   </span>
   <span class="absValue">
-    (5/22)
+    (5/16)
   </span>
 </td>
 </tr>
@@ -127,18 +121,20 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public void login(HttpServletRequest request, LoginForm loginForm) throws ApiException {
 <b class="nc">&nbsp;        UserPojo userPojo = userService.getUserByEmail(loginForm.getEmail());</b>
+&nbsp;
 <b class="nc">&nbsp;        boolean authenticated = (Objects.nonNull(userPojo) &amp;&amp; Objects.equals(userPojo.getPassword(), loginForm.getPassword()));</b>
 <b class="nc">&nbsp;        if (!authenticated) {</b>
 <b class="nc">&nbsp;            infoData.setMessage(&quot;Invalid username or password&quot;);</b>
 <b class="nc">&nbsp;            throw new ApiException(&quot;Invalid username or password&quot;);</b>
 &nbsp;        }
+&nbsp;
 <b class="nc">&nbsp;        Authentication authentication = AdminUtil.convert(userPojo);</b>
 <b class="nc">&nbsp;        HttpSession session = request.getSession(true);</b>
 <b class="nc">&nbsp;        SecurityUtil.createContext(session);</b>
 <b class="nc">&nbsp;        SecurityUtil.setAuthentication(authentication);</b>
-<b class="nc">&nbsp;    }</b>
+&nbsp;    }
 &nbsp;
-<b class="nc">&nbsp;    @Transactional(rollbackOn = ApiException.class)</b>
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public ModelAndView logout(HttpServletRequest request) {
 <b class="nc">&nbsp;        request.getSession().invalidate();</b>
 <b class="nc">&nbsp;        return new ModelAndView(&quot;redirect:/&quot;);</b>
@@ -175,7 +171,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

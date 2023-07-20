@@ -43,35 +43,23 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (8/8)
+    (7/7)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    91.9%
+    100%
   </span>
   <span class="absValue">
-    (34/37)
+    (31/31)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$3866e0b5</td>
+    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$cb5b624a</td>
   </tr>
   <tr>
-    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$3866e0b5$$FastClassBySpringCGLIB$$6ea3c306</td>
-  </tr>
-  <tr>
-    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$828b2d2e</td>
-  </tr>
-  <tr>
-    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$828b2d2e$$FastClassBySpringCGLIB$$3e6389ec</td>
-  </tr>
-  <tr>
-    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$a2dfde80</td>
-  </tr>
-  <tr>
-    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$a2dfde80$$FastClassBySpringCGLIB$$2cd811cf</td>
+    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$cb5b624a$$FastClassBySpringCGLIB$$9743bbb8</td>
   </tr>
   <tr>
     <td class="name">InventoryDto$$FastClassBySpringCGLIB$$d857bf16</td>
@@ -83,15 +71,15 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (8/8)
+    (7/7)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    91.9%
+    100%
   </span>
   <span class="absValue">
-    (34/37)
+    (31/31)
   </span>
 </td>
 </tr>
@@ -107,7 +95,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import com.increff.pos.dto.helper.HelperDto;
 &nbsp;import com.increff.pos.model.data.ErrorData;
 &nbsp;import com.increff.pos.model.data.InventoryData;
+&nbsp;import com.increff.pos.model.data.PaginatedData;
 &nbsp;import com.increff.pos.model.form.InventoryForm;
+&nbsp;import com.increff.pos.model.form.InventoryUpdateForm;
 &nbsp;import com.increff.pos.pojo.InventoryPojo;
 &nbsp;import com.increff.pos.pojo.ProductPojo;
 &nbsp;import com.increff.pos.service.ApiException;
@@ -125,7 +115,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import java.util.stream.IntStream;
 &nbsp;
 &nbsp;@Service
-<b class="fc">&nbsp;public class InventoryDto {</b>
+&nbsp;public class InventoryDto {
 &nbsp;    @Autowired
 &nbsp;    private ProductService productService;
 &nbsp;    @Autowired
@@ -133,65 +123,67 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @Autowired
 &nbsp;    private BrandService brandService;
 &nbsp;
-&nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public int insertProductInInventory(InventoryForm inventoryForm) throws ApiException {
-<b class="fc">&nbsp;        ProductPojo productPojo = productService.getProductByBarcode(inventoryForm.getBarcode());</b>
-<b class="fc">&nbsp;        HelperDto.validate(inventoryForm);</b>
-<b class="fc">&nbsp;        InventoryPojo inventoryPojo = HelperDto.convert(inventoryForm, productPojo.getId());</b>
-<b class="fc">&nbsp;        return inventoryService.insertProductInInventory(inventoryPojo);</b>
+<b class="fc">&nbsp;    public InventoryDto() {</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public void updateProductInInventory(int id, InventoryForm inventoryForm) throws ApiException {
-<b class="fc">&nbsp;        ProductPojo productPojo = productService.getProductById(id);</b>
+&nbsp;    public int insert(InventoryForm inventoryForm) throws ApiException {
 <b class="fc">&nbsp;        HelperDto.validate(inventoryForm);</b>
-<b class="fc">&nbsp;        validateProduct(id, inventoryForm.getBarcode());</b>
+<b class="fc">&nbsp;        ProductPojo productPojo = productService.getByBarcode(inventoryForm.getBarcode());</b>
+&nbsp;
 <b class="fc">&nbsp;        InventoryPojo inventoryPojo = HelperDto.convert(inventoryForm, productPojo.getId());</b>
-<b class="fc">&nbsp;        inventoryService.updateProductInInventory(inventoryPojo);</b>
+<b class="fc">&nbsp;        return inventoryService.insert(inventoryPojo);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public InventoryData getProduct(int id) throws ApiException {
-<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(id);</b>
-<b class="fc">&nbsp;        ProductPojo productPojo = productService.getProductById(inventoryPojo.getProductId());</b>
+&nbsp;    public void update(int id, InventoryUpdateForm inventoryUpdateForm) throws ApiException {
+<b class="fc">&nbsp;        HelperDto.validate(inventoryUpdateForm);</b>
+<b class="fc">&nbsp;        ProductPojo productPojo = productService.getById(id);</b>
+&nbsp;
+<b class="fc">&nbsp;        InventoryPojo inventoryPojo = HelperDto.convert(inventoryUpdateForm, productPojo.getId());</b>
+<b class="fc">&nbsp;        inventoryService.update(inventoryPojo, productPojo.getBarcode());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public InventoryData getById(int id) throws ApiException {
+<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryService.getById(id);</b>
+<b class="fc">&nbsp;        ProductPojo productPojo = productService.getById(inventoryPojo.getProductId());</b>
+&nbsp;
 <b class="fc">&nbsp;        return HelperDto.convert(inventoryPojo, productPojo.getBarcode(), productPojo.getName());</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public List&lt;InventoryData&gt; getAllProducts() throws ApiException {
-<b class="fc">&nbsp;        List&lt;InventoryPojo&gt; inventoryPojoList = inventoryService.getAllProductsInInventory();</b>
+&nbsp;    public PaginatedData getAll(int page,int rowsPerPage) throws ApiException {
+<b class="fc">&nbsp;        List&lt;InventoryPojo&gt; inventoryPojoList = inventoryService.getAll(page,rowsPerPage);</b>
+<b class="fc">&nbsp;        Integer totalCount = inventoryService.getCount();</b>
+&nbsp;
 <b class="fc">&nbsp;        List&lt;InventoryData&gt; inventoryDataList = new ArrayList&lt;InventoryData&gt;();</b>
 <b class="fc">&nbsp;        for (InventoryPojo inventoryPojo : inventoryPojoList) {</b>
-<b class="fc">&nbsp;            ProductPojo productPojo = productService.getProductById(inventoryPojo.getProductId());</b>
+<b class="fc">&nbsp;            ProductPojo productPojo = productService.getById(inventoryPojo.getProductId());</b>
 <b class="fc">&nbsp;            inventoryDataList.add(HelperDto.convert(inventoryPojo, productPojo.getBarcode(), productPojo.getName()));</b>
 <b class="fc">&nbsp;        }</b>
-<b class="fc">&nbsp;        return inventoryDataList;</b>
-&nbsp;    }
 &nbsp;
-&nbsp;    private void validateProduct(int id, String barcode) throws ApiException {
-<b class="fc">&nbsp;        ProductPojo productPojo = productService.getProductById(id);</b>
-<b class="fc">&nbsp;        if (!productPojo.getBarcode().equals(barcode)) {</b>
-<b class="fc">&nbsp;            throw new ApiException(&quot;Product id and barcode doesn&#39;t belong to same product!!&quot;);</b>
-&nbsp;        }
+<b class="fc">&nbsp;        return new PaginatedData(inventoryDataList,totalCount);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public void insertInventoryList(List&lt;InventoryForm&gt; inventoryFormList) throws ApiException {
+&nbsp;    public void insertList(List&lt;InventoryForm&gt; inventoryFormList) throws ApiException {
 <b class="fc">&nbsp;        List&lt;ErrorData&gt; errorDataList = IntStream.range(0, inventoryFormList.size())</b>
 <b class="fc">&nbsp;                .mapToObj(row -&gt; {</b>
 <b class="fc">&nbsp;                    InventoryForm inventoryForm = inventoryFormList.get(row);</b>
-<b class="nc">&nbsp;                    try {</b>
-<b class="fc">&nbsp;                        insertProductInInventory(inventoryForm);</b>
+&nbsp;                    try {
+<b class="fc">&nbsp;                        insert(inventoryForm);</b>
 <b class="fc">&nbsp;                        return null;</b>
 <b class="fc">&nbsp;                    } catch (ApiException e) {</b>
 <b class="fc">&nbsp;                        return HelperDto.convert(row + 1, e.getMessage());</b>
-<b class="nc">&nbsp;                    }</b>
+&nbsp;                    }
 &nbsp;                })
 <b class="fc">&nbsp;                .filter(Objects::nonNull)</b>
 <b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;
 <b class="fc">&nbsp;        if (!errorDataList.isEmpty()) {</b>
 <b class="fc">&nbsp;            throw new ApiException(errorDataList);</b>
-<b class="nc">&nbsp;        }</b>
+&nbsp;        }
 &nbsp;    }
 &nbsp;}
 </code>
@@ -217,7 +209,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

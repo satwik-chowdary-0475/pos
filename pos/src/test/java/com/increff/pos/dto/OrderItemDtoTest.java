@@ -49,9 +49,9 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         BrandForm brandForm = Helper.createBrandForm("brand 1", "category 1");
         brandDto.insert(brandForm);
         ProductForm productForm = Helper.createProductForm("barcode 1", "brand 1", "category 1", "product 1", 120.12);
-        productDto.insertProduct(productForm);
+        productDto.insert(productForm);
         ProductForm productForm1 = Helper.createProductForm("barcode 2", "brand 1", "category 1", "product 2", 120.12);
-        productDto.insertProduct(productForm1);
+        productDto.insert(productForm1);
         InventoryForm inventoryForm = Helper.createInventoryForm("barcode 1", 200);
         inventoryDto.insert(inventoryForm);
     }
@@ -64,7 +64,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1", 10, 120.12);
         int id = orderItemDto.insert(orderPojo.getId(), orderItemForm);
         OrderItemPojo orderItemPojo = orderItemService.getById(id);
-        ProductPojo productPojo = productService.getProductByBarcode("barcode 1");
+        ProductPojo productPojo = productService.getByBarcode("barcode 1");
         // Check insert order item
         assertEquals(orderItemPojo.getOrderId(), orderPojo.getId());
         assertEquals(orderItemPojo.getProductId(), productPojo.getId());
@@ -235,7 +235,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderItemUpdateForm updatedOrderItemForm = Helper.createOrderItemUpdateForm(20, 100.23);
         orderItemDto.update(orderPojo.getId(), id, updatedOrderItemForm);
         OrderItemPojo orderItemPojo = orderItemService.getById(id);
-        ProductPojo productPojo = productService.getProductByBarcode("barcode 1");
+        ProductPojo productPojo = productService.getByBarcode("barcode 1");
 
         //Check for order item update
         assertEquals(orderItemPojo.getProductId(), productPojo.getId());
@@ -288,5 +288,35 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         orderItemDto.update(orderPojo.getId(), id + 1, updatedOrderItemForm);
     }
 
+    @Test
+    public void TestUpdateOrderIdsMismatch() throws ApiException{
+        OrderForm orderForm = Helper.createOrderForm("customer 1");
+        OrderForm orderForm1 = Helper.createOrderForm("customer 2");
+        String orderCode = orderDto.insert(orderForm);
+        String orderCode1 = orderDto.insert(orderForm1);
+        OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
+        OrderPojo orderPojo1 = orderService.getByOrderCode(orderCode1);
+        OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1", 10, 120.12);
+        int id = orderItemDto.insert(orderPojo.getId(), orderItemForm);
+        exceptionRule.expect(ApiException.class);
+        exceptionRule.expectMessage("Order id provided does not match the order id associated with the order item");
+        OrderItemUpdateForm updatedOrderItemForm = Helper.createOrderItemUpdateForm(20, 100.23);
+        orderItemDto.update(orderPojo1.getId(),id,updatedOrderItemForm);
+    }
+
+    @Test
+    public void TestDeleteOrderIdsMismatch() throws ApiException{
+        OrderForm orderForm = Helper.createOrderForm("customer 1");
+        OrderForm orderForm1 = Helper.createOrderForm("customer 2");
+        String orderCode = orderDto.insert(orderForm);
+        String orderCode1 = orderDto.insert(orderForm1);
+        OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
+        OrderPojo orderPojo1 = orderService.getByOrderCode(orderCode1);
+        OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1", 10, 120.12);
+        int id = orderItemDto.insert(orderPojo.getId(), orderItemForm);
+        exceptionRule.expect(ApiException.class);
+        exceptionRule.expectMessage("Order id provided does not match the order id associated with the order item");
+        orderItemDto.delete(orderPojo1.getId(),id);
+    }
 
 }

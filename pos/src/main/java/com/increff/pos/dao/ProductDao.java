@@ -14,37 +14,52 @@ public class ProductDao extends AbstractDao {
     private static String SELECT_BY_BARCODE = "select p from ProductPojo p where barcode=:barcode";
     private static String SELECT_ALL = "select p from ProductPojo p";
     private static String SELECT_BY_BRAND_CATEGORY = "select p from ProductPojo p where brandCategoryId=:brandCategoryId";
+    private static String SELECT_ALL_COUNT = "select COUNT(p) from ProductPojo p";
 
     @Transactional
-    public void insertProduct(ProductPojo productPojo) {
+    public void insert(ProductPojo productPojo) {
         em().persist(productPojo);
     }
 
     @Transactional
-    public ProductPojo getProductById(int id) {
+    public ProductPojo getById(int id) {
         TypedQuery<ProductPojo> query = getQuery(SELECT_BY_ID, ProductPojo.class);
         query.setParameter("id", id);
         return getSingle(query);
     }
 
     @Transactional
-    public List<ProductPojo> getProductByBrandCategoryId(int brandCategoryId) {
+    public List<ProductPojo> getByBrandCategoryId(int brandCategoryId) {
         TypedQuery<ProductPojo> query = getQuery(SELECT_BY_BRAND_CATEGORY, ProductPojo.class);
         query.setParameter("brandCategoryId", brandCategoryId);
         return query.getResultList();
     }
 
     @Transactional
-    public ProductPojo getProductByBarcode(String barcode) {
+    public ProductPojo getByBarcode(String barcode) {
         TypedQuery<ProductPojo> query = getQuery(SELECT_BY_BARCODE, ProductPojo.class);
         query.setParameter("barcode", barcode);
         return getSingle(query);
     }
 
     @Transactional
-    public List<ProductPojo> getAllProducts() {
+    public List<ProductPojo> getAll() {
         TypedQuery<ProductPojo> query = getQuery(SELECT_ALL, ProductPojo.class);
         return query.getResultList();
+    }
+
+    @Transactional
+    public List<ProductPojo> getAll(int page,int rowsPerPage){
+        TypedQuery<ProductPojo> query = getQuery(SELECT_ALL, ProductPojo.class);
+        query.setFirstResult((page-1)*rowsPerPage);
+        query.setMaxResults(rowsPerPage);
+        return query.getResultList();
+    }
+
+    @Transactional
+    public Integer getCount(){
+        TypedQuery<Number> query = getQuery(SELECT_ALL_COUNT, Number.class);
+        return query.getSingleResult().intValue();
     }
 
 

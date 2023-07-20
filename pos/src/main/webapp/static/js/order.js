@@ -1,3 +1,7 @@
+const rowsPerPage = 10;
+var totalRows = 0;
+var currentPage = 1;
+
 function getOrderUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/orders";
@@ -15,7 +19,7 @@ function deleteOrder(orderCode){
     	   url: url,
     	   type: 'DELETE',
     	   success: function() {
-    	   		getOrderList();
+    	   		getOrderList(currentPage);
     	   },
     	   error: handleAjaxError
     	});
@@ -40,9 +44,13 @@ function generatePdf(data){
        },
         success : function(data){
             convertBase64ToPDF(data,customerName);
+
             $.notify("PDF for "+customerName+" generated successfully","success");
         },
-        error: handleAjaxError
+        error: function(e){
+
+            $.notify("PDF generation failed",{className:"error",autoHideDelay: 20000});
+        }
     });
 }
 
@@ -73,7 +81,7 @@ function setOrderStatus(data, callback) {
            'Content-Type': 'application/json'
         },
         success: function(data){
-            getOrderList();
+            getOrderList(currentPage);
         },
         error: handleAjaxError
     });
@@ -84,8 +92,9 @@ function setOrderStatus(data, callback) {
 function displayOrderList(data){
     var $tbody = $('#order-table').find('tbody');
     	$tbody.empty();
-    	for(var i in data){
-    		var e = data[i];
+    	totalRows = data.totalCount;
+    	for(var i in data.dataList){
+    		var e = data.dataList[i];
     		var status = e.status;
     		var deleteHtml = (e.status != 'CREATED')?'':'<button class="btn btn-danger" onclick="deleteOrder(\''+e.orderCode+'\')" ';
     		deleteHtml += (e.status != 'CREATED')?'':'<div class="d-flex gap-2 align-items-center"><i class="fas fa-trash" style="font-size: 15px; margin-right: 10px;"></i>Delete</div></button>';
@@ -94,8 +103,9 @@ function displayOrderList(data){
             buttonHtml += (status == 'INVOICED') ? '<button class="btn btn-success" onclick="printInvoice(\'' + e.orderCode + '\')"><div class="d-flex gap-2 align-items-center"><i class="fas fa-print" style="font-size: 15px; margin-right: 10px;"></i> Print Invoice</div></button> &nbsp;' : '';
     		buttonHtml += deleteHtml;
     		i = parseInt(i)+1;
+    		var sno = (currentPage - 1)*rowsPerPage + i;
     		var row = '<tr rowId='+e.id+' >'
-    		+ '<td>' + i + '</td>'
+    		+ '<td>' + sno + '</td>'
     		+ '<td>' + e.customerName + '</td>'
     		+ '<td>' + e.status + '</td>'
     		+ '<td>' + buttonHtml + '</td>'
@@ -103,10 +113,85 @@ function displayOrderList(data){
 
             $tbody.append(row);
     	}
+    	updatePagination();
 }
 
-function getOrderList(){
-    var url = getOrderUrl();
+function updatePagination() {
+    const pagination = $('.pagination');
+    pagination.empty();
+
+    const totalPages = Math.ceil(totalRows / rowsPerPage);
+    const prevDisabled = currentPage === 1 ? 'disabled' : '';
+    const nextDisabled = currentPage === totalPages ? 'disabled' : '';
+
+    let paginationHTML = `
+      <li class="page-item ${prevDisabled}">
+        <a class="page-link" href="#" tabindex="-1" data-page="${currentPage - 1}"><i class="fas fa-angle-double-left" style="font-size: 15px;"></i></a>
+      </li>
+    `;
+
+  let startPage = Math.max(1, currentPage - 1);
+  let endPage = Math.min(totalPages, startPage + 2);
+
+  if (endPage - startPage < 2) {
+    if (startPage === 1) {
+      endPage = Math.min(totalPages, startPage + 2);
+    } else {
+      startPage = Math.max(1, endPage - 2);
+    }
+  }
+  if (startPage > 1) {
+    paginationHTML += `
+      <li class="page-item">
+        <a class="page-link" href="#" data-page="1">1</a>
+      </li>
+    `;
+
+    if (startPage > 2) {
+      paginationHTML += `
+        <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1">...</a>
+        </li>
+      `;
+    }
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    const active = currentPage === i ? 'active' : '';
+    paginationHTML += `
+      <li class="page-item ${active}">
+        <a class="page-link" href="#" data-page="${i}">${i}</a>
+      </li>
+    `;
+  }
+
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) {
+      paginationHTML += `
+        <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1">...</a>
+        </li>
+      `;
+    }
+    paginationHTML += `
+          <li class="page-item">
+            <a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a>
+          </li>
+        `;
+      }
+
+    paginationHTML += `
+      <li class="page-item ${nextDisabled}">
+        <a class="page-link" href="#" data-page="${currentPage + 1}"><i class="fas fa-angle-double-right" style="font-size: 15px;"></i></a>
+      </li>
+    `;
+
+    pagination.html(paginationHTML);
+}
+
+
+function getOrderList(page){
+    var url = getOrderUrl()+"?page="+page+"&rowsPerPage="+rowsPerPage;
 	$.ajax({
 	   url: url,
 	   type: 'GET',
@@ -162,9 +247,34 @@ function resetOrderModal(){
     toggleOrderModal();
 }
 
+function removeHash() {
+    window.location.hash = '';
+}
+
 function init(){
     $('#create-modal-order').click(resetOrderModal);
     $('#create-order').click(createOrder);
+    $('.pagination').on('click', '.page-link', function(e) {
+        e.preventDefault();
+        const targetPage = parseInt($(this).data('page'));
+        if (targetPage >= 1 && targetPage <= Math.ceil(totalRows / rowsPerPage)) {
+          currentPage = targetPage;
+          getOrderList(currentPage);
+        }
+    });
+    if(window.location.hash.includes("#success")){
+        const encodedData = window.location.hash.split('?')[1];
+        const decodedData = decodeURIComponent(encodedData);
+        const data = JSON.parse(decodedData);
+
+        $.notify("PDF for "+data.customerName+" generated successfully","success");
+        removeHash();
+    }
+    else if(window.location.hash.includes("#error")){
+
+         $.notify("PDF generation failed",{className:"error",autoHideDelay: 20000});
+         removeHash();
+    }
 }
 $(document).ready(init);
-$(document).ready(getOrderList);
+$(document).ready(getOrderList(1));

@@ -33,7 +33,7 @@ public class OrderItemDto {
     public int insert(int orderId, OrderItemForm orderItemForm) throws ApiException {
         HelperDto.normalise(orderItemForm);
 
-        ProductPojo productPojo = productService.getProductByBarcode(orderItemForm.getBarcode());
+        ProductPojo productPojo = productService.getByBarcode(orderItemForm.getBarcode());
         OrderPojo orderPojo = orderService.getByOrderId(orderId);
         validateStatus(orderPojo.getStatus());
 
@@ -44,7 +44,6 @@ public class OrderItemDto {
         updateInventory(inventoryPojo, orderItemPojo.getQuantity());
         return orderItemId;
     }
-
     @Transactional(rollbackOn = ApiException.class)
     public List<OrderItemData> getAllByOrderId(int orderId) throws ApiException {
         orderService.getByOrderId(orderId);
@@ -52,7 +51,7 @@ public class OrderItemDto {
 
         List<OrderItemData> orderItemDataList = new ArrayList<OrderItemData>();
         for (OrderItemPojo orderItemPojo : orderItemPojoList) {
-            ProductPojo productPojo = productService.getProductById(orderItemPojo.getProductId());
+            ProductPojo productPojo = productService.getById(orderItemPojo.getProductId());
             orderItemDataList.add(HelperDto.convert(orderItemPojo, productPojo.getBarcode(), productPojo.getName()));
         }
 
@@ -63,7 +62,7 @@ public class OrderItemDto {
     public OrderItemData getById(int orderId, int id) throws ApiException {
         orderService.getByOrderId(orderId);
         OrderItemPojo orderItemPojo = orderItemService.getById(id);
-        ProductPojo productPojo = productService.getProductById(orderItemPojo.getProductId());
+        ProductPojo productPojo = productService.getById(orderItemPojo.getProductId());
         return HelperDto.convert(orderItemPojo, productPojo.getBarcode(), productPojo.getName());
     }
 
@@ -75,7 +74,9 @@ public class OrderItemDto {
         validateStatus(orderPojo.getStatus());
 
         OrderItemPojo existingOrderItemPojo = orderItemService.getById(id);
-        ProductPojo productPojo = productService.getProductById(existingOrderItemPojo.getProductId());
+        validateOrder(orderPojo,existingOrderItemPojo);
+
+        ProductPojo productPojo = productService.getById(existingOrderItemPojo.getProductId());
         OrderItemPojo orderItemPojo = HelperDto.convert(orderItemUpdateForm, orderId);
 
         int requiredQuantity = orderItemPojo.getQuantity();
@@ -92,15 +93,23 @@ public class OrderItemDto {
         validateStatus(orderPojo.getStatus());
 
         OrderItemPojo orderItemPojo = orderItemService.getById(id);
+        validateOrder(orderPojo,orderItemPojo);
+
         InventoryPojo inventoryPojo = inventoryService.getById(orderItemPojo.getProductId());
 
-        orderItemService.delete(orderId, id);
+        orderItemService.delete(id);
         inventoryService.update(inventoryPojo, inventoryPojo.getQuantity() + orderItemPojo.getQuantity());
     }
 
     private void validateStatus(OrderStatus orderStatus) throws ApiException {
         if (orderStatus.equals(OrderStatus.INVOICED)) {
             throw new ApiException("Order cannot be modified");
+        }
+    }
+
+    private void validateOrder(OrderPojo orderPojo,OrderItemPojo orderItemPojo) throws ApiException{
+        if(!orderPojo.getId().equals(orderItemPojo.getOrderId())){
+            throw new ApiException("Order id provided does not match the order id associated with the order item");
         }
     }
 

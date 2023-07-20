@@ -67,7 +67,7 @@ public class HelperDto {
         }
         validateStringField(orderItemForm.getBarcode(), "Barcode");
         validateQuantity(orderItemForm.getQuantity(), true);
-        validateSellingPrice(orderItemForm.getSellingPrice());
+        validateSellingPrice(orderItemForm.getSellingPrice(),true);
     }
 
     public static void validate(OrderItemUpdateForm orderItemUpdateForm) throws ApiException {
@@ -75,7 +75,7 @@ public class HelperDto {
             throw new ApiException("Invalid order item form");
         }
         validateQuantity(orderItemUpdateForm.getQuantity(), true);
-        validateSellingPrice(orderItemUpdateForm.getSellingPrice());
+        validateSellingPrice(orderItemUpdateForm.getSellingPrice(),true);
     }
 
     public static void validate(UserForm userForm) throws ApiException {
@@ -101,8 +101,8 @@ public class HelperDto {
         }
     }
 
-    private static void validateSellingPrice(Double sellingPrice) throws ApiException {
-        if (Objects.isNull(sellingPrice) || sellingPrice <= 0 || sellingPrice > 10000000) {
+    private static void validateSellingPrice(Double sellingPrice, boolean allowZero) throws ApiException {
+        if (Objects.isNull(sellingPrice) || (sellingPrice < 0 && !allowZero) || sellingPrice > 10000000) {
             throw new ApiException("Invalid product selling price.");
         }
     }

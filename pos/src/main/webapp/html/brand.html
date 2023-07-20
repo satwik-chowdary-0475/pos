@@ -26,14 +26,14 @@
                                 <div class="form-group my-3">
                                     <label for="inputBrand" class="col-sm-2 col-form-label required-label">Brand<span class="required-asterisk">*</span></label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="brand" id="inputBrand" placeholder="Enter Brand" required>
+                                        <input type="text" class="form-control" name="brand" id="inputBrand" placeholder="Enter Brand"contenteditable="true" required>
                                         <div class="invalid-feedback">Please enter a brand.</div>
                                     </div>
                                 </div>
                                 <div class="form-group my-3">
                                     <label for="inputCategory" class="col-sm-2 col-form-label required-label">Category<span class="required-asterisk">*</span></label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="category" id="inputCategory" placeholder="Enter Category" required>
+                                        <input type="text" class="form-control" name="category" id="inputCategory" placeholder="Enter Category" contenteditable="true" required>
                                         <div class="invalid-feedback">Please enter a category.</div>
                                     </div>
                                 </div>
@@ -98,7 +98,13 @@
 
                 </tbody>
             </table>
-
+            <div class="d-flex justify-content-end">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <!-- Pagination links will be added dynamically here -->
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
 
@@ -131,6 +137,7 @@
                     </button>
                     <button type="button" class="btn btn-primary" id="process-data" disabled>
                         <div class="d-flex gap-2 align-items-center">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 15px; margin-right: 10px; display: none;"></i>
                             <i class="fas fa-upload" style="font-size: 15px; margin-right: 10px;"></i>
                             Upload
                         </div>
@@ -161,13 +168,13 @@
                         <div class="form-group my-3">
                             <label for="inputBrand" class="col-sm-2 col-form-label required-label">Brand<span class="required-asterisk">*</span></label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="brand" placeholder="Enter Brand" required>
+                                <input type="text" class="form-control" name="brand" placeholder="Enter Brand" contenteditable="true" required>
                             </div>
                         </div>
                         <div class="form-group my-3">
                             <label for="inputCategory" class="col-sm-2 col-form-label required-label">Category<span class="required-asterisk">*</span></label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="category" placeholder="Enter Category" required>
+                                <input type="text" class="form-control" name="category" placeholder="Enter Category" contenteditable="true" required>
                                 <div class="invalid-feedback">Please enter a category.</div>
                             </div>
                         </div>

@@ -51,18 +51,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    71.4%
+    80%
   </span>
   <span class="absValue">
-    (5/7)
+    (8/10)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    73%
+    80.4%
   </span>
   <span class="absValue">
-    (27/37)
+    (37/46)
   </span>
 </td>
 </tr>
@@ -76,10 +76,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.dto.helper;
 &nbsp;
-&nbsp;import com.increff.pos.model.data.DailySalesData;
-&nbsp;import com.increff.pos.model.data.InventoryReportData;
-&nbsp;import com.increff.pos.model.data.ReportData;
-&nbsp;import com.increff.pos.model.data.SalesData;
+&nbsp;import com.increff.pos.model.data.*;
 &nbsp;import com.increff.pos.model.form.SalesForm;
 &nbsp;import com.increff.pos.pojo.BrandPojo;
 &nbsp;import com.increff.pos.pojo.DailySalesReportPojo;
@@ -88,11 +85,19 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import com.increff.pos.util.StringUtil;
 &nbsp;import javafx.util.Pair;
 &nbsp;
+&nbsp;import java.time.LocalDate;
 &nbsp;import java.time.ZonedDateTime;
 &nbsp;import java.time.format.DateTimeFormatter;
 &nbsp;import java.util.*;
 &nbsp;
 <b class="nc">&nbsp;public class ReportHelperDto {</b>
+&nbsp;
+&nbsp;    public static BrandReportData convert(BrandPojo brandPojo) {
+<b class="fc">&nbsp;        BrandReportData brandReportData = new BrandReportData();</b>
+<b class="fc">&nbsp;        brandReportData.setBrand(brandPojo.getBrand());</b>
+<b class="fc">&nbsp;        brandReportData.setCategory(brandPojo.getCategory());</b>
+<b class="fc">&nbsp;        return brandReportData;</b>
+&nbsp;    }
 &nbsp;
 &nbsp;    public static InventoryReportData convert(String brand, String category, Integer quantity) {
 <b class="fc">&nbsp;        InventoryReportData inventoryReportData = new InventoryReportData();</b>
@@ -122,29 +127,39 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return salesData;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public static ReportData convert(Integer quantity, Double revenue){
+&nbsp;    public static ReportData convert(Integer quantity, Double revenue) {
 <b class="nc">&nbsp;        ReportData reportData = new ReportData();</b>
 <b class="nc">&nbsp;        reportData.setRevenue(revenue);</b>
 <b class="nc">&nbsp;        reportData.setQuantity(quantity);</b>
-<b class="nc">&nbsp;        return  reportData;</b>
+<b class="nc">&nbsp;        return reportData;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public static void validate(SalesForm salesForm) throws ApiException {
 <b class="fc">&nbsp;        if (Objects.isNull(salesForm)) {</b>
 <b class="nc">&nbsp;            throw new ApiException(&quot;Invalid sales form details&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if(Objects.isNull(salesForm.getStartTime()) || salesForm.getStartTime().length() == 0){</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid start time&quot;);</b>
+<b class="fc">&nbsp;        validateStringField(salesForm.getStartTime(), &quot;Start date&quot;);</b>
+<b class="fc">&nbsp;        validateStringField(salesForm.getEndTime(), &quot;End date&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        validateDates(salesForm.getStartTime(), salesForm.getEndTime());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void validateStringField(String field, String fieldName) throws ApiException {
+<b class="fc">&nbsp;        if (Objects.isNull(field) || field.trim().isEmpty()) {</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid &quot; + fieldName.toLowerCase() + &quot;. &quot; + fieldName + &quot; is required.&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if(Objects.isNull(salesForm.getEndTime()) || salesForm.getEndTime().length() == 0){</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid end time&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static void validateDates(String startDateString, String endDateString) throws ApiException {
+<b class="fc">&nbsp;        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd&quot;);</b>
+<b class="fc">&nbsp;        LocalDate startDate = LocalDate.parse(startDateString, formatter);</b>
+<b class="fc">&nbsp;        LocalDate endDate = LocalDate.parse(endDateString, formatter);</b>
+<b class="fc">&nbsp;        LocalDate currentDate = LocalDate.now();</b>
+<b class="fc">&nbsp;        if (startDate.isAfter(endDate)) {</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Start date cannot be greater than end date&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        if(Objects.isNull(salesForm.getBrand()))</b>
-&nbsp;        {
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid brand name&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        if (Objects.isNull(salesForm.getCategory())) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Invalid category name&quot;);</b>
+<b class="fc">&nbsp;        if (startDate.isAfter(currentDate) || endDate.isAfter(currentDate)) {</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Start date and end date cannot be greater than current date&quot;);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
@@ -153,6 +168,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        salesForm.setCategory(StringUtil.toLowerCase(salesForm.getCategory()));</b>
 <b class="fc">&nbsp;        ReportHelperDto.validate(salesForm);</b>
 &nbsp;    }
+&nbsp;
 &nbsp;}
 </code>
 </pre>
@@ -177,7 +193,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

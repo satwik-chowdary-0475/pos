@@ -43,7 +43,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (5/5)
+    (7/7)
   </span>
 </td>
 <td class="coverageStat">
@@ -51,15 +51,15 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (9/9)
+    (16/16)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">InventoryDao$$EnhancerBySpringCGLIB$$bf5cfb20</td>
+    <td class="name">InventoryDao$$EnhancerBySpringCGLIB$$e7d87eea</td>
   </tr>
   <tr>
-    <td class="name">InventoryDao$$EnhancerBySpringCGLIB$$bf5cfb20$$FastClassBySpringCGLIB$$16ffda0f</td>
+    <td class="name">InventoryDao$$EnhancerBySpringCGLIB$$e7d87eea$$FastClassBySpringCGLIB$$e61f0673</td>
   </tr>
   <tr>
     <td class="name">InventoryDao$$FastClassBySpringCGLIB$$2d0ed9f6</td>
@@ -71,7 +71,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (5/5)
+    (7/7)
   </span>
 </td>
 <td class="coverageStat">
@@ -79,7 +79,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (9/9)
+    (16/16)
   </span>
 </td>
 </tr>
@@ -104,24 +104,40 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;public class InventoryDao extends AbstractDao {</b>
 <b class="fc">&nbsp;    private static String SELECT_BY_ID = &quot;select p from InventoryPojo p where id=:id&quot;;</b>
 <b class="fc">&nbsp;    private static String SELECT_ALL = &quot;select p from InventoryPojo p&quot;;</b>
+<b class="fc">&nbsp;    private static String SELECT_ALL_COUNT = &quot;select COUNT(p) from InventoryPojo p&quot;;</b>
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public void insertProductInInventory(InventoryPojo inventoryPojo) {
+&nbsp;    public void insert(InventoryPojo inventoryPojo) {
 <b class="fc">&nbsp;        em().persist(inventoryPojo);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public InventoryPojo getProductInventoryById(int id) {
+&nbsp;    public InventoryPojo getById(int id) {
 <b class="fc">&nbsp;        TypedQuery&lt;InventoryPojo&gt; query = getQuery(SELECT_BY_ID, InventoryPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;id&quot;, id);</b>
 <b class="fc">&nbsp;        return getSingle(query);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public List&lt;InventoryPojo&gt; getAllProductsInInventory() {
+&nbsp;    public List&lt;InventoryPojo&gt; getAll() {
 <b class="fc">&nbsp;        TypedQuery&lt;InventoryPojo&gt; query = getQuery(SELECT_ALL, InventoryPojo.class);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public List&lt;InventoryPojo&gt; getAll(int page, int rowsPerPage) {
+<b class="fc">&nbsp;        TypedQuery&lt;InventoryPojo&gt; query = getQuery(SELECT_ALL, InventoryPojo.class);</b>
+<b class="fc">&nbsp;        query.setFirstResult((page-1)*rowsPerPage);</b>
+<b class="fc">&nbsp;        query.setMaxResults(rowsPerPage);</b>
+<b class="fc">&nbsp;        return query.getResultList();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public Integer getCount(){
+<b class="fc">&nbsp;        TypedQuery&lt;Number&gt; query = getQuery(SELECT_ALL_COUNT, Number.class);</b>
+<b class="fc">&nbsp;        return query.getSingleResult().intValue();</b>
+&nbsp;    }
+&nbsp;
 &nbsp;}
 </code>
 </pre>
@@ -146,7 +162,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

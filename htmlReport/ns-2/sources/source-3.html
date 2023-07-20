@@ -51,27 +51,15 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (31/31)
+    (32/32)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">OrderDto$$EnhancerBySpringCGLIB$$6a60d45f</td>
+    <td class="name">OrderDto$$EnhancerBySpringCGLIB$$fd5555f4</td>
   </tr>
   <tr>
-    <td class="name">OrderDto$$EnhancerBySpringCGLIB$$6a60d45f$$FastClassBySpringCGLIB$$a1cccadb</td>
-  </tr>
-  <tr>
-    <td class="name">OrderDto$$EnhancerBySpringCGLIB$$b48520d8</td>
-  </tr>
-  <tr>
-    <td class="name">OrderDto$$EnhancerBySpringCGLIB$$b48520d8$$FastClassBySpringCGLIB$$33a17976</td>
-  </tr>
-  <tr>
-    <td class="name">OrderDto$$EnhancerBySpringCGLIB$$d4d9d22a</td>
-  </tr>
-  <tr>
-    <td class="name">OrderDto$$EnhancerBySpringCGLIB$$d4d9d22a$$FastClassBySpringCGLIB$$4ec828b7</td>
+    <td class="name">OrderDto$$EnhancerBySpringCGLIB$$fd5555f4$$FastClassBySpringCGLIB$$b9342f61</td>
   </tr>
   <tr>
     <td class="name">OrderDto$$FastClassBySpringCGLIB$$d9134564</td>
@@ -91,7 +79,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (31/31)
+    (32/32)
   </span>
 </td>
 </tr>
@@ -108,6 +96,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import com.increff.pos.model.data.OrderData;
 &nbsp;import com.increff.pos.model.data.OrderDetailsData;
 &nbsp;import com.increff.pos.model.data.OrderItemData;
+&nbsp;import com.increff.pos.model.data.PaginatedData;
 &nbsp;import com.increff.pos.model.form.OrderForm;
 &nbsp;import com.increff.pos.pojo.InventoryPojo;
 &nbsp;import com.increff.pos.pojo.OrderItemPojo;
@@ -117,6 +106,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import com.increff.pos.pojo.OrderStatus;
 &nbsp;import lombok.extern.log4j.Log4j;
 &nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.security.access.method.P;
 &nbsp;import org.springframework.stereotype.Service;
 &nbsp;
 &nbsp;import javax.transaction.Transactional;
@@ -137,35 +127,38 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    private ProductService productService;
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public String createOrder(OrderForm orderForm) throws ApiException {
+&nbsp;    public String insert(OrderForm orderForm) throws ApiException {
 <b class="fc">&nbsp;        HelperDto.normalise(orderForm);</b>
 <b class="fc">&nbsp;        OrderPojo orderPojo = HelperDto.convert(orderForm);</b>
-<b class="fc">&nbsp;        orderService.createOrder(orderPojo);</b>
+<b class="fc">&nbsp;        orderService.insert(orderPojo);</b>
 <b class="fc">&nbsp;        return orderPojo.getOrderCode();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public List&lt;OrderData&gt; getAllOrders() {
-<b class="fc">&nbsp;        List&lt;OrderPojo&gt; orderPojoList = orderService.getAllOrders();</b>
+&nbsp;    public PaginatedData getAll(int page, int rowsPerPage) {
+<b class="fc">&nbsp;        List&lt;OrderPojo&gt; orderPojoList = orderService.getAll(page,rowsPerPage);</b>
+<b class="fc">&nbsp;        Integer totalCount = orderService.getCount();</b>
+&nbsp;
 <b class="fc">&nbsp;        List&lt;OrderData&gt; orderDataList = orderPojoList.stream()</b>
 <b class="fc">&nbsp;                .map(HelperDto::convert)</b>
 <b class="fc">&nbsp;                .collect(Collectors.toList());</b>
-<b class="fc">&nbsp;        return orderDataList;</b>
+<b class="fc">&nbsp;        return new PaginatedData(orderDataList,totalCount);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public void deleteOrder(String orderCode) throws ApiException {
-<b class="fc">&nbsp;        Integer orderId = orderService.deleteOrder(orderCode);</b>
-<b class="fc">&nbsp;        List&lt;OrderItemPojo&gt; orderItemPojoList = orderItemService.getAllOrderItems(orderId);</b>
+&nbsp;    public void delete(String orderCode) throws ApiException {
+<b class="fc">&nbsp;        Integer orderId = orderService.delete(orderCode);</b>
+&nbsp;
+<b class="fc">&nbsp;        List&lt;OrderItemPojo&gt; orderItemPojoList = orderItemService.getAllByOrderId(orderId);</b>
 <b class="fc">&nbsp;        for (OrderItemPojo orderItemPojo : orderItemPojoList) {</b>
-<b class="fc">&nbsp;            updateProductInInventory(orderItemPojo);</b>
+<b class="fc">&nbsp;            updateInventory(orderItemPojo);</b>
 <b class="fc">&nbsp;        }</b>
-<b class="fc">&nbsp;        orderItemService.deleteOrderItemsByOrder(orderId);</b>
+<b class="fc">&nbsp;        orderItemService.deleteByOrderId(orderId);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public void changeOrderStatus(String orderCode) throws ApiException {
-<b class="fc">&nbsp;        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);</b>
+&nbsp;    public void changeStatus(String orderCode) throws ApiException {
+<b class="fc">&nbsp;        OrderPojo orderPojo = orderService.getByOrderCode(orderCode);</b>
 <b class="fc">&nbsp;        if (orderPojo.getStatus().equals(OrderStatus.CREATED)) {</b>
 <b class="fc">&nbsp;            orderService.changeStatus(orderCode,OrderStatus.INVOICED);</b>
 &nbsp;        }
@@ -173,20 +166,23 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public OrderDetailsData getAllOrderDetails(String orderCode) throws ApiException {
-<b class="fc">&nbsp;        OrderPojo orderPojo = orderService.getOrderByOrderCode(orderCode);</b>
-<b class="fc">&nbsp;        List&lt;OrderItemPojo&gt; orderItemPojoList = orderItemService.getAllOrderItems(orderPojo.getId());</b>
+<b class="fc">&nbsp;        OrderPojo orderPojo = orderService.getByOrderCode(orderCode);</b>
+<b class="fc">&nbsp;        List&lt;OrderItemPojo&gt; orderItemPojoList = orderItemService.getAllByOrderId(orderPojo.getId());</b>
+&nbsp;
 <b class="fc">&nbsp;        List&lt;OrderItemData&gt; orderItemDataList = new ArrayList&lt;OrderItemData&gt;();</b>
 <b class="fc">&nbsp;        for (OrderItemPojo orderItemPojo : orderItemPojoList) {</b>
-<b class="fc">&nbsp;            ProductPojo productPojo = productService.getProductById(orderItemPojo.getProductId());</b>
+<b class="fc">&nbsp;            ProductPojo productPojo = productService.getById(orderItemPojo.getProductId());</b>
 <b class="fc">&nbsp;            orderItemDataList.add(HelperDto.convert(orderItemPojo, productPojo.getBarcode(), productPojo.getName()));</b>
 <b class="fc">&nbsp;        }</b>
+&nbsp;
 <b class="fc">&nbsp;        return HelperDto.convert(orderPojo, orderItemDataList);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    private void updateProductInInventory(OrderItemPojo orderItemPojo) throws ApiException {
-<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId());</b>
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    private void updateInventory(OrderItemPojo orderItemPojo) throws ApiException {
+<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryService.getById(orderItemPojo.getProductId());</b>
 <b class="fc">&nbsp;        int updatedQuantity = inventoryPojo.getQuantity() + orderItemPojo.getQuantity();</b>
-<b class="fc">&nbsp;        inventoryService.updateProductInInventory(inventoryPojo, updatedQuantity);</b>
+<b class="fc">&nbsp;        inventoryService.update(inventoryPojo, updatedQuantity);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;}
@@ -213,7 +209,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

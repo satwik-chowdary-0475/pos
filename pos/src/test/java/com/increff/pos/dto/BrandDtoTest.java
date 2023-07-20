@@ -3,11 +3,13 @@ package com.increff.pos.dto;
 import com.increff.pos.Helper;
 import com.increff.pos.model.data.BrandData;
 import com.increff.pos.model.data.ErrorData;
+import com.increff.pos.model.data.PaginatedData;
 import com.increff.pos.model.form.BrandForm;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.service.BrandService;
 import com.increff.pos.spring.AbstractUnitTest;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -117,13 +119,13 @@ public class BrandDtoTest extends AbstractUnitTest {
         BrandForm brandForm1 = Helper.createBrandForm("brand 2","category 2");
         int id1 = brandDto.insert(brandForm1);
         actualBrandDataList.add(Helper.createBrandData(id1,"brand 2","category 2"));
-        List<BrandData>expectedDataList = brandDto.getAll();
-        assertEquals(expectedDataList.size(), actualBrandDataList.size());
+        PaginatedData actualPaginatedData = new PaginatedData(actualBrandDataList, brandService.getCount());
+        PaginatedData expectedPaginatedData = brandDto.getAll(1,10);
+        assertEquals(expectedPaginatedData.getDataList().size(),actualPaginatedData.getDataList().size());
     }
 
     @Test
     public void testBulkInsert() throws ApiException{
-        List<BrandData> actualBrandDataList = new ArrayList<>();
         List<BrandForm>brandFormList = new ArrayList<>();
         brandFormList.add(Helper.createBrandForm("brand 1","category 1"));
         brandFormList.add(Helper.createBrandForm("brand 2","category 2"));

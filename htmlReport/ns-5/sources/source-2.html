@@ -62,7 +62,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/14)
+    (0/8)
   </span>
 </td>
 </tr>
@@ -80,6 +80,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl;
 &nbsp;import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 &nbsp;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
 <b class="nc">&nbsp;public class CustomPhysicalNamingStrategy extends PhysicalNamingStrategyStandardImpl {</b>
 &nbsp;
 &nbsp;    @Override
@@ -92,20 +95,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    private String convertCamelToSnakeCase(String camelCaseName) {
-<b class="nc">&nbsp;        StringBuilder snakeCaseName = new StringBuilder();</b>
-<b class="nc">&nbsp;        for (int i = 0; i &lt; camelCaseName.length(); i++) {</b>
-<b class="nc">&nbsp;            char currentChar = camelCaseName.charAt(i);</b>
-<b class="nc">&nbsp;            if (Character.isUpperCase(currentChar)) {</b>
-<b class="nc">&nbsp;                if (i &gt; 0) {</b>
-<b class="nc">&nbsp;                    snakeCaseName.append(&quot;_&quot;);</b>
-&nbsp;                }
-<b class="nc">&nbsp;                snakeCaseName.append(Character.toLowerCase(currentChar));</b>
-&nbsp;            } else {
-<b class="nc">&nbsp;                snakeCaseName.append(currentChar);</b>
-&nbsp;            }
-&nbsp;        }
-<b class="nc">&nbsp;        return snakeCaseName.toString();</b>
+<b class="nc">&nbsp;        return Arrays.stream(camelCaseName.split(&quot;(?=[A-Z])&quot;))</b>
+<b class="nc">&nbsp;                .map(String::toLowerCase)</b>
+<b class="nc">&nbsp;                .collect(Collectors.joining(&quot;_&quot;));</b>
 &nbsp;    }
+&nbsp;
 &nbsp;}
 </code>
 </pre>
@@ -130,7 +124,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

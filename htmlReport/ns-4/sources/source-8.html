@@ -56,10 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">UserService$$EnhancerBySpringCGLIB$$dbd2b6a5</td>
+    <td class="name">UserService$$EnhancerBySpringCGLIB$$44e3a6f</td>
   </tr>
   <tr>
-    <td class="name">UserService$$EnhancerBySpringCGLIB$$dbd2b6a5$$FastClassBySpringCGLIB$$56b34880</td>
+    <td class="name">UserService$$EnhancerBySpringCGLIB$$44e3a6f$$FastClassBySpringCGLIB$$4d5181b7</td>
   </tr>
   <tr>
     <td class="name">UserService$$FastClassBySpringCGLIB$$14617fad</td>
@@ -109,19 +109,20 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public void insertUser(UserPojo userPojo) throws ApiException {
 <b class="fc">&nbsp;        UserPojo existingUserPojo = userDao.getUserByEmail(userPojo.getEmail());</b>
-<b class="fc">&nbsp;        if(Objects.nonNull(existingUserPojo)){</b>
+<b class="fc">&nbsp;        if (Objects.nonNull(existingUserPojo)) {</b>
 <b class="nc">&nbsp;            throw new ApiException(&quot;Email already exists&quot;);</b>
 &nbsp;        }
+&nbsp;
 <b class="fc">&nbsp;        userDao.insertUser(userPojo);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public UserPojo getUserByEmail(String email){
+&nbsp;    public UserPojo getUserByEmail(String email) {
 <b class="nc">&nbsp;        return userDao.getUserByEmail(email);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public List&lt;UserPojo&gt; getAllUsers(){
+&nbsp;    public List&lt;UserPojo&gt; getAllUsers() {
 <b class="fc">&nbsp;        return userDao.getAllUsers();</b>
 &nbsp;    }
 &nbsp;
@@ -149,7 +150,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

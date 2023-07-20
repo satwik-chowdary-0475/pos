@@ -48,18 +48,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    94.3%
+    91.7%
   </span>
   <span class="absValue">
-    (33/35)
+    (33/36)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">OrderItemService$$EnhancerBySpringCGLIB$$d5a849d1</td>
+    <td class="name">OrderItemService$$EnhancerBySpringCGLIB$$fe23cd9b</td>
   </tr>
   <tr>
-    <td class="name">OrderItemService$$EnhancerBySpringCGLIB$$d5a849d1$$FastClassBySpringCGLIB$$a1b0b962</td>
+    <td class="name">OrderItemService$$EnhancerBySpringCGLIB$$fe23cd9b$$FastClassBySpringCGLIB$$c39ee72</td>
   </tr>
   <tr>
     <td class="name">OrderItemService$$FastClassBySpringCGLIB$$ca463691</td>
@@ -76,10 +76,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    94.3%
+    91.7%
   </span>
   <span class="absValue">
-    (33/35)
+    (33/36)
   </span>
 </td>
 </tr>
@@ -104,6 +104,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import java.util.ArrayList;
 &nbsp;import java.util.List;
 &nbsp;import java.util.Objects;
+&nbsp;import java.util.stream.Collectors;
 &nbsp;
 &nbsp;@Service
 <b class="fc">&nbsp;@Log4j</b>
@@ -115,83 +116,82 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    private InventoryService inventoryService;
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public int insertOrderItem(OrderItemPojo orderItemPojo, InventoryPojo inventoryPojo) throws ApiException {
+&nbsp;    public int insert(OrderItemPojo orderItemPojo, InventoryPojo inventoryPojo, String barcode) throws ApiException {
 <b class="fc">&nbsp;        int requiredQuantity = orderItemPojo.getQuantity();</b>
 <b class="fc">&nbsp;        int inventoryQuantity = inventoryPojo.getQuantity();</b>
-<b class="fc">&nbsp;        checkInventory(requiredQuantity, inventoryQuantity,inventoryPojo.getProductId());</b>
-<b class="fc">&nbsp;        OrderItemPojo existingOrderItemPojo = orderItemDao.getOrderItemByProductId(orderItemPojo.getOrderId(), orderItemPojo.getProductId());</b>
+<b class="fc">&nbsp;        checkInventory(requiredQuantity, inventoryQuantity, barcode);</b>
+&nbsp;
+<b class="fc">&nbsp;        OrderItemPojo existingOrderItemPojo = orderItemDao.getByProductId(orderItemPojo.getOrderId(), orderItemPojo.getProductId());</b>
 <b class="fc">&nbsp;        if (Objects.nonNull(existingOrderItemPojo)) {</b>
-<b class="fc">&nbsp;            return insertExistingOrderItem(existingOrderItemPojo, orderItemPojo);</b>
-&nbsp;        } else {
-<b class="fc">&nbsp;            return insertNewOrderItem(orderItemPojo);</b>
+<b class="fc">&nbsp;            return update(existingOrderItemPojo, orderItemPojo);</b>
 &nbsp;        }
-&nbsp;    }
-&nbsp;
-&nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public OrderItemPojo getOrderItemById(int id) throws ApiException {
-<b class="fc">&nbsp;        OrderItemPojo orderItemPojo = orderItemDao.getOrderItemById(id);</b>
-<b class="fc">&nbsp;        if (Objects.isNull(orderItemPojo)) {</b>
-<b class="fc">&nbsp;            throw new ApiException(&quot;Order item doesn&#39;t exist!!&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        return orderItemPojo;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;
-&nbsp;    @Transactional
-&nbsp;    public List&lt;OrderItemPojo&gt; getAllOrderItems(int orderId) {
-<b class="fc">&nbsp;        return orderItemDao.getAllOrderItems(orderId);</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public void updateOrderItem(int id, OrderItemPojo updatedOrderItemPojo, InventoryPojo inventoryPojo) throws ApiException {
-<b class="fc">&nbsp;        OrderItemPojo existingOrderItemPojo = orderItemDao.getOrderItemById(id);</b>
-<b class="fc">&nbsp;        int requiredQuantity = updatedOrderItemPojo.getQuantity();</b>
-<b class="fc">&nbsp;        int inventoryQuantity = inventoryPojo.getQuantity() + existingOrderItemPojo.getQuantity();</b>
-<b class="fc">&nbsp;        checkInventory(requiredQuantity, inventoryQuantity,inventoryPojo.getProductId());</b>
-<b class="fc">&nbsp;        existingOrderItemPojo.setQuantity(requiredQuantity);</b>
-<b class="fc">&nbsp;        existingOrderItemPojo.setSellingPrice(updatedOrderItemPojo.getSellingPrice());</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public void deleteOrderItem(int id) throws ApiException {
-<b class="fc">&nbsp;        OrderItemPojo orderItemPojo = orderItemDao.getOrderItemById(id);</b>
-<b class="fc">&nbsp;        if (Objects.isNull(orderItemPojo)) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Order item doesn&#39;t exist!!&quot;);</b>
-&nbsp;        }
-<b class="fc">&nbsp;        orderItemDao.deleteOrderItem(id);</b>
+<b class="fc">&nbsp;        return insert(orderItemPojo);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public void deleteOrderItemsByOrder(int orderId) {
-<b class="fc">&nbsp;        orderItemDao.deleteAllOrderItems(orderId);</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    @Transactional
-&nbsp;    private void checkInventory(int requiredQuantity, int inventoryQuantity, int productId) throws ApiException {
-<b class="fc">&nbsp;        if (requiredQuantity &gt; inventoryQuantity) {</b>
-<b class="fc">&nbsp;            throw new ApiException(&quot;Insufficient inventory for the product!!&quot;);</b>
-&nbsp;        }
-&nbsp;    }
-&nbsp;
-&nbsp;    @Transactional
-&nbsp;    private Integer insertNewOrderItem(OrderItemPojo orderItemPojo) {
-<b class="fc">&nbsp;        orderItemDao.insertOrderItem(orderItemPojo);</b>
+&nbsp;    private Integer insert(OrderItemPojo orderItemPojo) {
+<b class="fc">&nbsp;        orderItemDao.insert(orderItemPojo);</b>
 <b class="fc">&nbsp;        return orderItemPojo.getId();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
-&nbsp;    private Integer insertExistingOrderItem(OrderItemPojo existingOrderItemPojo, OrderItemPojo orderItemPojo) {
+&nbsp;    private Integer update(OrderItemPojo existingOrderItemPojo, OrderItemPojo orderItemPojo) {
 <b class="fc">&nbsp;        existingOrderItemPojo.setSellingPrice(orderItemPojo.getSellingPrice());</b>
 <b class="fc">&nbsp;        existingOrderItemPojo.setQuantity(orderItemPojo.getQuantity() + existingOrderItemPojo.getQuantity());</b>
 <b class="fc">&nbsp;        return existingOrderItemPojo.getId();</b>
 &nbsp;    }
 &nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public OrderItemPojo getById(int id) throws ApiException {
+<b class="fc">&nbsp;        OrderItemPojo orderItemPojo = orderItemDao.getById(id);</b>
+<b class="fc">&nbsp;        if (Objects.isNull(orderItemPojo)) {</b>
+<b class="fc">&nbsp;            throw new ApiException(&quot;Order item doesn&#39;t exist&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return orderItemPojo;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public List&lt;OrderItemPojo&gt; getAllByOrderId(int orderId) {
+<b class="fc">&nbsp;        return orderItemDao.getAllByOrderId(orderId);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public void update(int id, OrderItemPojo updatedOrderItemPojo, InventoryPojo inventoryPojo, String barcode) throws ApiException {
+<b class="fc">&nbsp;        OrderItemPojo existingOrderItemPojo = orderItemDao.getById(id);</b>
+<b class="fc">&nbsp;        int requiredQuantity = updatedOrderItemPojo.getQuantity();</b>
+<b class="fc">&nbsp;        int inventoryQuantity = inventoryPojo.getQuantity() + existingOrderItemPojo.getQuantity();</b>
+<b class="fc">&nbsp;        checkInventory(requiredQuantity, inventoryQuantity, barcode);</b>
+&nbsp;
+<b class="fc">&nbsp;        existingOrderItemPojo.setQuantity(requiredQuantity);</b>
+<b class="fc">&nbsp;        existingOrderItemPojo.setSellingPrice(updatedOrderItemPojo.getSellingPrice());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public void delete(int orderId, int id) throws ApiException {
+<b class="fc">&nbsp;        OrderItemPojo orderItemPojo = orderItemDao.getById(id);</b>
+<b class="fc">&nbsp;        if (Objects.isNull(orderItemPojo)) {</b>
+<b class="nc">&nbsp;            throw new ApiException(&quot;Order item doesn&#39;t exist&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        orderItemDao.delete(orderId, id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public void deleteByOrderId(int orderId) {
+<b class="fc">&nbsp;        orderItemDao.deleteByOrderId(orderId);</b>
+&nbsp;    }
+&nbsp;
 &nbsp;    @Transactional
 &nbsp;    public List&lt;OrderItemPojo&gt; getAllOrderItemsByOrderList(List&lt;OrderPojo&gt; orderPojoList) {
-<b class="fc">&nbsp;        if(!orderPojoList.isEmpty()) {</b>
-<b class="nc">&nbsp;            return orderItemDao.getAllOrderItemsByOrderList(orderPojoList);</b>
+<b class="fc">&nbsp;        if (!orderPojoList.isEmpty()) {</b>
+<b class="nc">&nbsp;            List&lt;Integer&gt; orderIdsList = orderPojoList.stream().map(OrderPojo::getId).collect(Collectors.toList());</b>
+<b class="nc">&nbsp;            return orderItemDao.getAllByOrderList(orderIdsList);</b>
 &nbsp;        }
 <b class="fc">&nbsp;        return new ArrayList&lt;&gt;();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void checkInventory(int requiredQuantity, int inventoryQuantity, String barcode) throws ApiException {
+<b class="fc">&nbsp;        if (requiredQuantity &gt; inventoryQuantity) {</b>
+<b class="fc">&nbsp;            throw new ApiException(&quot;Insufficient inventory for the product with barcode &quot; + barcode);</b>
+&nbsp;        }
 &nbsp;    }
 &nbsp;}
 </code>
@@ -217,7 +217,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

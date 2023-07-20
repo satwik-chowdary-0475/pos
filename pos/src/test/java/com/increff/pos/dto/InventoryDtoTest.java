@@ -3,6 +3,7 @@ package com.increff.pos.dto;
 import com.increff.pos.Helper;
 import com.increff.pos.model.data.ErrorData;
 import com.increff.pos.model.data.InventoryData;
+import com.increff.pos.model.data.PaginatedData;
 import com.increff.pos.model.form.BrandForm;
 import com.increff.pos.model.form.InventoryForm;
 import com.increff.pos.model.form.InventoryUpdateForm;
@@ -13,10 +14,12 @@ import com.increff.pos.service.InventoryService;
 import com.increff.pos.service.ProductService;
 import com.increff.pos.spring.AbstractUnitTest;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +48,9 @@ public class InventoryDtoTest extends AbstractUnitTest {
         BrandForm brandForm = Helper.createBrandForm("brand 1","category 1");
         brandDto.insert(brandForm);
         ProductForm productForm = Helper.createProductForm("barcode 1","brand 1","category 1","product 1",120.12);
-        productDto.insertProduct(productForm);
+        productDto.insert(productForm);
         ProductForm productForm1 = Helper.createProductForm("barcode 3","brand 1","category 1","product 3",120.12);
-        productDto.insertProduct(productForm1);
+        productDto.insert(productForm1);
 
     }
 
@@ -128,8 +131,9 @@ public class InventoryDtoTest extends AbstractUnitTest {
         InventoryForm inventoryForm1 = Helper.createInventoryForm("barcode 3",100);
         int id1 = inventoryDto.insert(inventoryForm1);
         actualInventoryData.add(Helper.createInventoryData(id1,"product 3","barcode 3",100));
-        List<InventoryData>expectedInventoryData = inventoryDto.getAll();
-        assertEquals(actualInventoryData.size(),expectedInventoryData.size());
+        PaginatedData actualPaginatedData = new PaginatedData(actualInventoryData,inventoryService.getCount());
+        PaginatedData expectedPaginatedData = inventoryDto.getAll(1,10);
+        assertEquals(actualPaginatedData.getDataList().size(),expectedPaginatedData.getDataList().size());
     }
 
     @Test

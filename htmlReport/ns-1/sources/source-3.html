@@ -56,10 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">DailySalesReportDao$$EnhancerBySpringCGLIB$$4a36bdf</td>
+    <td class="name">DailySalesReportDao$$EnhancerBySpringCGLIB$$2d1eefa9</td>
   </tr>
   <tr>
-    <td class="name">DailySalesReportDao$$EnhancerBySpringCGLIB$$4a36bdf$$FastClassBySpringCGLIB$$377bf466</td>
+    <td class="name">DailySalesReportDao$$EnhancerBySpringCGLIB$$2d1eefa9$$FastClassBySpringCGLIB$$8620f40d</td>
   </tr>
   <tr>
     <td class="name">DailySalesReportDao$$FastClassBySpringCGLIB$$522e872b</td>
@@ -106,12 +106,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;    private static String SELECT_ALL = &quot;select p from DailySalesReportPojo p&quot;;</b>
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public void insertDailySalesReport(DailySalesReportPojo dailySalesReportPojo) {
+&nbsp;    public void insert(DailySalesReportPojo dailySalesReportPojo) {
 <b class="fc">&nbsp;        em().persist(dailySalesReportPojo);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public List&lt;DailySalesReportPojo&gt; getAllDailySalesReport() {
+&nbsp;    public List&lt;DailySalesReportPojo&gt; getAll() {
 <b class="fc">&nbsp;        TypedQuery&lt;DailySalesReportPojo&gt; query = getQuery(SELECT_ALL, DailySalesReportPojo.class);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
@@ -139,7 +139,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

@@ -17,7 +17,9 @@
 
             </div>
             <div class="card-footer" th:if="${info.getRole()!='operator'}">
-                <button class="card-button" id = "download-brand-report">Download Report
+                <button class="card-button" id = "download-brand-report">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 15px; margin-right: 10px; display: none;"></i>
+                    Download Report
                 </button>
             </div>
         </div>
@@ -27,7 +29,9 @@
                 <h5 class="card-title">Inventory Report</h5>
             </div>
             <div class="card-footer" th:if="${info.getRole()!='operator'}">
-                <button class="card-button" id="download-inventory-report">Download Report
+                <button class="card-button" id="download-inventory-report">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 15px; margin-right: 10px; display: none;"></i>
+                    Download Report
                 </button>
             </div>
         </div>
@@ -37,7 +41,9 @@
                 <h5 class="card-title">Daily Sales Report</h5>
             </div>
             <div class="card-footer" th:if="${info.getRole()!='operator'}">
-                <button class="card-button" id="download-daily-sales-report">Download Report
+                <button class="card-button" id="download-daily-sales-report">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 15px; margin-right: 10px; display: none;"></i>
+                    Download Report
                 </button>
             </div>
         </div>
@@ -102,6 +108,7 @@
                     </button>
                     <button type="button" class="btn btn-info" id="download-sales-report">
                         <div class="d-flex gap-2 align-items-center">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 15px; margin-right: 10px; display: none;"></i>
                             <i class="fas fa-file-alt" style="font-size: 15px; margin-right: 10px;"></i>
                             Download Report
                         </div>

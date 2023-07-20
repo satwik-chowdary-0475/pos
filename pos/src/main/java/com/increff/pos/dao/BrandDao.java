@@ -15,6 +15,7 @@ public class BrandDao extends AbstractDao {
     private static String SELECT_BY_BRAND_CATEGORY = "select p from BrandPojo p where brand=:brand and category=:category";
     private static String SELECT_BY_BRAND = "select p from BrandPojo p where brand=:brand";
     private static String SELECT_BY_CATEGORY = "select p from BrandPojo p where category=:category";
+    private static String SELECT_ALL_COUNT = "select COUNT(p) from BrandPojo p";
 
     @Transactional
     public void insert(BrandPojo brandPojo) {
@@ -51,9 +52,23 @@ public class BrandDao extends AbstractDao {
     }
 
     @Transactional
-    public List<BrandPojo> getAll() {
+    public List<BrandPojo> getAll(int page,int rowsPerPage) {
+        TypedQuery<BrandPojo> query = getQuery(SELECT_ALL, BrandPojo.class);
+        query.setFirstResult((page-1)*rowsPerPage);
+        query.setMaxResults(rowsPerPage);
+        return query.getResultList();
+    }
+
+    @Transactional
+    public List<BrandPojo> getAll(){
         TypedQuery<BrandPojo> query = getQuery(SELECT_ALL, BrandPojo.class);
         return query.getResultList();
+    }
+
+    @Transactional
+    public Integer getCount(){
+        TypedQuery<Number> query = getQuery(SELECT_ALL_COUNT, Number.class);
+        return query.getSingleResult().intValue();
     }
 
 

@@ -2,6 +2,7 @@ package com.increff.pos.controller;
 
 
 import com.increff.pos.dto.ProductDto;
+import com.increff.pos.model.data.PaginatedData;
 import com.increff.pos.model.data.ProductData;
 import com.increff.pos.model.form.ProductForm;
 import com.increff.pos.model.form.ProductUpdateForm;
@@ -24,32 +25,32 @@ public class ProductController {
     @ApiOperation(value = "Inserts a product")
     @PostMapping(path = "")
     public void insertProduct(@RequestBody ProductForm productForm) throws ApiException {
-        productDto.insertProduct(productForm);
+        productDto.insert(productForm);
     }
 
     @ApiOperation(value = "Update a product")
     @PutMapping(path = "/{id}")
     public void updateProduct(@PathVariable int id, @RequestBody ProductUpdateForm productUpdateForm) throws ApiException {
-        productDto.updateProduct(id, productUpdateForm);
+        productDto.update(id, productUpdateForm);
 
     }
 
     @ApiOperation(value = "Get list of all products")
     @GetMapping(path = "")
-    public List<ProductData> getAllProduct() throws ApiException {
-        return productDto.getAllProducts();
+    public PaginatedData getAllProduct(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int rowsPerPage) throws ApiException {
+        return productDto.getAll(page,rowsPerPage);
     }
 
     @ApiOperation(value = "Get a product details")
     @GetMapping(path = "/{id}")
     public ProductData getProduct(@PathVariable int id) throws ApiException {
-        return productDto.getProduct(id);
+        return productDto.getById(id);
     }
 
     @ApiOperation(value = "Add list of products")
     @PostMapping(path = "/bulk")
     public void insertProductList(@RequestBody List<ProductForm> productFormList) throws ApiException {
-        productDto.insertProductList(productFormList);
+        productDto.insertList(productFormList);
     }
 
 

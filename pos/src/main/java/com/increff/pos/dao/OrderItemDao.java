@@ -13,7 +13,7 @@ public class OrderItemDao extends AbstractDao {
     private static String SELECT_BY_ID = "select p from OrderItemPojo p where id=:id";
     private static String SELECT_BY_PRODUCT_ID = "select p from OrderItemPojo p where orderId=:orderId and productId=:productId";
     private static String SELECT_ALL = "select p from OrderItemPojo p where orderId=:orderId";
-    private static String DELETE_BY_ID = "delete from OrderItemPojo p where orderId=:orderId and id=:id";
+    private static String DELETE_BY_ID = "delete from OrderItemPojo p where id=:id";
     private static String DELETE_BY_ORDER_ID = "delete from OrderItemPojo p where orderId=:orderId";
     private static String SELECT_ALL_REPORT = "SELECT SUM(p.quantity), SUM(p.quantity * p.sellingPrice) FROM OrderItemPojo p WHERE p.orderId IN :orderIdsList";
     private static String SELECT_BY_ORDER_LIST = "select p from OrderItemPojo p where p.orderId IN :orderIdsList";
@@ -54,10 +54,9 @@ public class OrderItemDao extends AbstractDao {
     }
 
     @Transactional
-    public int delete(int orderId,int id) {
+    public int delete(int id) {
         Query query = em().createQuery(DELETE_BY_ID);
         query.setParameter("id", id);
-        query.setParameter("orderId",orderId);
         return query.executeUpdate();
     }
 
@@ -68,9 +67,11 @@ public class OrderItemDao extends AbstractDao {
         return query.executeUpdate();
     }
 
+    @Transactional
     public List<OrderItemPojo> getAllByOrderList(List<Integer> orderIdsList) {
         TypedQuery<OrderItemPojo> query = getQuery(SELECT_BY_ORDER_LIST, OrderItemPojo.class);
         query.setParameter("orderIdsList", orderIdsList);
         return query.getResultList();
     }
+
 }

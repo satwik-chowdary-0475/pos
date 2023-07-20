@@ -56,22 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">OrderItemDto$$EnhancerBySpringCGLIB$$7fe7b0c6</td>
+    <td class="name">OrderItemDto$$EnhancerBySpringCGLIB$$12dc325b</td>
   </tr>
   <tr>
-    <td class="name">OrderItemDto$$EnhancerBySpringCGLIB$$7fe7b0c6$$FastClassBySpringCGLIB$$d12338a</td>
-  </tr>
-  <tr>
-    <td class="name">OrderItemDto$$EnhancerBySpringCGLIB$$ca0bfd3f</td>
-  </tr>
-  <tr>
-    <td class="name">OrderItemDto$$EnhancerBySpringCGLIB$$ca0bfd3f$$FastClassBySpringCGLIB$$87366a69</td>
-  </tr>
-  <tr>
-    <td class="name">OrderItemDto$$EnhancerBySpringCGLIB$$ea60ae91</td>
-  </tr>
-  <tr>
-    <td class="name">OrderItemDto$$EnhancerBySpringCGLIB$$ea60ae91$$FastClassBySpringCGLIB$$5e72ff1a</td>
+    <td class="name">OrderItemDto$$EnhancerBySpringCGLIB$$12dc325b$$FastClassBySpringCGLIB$$dfa8f354</td>
   </tr>
   <tr>
     <td class="name">OrderItemDto$$FastClassBySpringCGLIB$$f18ecad1</td>
@@ -107,6 +95,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import com.increff.pos.dto.helper.HelperDto;
 &nbsp;import com.increff.pos.model.data.OrderItemData;
 &nbsp;import com.increff.pos.model.form.OrderItemForm;
+&nbsp;import com.increff.pos.model.form.OrderItemUpdateForm;
 &nbsp;import com.increff.pos.pojo.InventoryPojo;
 &nbsp;import com.increff.pos.pojo.OrderItemPojo;
 &nbsp;import com.increff.pos.pojo.OrderPojo;
@@ -133,72 +122,82 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    private OrderService orderService;
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public int insertOrderItem(int orderId, OrderItemForm orderItemForm) throws ApiException {
+&nbsp;    public int insert(int orderId, OrderItemForm orderItemForm) throws ApiException {
 <b class="fc">&nbsp;        HelperDto.normalise(orderItemForm);</b>
-<b class="fc">&nbsp;        ProductPojo productPojo = productService.getProductByBarcode(orderItemForm.getBarcode());</b>
-<b class="fc">&nbsp;        OrderPojo orderPojo = orderService.getOrderByOrderId(orderId);</b>
+&nbsp;
+<b class="fc">&nbsp;        ProductPojo productPojo = productService.getByBarcode(orderItemForm.getBarcode());</b>
+<b class="fc">&nbsp;        OrderPojo orderPojo = orderService.getByOrderId(orderId);</b>
 <b class="fc">&nbsp;        validateStatus(orderPojo.getStatus());</b>
+&nbsp;
 <b class="fc">&nbsp;        OrderItemPojo orderItemPojo = HelperDto.convert(orderItemForm, orderId, productPojo);</b>
-<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId());</b>
-<b class="fc">&nbsp;        int orderItemId = orderItemService.insertOrderItem(orderItemPojo, inventoryPojo);</b>
-<b class="fc">&nbsp;        updateInventoryQuantity(inventoryPojo, orderItemPojo.getQuantity());</b>
+<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryService.getById(orderItemPojo.getProductId());</b>
+&nbsp;
+<b class="fc">&nbsp;        int orderItemId = orderItemService.insert(orderItemPojo, inventoryPojo, productPojo.getBarcode());</b>
+<b class="fc">&nbsp;        updateInventory(inventoryPojo, orderItemPojo.getQuantity());</b>
 <b class="fc">&nbsp;        return orderItemId;</b>
 &nbsp;    }
-&nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public List&lt;OrderItemData&gt; getOrderItems(int orderId) throws ApiException {
-<b class="fc">&nbsp;        OrderPojo orderPojo = orderService.getOrderByOrderId(orderId);</b>
-<b class="fc">&nbsp;        List&lt;OrderItemPojo&gt; orderItemPojoList = orderItemService.getAllOrderItems(orderId);</b>
+&nbsp;    public List&lt;OrderItemData&gt; getAllByOrderId(int orderId) throws ApiException {
+<b class="fc">&nbsp;        orderService.getByOrderId(orderId);</b>
+<b class="fc">&nbsp;        List&lt;OrderItemPojo&gt; orderItemPojoList = orderItemService.getAllByOrderId(orderId);</b>
+&nbsp;
 <b class="fc">&nbsp;        List&lt;OrderItemData&gt; orderItemDataList = new ArrayList&lt;OrderItemData&gt;();</b>
 <b class="fc">&nbsp;        for (OrderItemPojo orderItemPojo : orderItemPojoList) {</b>
-<b class="fc">&nbsp;            ProductPojo productPojo = productService.getProductById(orderItemPojo.getProductId());</b>
+<b class="fc">&nbsp;            ProductPojo productPojo = productService.getById(orderItemPojo.getProductId());</b>
 <b class="fc">&nbsp;            orderItemDataList.add(HelperDto.convert(orderItemPojo, productPojo.getBarcode(), productPojo.getName()));</b>
 <b class="fc">&nbsp;        }</b>
+&nbsp;
 <b class="fc">&nbsp;        return orderItemDataList;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public OrderItemData getOrderItem(int orderId, int id) throws ApiException {
-<b class="fc">&nbsp;        OrderPojo orderPojo = orderService.getOrderByOrderId(orderId);</b>
-<b class="fc">&nbsp;        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(id);</b>
-<b class="fc">&nbsp;        ProductPojo productPojo = productService.getProductById(orderItemPojo.getProductId());</b>
+&nbsp;    public OrderItemData getById(int orderId, int id) throws ApiException {
+<b class="fc">&nbsp;        orderService.getByOrderId(orderId);</b>
+<b class="fc">&nbsp;        OrderItemPojo orderItemPojo = orderItemService.getById(id);</b>
+<b class="fc">&nbsp;        ProductPojo productPojo = productService.getById(orderItemPojo.getProductId());</b>
 <b class="fc">&nbsp;        return HelperDto.convert(orderItemPojo, productPojo.getBarcode(), productPojo.getName());</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public void updateOrderItem(int orderId, int id, OrderItemForm orderItemForm) throws ApiException {
-<b class="fc">&nbsp;        HelperDto.normalise(orderItemForm);</b>
-<b class="fc">&nbsp;        ProductPojo productPojo = productService.getProductByBarcode(orderItemForm.getBarcode());</b>
-<b class="fc">&nbsp;        OrderPojo orderPojo = orderService.getOrderByOrderId(orderId);</b>
+&nbsp;    public void update(int orderId, int id, OrderItemUpdateForm orderItemUpdateForm) throws ApiException {
+<b class="fc">&nbsp;        HelperDto.normalise(orderItemUpdateForm);</b>
+&nbsp;
+<b class="fc">&nbsp;        OrderPojo orderPojo = orderService.getByOrderId(orderId);</b>
 <b class="fc">&nbsp;        validateStatus(orderPojo.getStatus());</b>
-<b class="fc">&nbsp;        OrderItemPojo orderItemPojo = HelperDto.convert(orderItemForm, orderId, productPojo);</b>
-<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(productPojo.getId());</b>
-<b class="fc">&nbsp;        OrderItemPojo existingOrderItemPojo = orderItemService.getOrderItemById(id);</b>
+&nbsp;
+<b class="fc">&nbsp;        OrderItemPojo existingOrderItemPojo = orderItemService.getById(id);</b>
+<b class="fc">&nbsp;        ProductPojo productPojo = productService.getById(existingOrderItemPojo.getProductId());</b>
+<b class="fc">&nbsp;        OrderItemPojo orderItemPojo = HelperDto.convert(orderItemUpdateForm, orderId);</b>
+&nbsp;
 <b class="fc">&nbsp;        int requiredQuantity = orderItemPojo.getQuantity();</b>
 <b class="fc">&nbsp;        int previousQuantity = existingOrderItemPojo.getQuantity();</b>
-<b class="fc">&nbsp;        orderItemService.updateOrderItem(id, orderItemPojo, inventoryPojo);</b>
-<b class="fc">&nbsp;        updateInventoryQuantity(inventoryPojo, (requiredQuantity - previousQuantity));</b>
+<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryService.getById(existingOrderItemPojo.getProductId());</b>
+&nbsp;
+<b class="fc">&nbsp;        orderItemService.update(id, orderItemPojo, inventoryPojo, productPojo.getBarcode());</b>
+<b class="fc">&nbsp;        updateInventory(inventoryPojo, (requiredQuantity - previousQuantity));</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public void deleteOrderItem(int orderId, int id) throws ApiException {
-<b class="fc">&nbsp;        OrderPojo orderPojo = orderService.getOrderByOrderId(orderId);</b>
+&nbsp;    public void delete(int orderId, int id) throws ApiException {
+<b class="fc">&nbsp;        OrderPojo orderPojo = orderService.getByOrderId(orderId);</b>
 <b class="fc">&nbsp;        validateStatus(orderPojo.getStatus());</b>
-<b class="fc">&nbsp;        OrderItemPojo orderItemPojo = orderItemService.getOrderItemById(id);</b>
-<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryService.getProductInventoryByProductId(orderItemPojo.getProductId());</b>
-<b class="fc">&nbsp;        orderItemService.deleteOrderItem(id);</b>
-<b class="fc">&nbsp;        inventoryService.updateProductInInventory(inventoryPojo, inventoryPojo.getQuantity() + orderItemPojo.getQuantity());</b>
+&nbsp;
+<b class="fc">&nbsp;        OrderItemPojo orderItemPojo = orderItemService.getById(id);</b>
+<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryService.getById(orderItemPojo.getProductId());</b>
+&nbsp;
+<b class="fc">&nbsp;        orderItemService.delete(orderId, id);</b>
+<b class="fc">&nbsp;        inventoryService.update(inventoryPojo, inventoryPojo.getQuantity() + orderItemPojo.getQuantity());</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    private void validateStatus(OrderStatus orderStatus) throws ApiException {
 <b class="fc">&nbsp;        if (orderStatus.equals(OrderStatus.INVOICED)) {</b>
-<b class="fc">&nbsp;            throw new ApiException(&quot;Order cannot be modified!!&quot;);</b>
+<b class="fc">&nbsp;            throw new ApiException(&quot;Order cannot be modified&quot;);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
-&nbsp;    private void updateInventoryQuantity(InventoryPojo inventoryPojo, int requiredQuantity) {
+&nbsp;    private void updateInventory(InventoryPojo inventoryPojo, int requiredQuantity) {
 <b class="fc">&nbsp;        int inventoryQuantity = inventoryPojo.getQuantity();</b>
-<b class="fc">&nbsp;        inventoryService.updateProductInInventory(inventoryPojo, inventoryQuantity - requiredQuantity);</b>
+<b class="fc">&nbsp;        inventoryService.update(inventoryPojo, inventoryQuantity - requiredQuantity);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;}
@@ -225,7 +224,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-14 16:32</div>
+    <div style="float:right;">generated on 2023-07-19 16:12</div>
 </div>
 </body>
 </html>

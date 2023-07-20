@@ -22,7 +22,8 @@ function validatePassword(password){
 
 function showError(message,info){
     if(info!=null && info.length > 0)
-    message = message + ' : ' + info
+    message = message + ' : ' + info;
+
     $.notify(message,{className:"error",autoHideDelay: 20000});
 
 }
@@ -99,6 +100,7 @@ function signup(event){
                },
                success: function(response) {
                     resetFormValues();
+
                     $.notify("User added successfully","success");
            },
                error:function(error){

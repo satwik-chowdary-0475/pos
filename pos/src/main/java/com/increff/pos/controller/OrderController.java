@@ -5,6 +5,7 @@ import com.increff.pos.dto.OrderItemDto;
 import com.increff.pos.model.data.OrderData;
 import com.increff.pos.model.data.OrderDetailsData;
 import com.increff.pos.model.data.OrderItemData;
+import com.increff.pos.model.data.PaginatedData;
 import com.increff.pos.model.form.OrderForm;
 import com.increff.pos.model.form.OrderItemForm;
 import com.increff.pos.model.form.OrderItemUpdateForm;
@@ -40,8 +41,8 @@ public class OrderController {
 
     @ApiOperation(value = "Get list of all orders")
     @GetMapping(path = "")
-    public List<OrderData> getAllOrders() throws ApiException {
-        return orderDto.getAll();
+    public PaginatedData getAllOrders(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int rowsPerPage) throws ApiException {
+        return orderDto.getAll(page,rowsPerPage);
     }
 
     @ApiOperation(value = "Delete an order")

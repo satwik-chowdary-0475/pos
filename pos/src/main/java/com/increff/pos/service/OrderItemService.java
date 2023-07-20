@@ -73,13 +73,15 @@ public class OrderItemService {
         existingOrderItemPojo.setSellingPrice(updatedOrderItemPojo.getSellingPrice());
     }
 
+    //TODO: think about orders
+
     @Transactional(rollbackOn = ApiException.class)
-    public void delete(int orderId, int id) throws ApiException {
+    public void delete(int id) throws ApiException {
         OrderItemPojo orderItemPojo = orderItemDao.getById(id);
         if (Objects.isNull(orderItemPojo)) {
             throw new ApiException("Order item doesn't exist");
         }
-        orderItemDao.delete(orderId, id);
+        orderItemDao.delete(id);
     }
 
     @Transactional
