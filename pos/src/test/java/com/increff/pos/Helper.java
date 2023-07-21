@@ -113,13 +113,12 @@ public class Helper {
         return orderItemForm;
     }
 
-    public static SalesForm createSalesForm(String brand, String category, ZonedDateTime startTime,ZonedDateTime endTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static SalesForm createSalesForm(String brand, String category, String startTime,String endTime) {
         SalesForm salesForm = new SalesForm();
         salesForm.setBrand(brand);
         salesForm.setCategory(category);
-        salesForm.setStartTime(formatter.format(startTime));
-        salesForm.setEndTime(formatter.format(endTime));
+        salesForm.setStartTime(startTime);
+        salesForm.setEndTime(endTime);
         return salesForm;
     }
 

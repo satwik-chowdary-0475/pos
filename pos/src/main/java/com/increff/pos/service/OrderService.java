@@ -3,7 +3,7 @@ package com.increff.pos.service;
 import com.increff.pos.dao.OrderDao;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.OrderStatus;
-import lombok.extern.log4j.Log4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-@Log4j
 public class OrderService {
 
     @Autowired
@@ -39,13 +38,8 @@ public class OrderService {
     }
 
     @Transactional
-    public List<OrderPojo> getAll() {
-        return orderDao.getAll();
-    }
-
-    @Transactional
-    public List<OrderPojo> getAll(int page,int rowsPerPage) {
-        return orderDao.getAll(page,rowsPerPage);
+    public List<OrderPojo> getAll(int page, int rowsPerPage) {
+        return orderDao.getAll((page - 1) * rowsPerPage, rowsPerPage);
     }
 
     @Transactional
@@ -56,13 +50,14 @@ public class OrderService {
     @Transactional(rollbackOn = ApiException.class)
     public Integer delete(String orderCode) throws ApiException {
         OrderPojo orderPojo = orderDao.getByOrderCode(orderCode);
+
         if (Objects.nonNull(orderPojo)) {
-            if (orderPojo.getStatus().equals(OrderStatus.INVOICED)) {
-                throw new ApiException("Cannot delete order");
-            }
+            int orderId = orderPojo.getId();
+            checkStatus(orderPojo);
             orderDao.delete(orderCode);
-            return orderPojo.getId();
+            return orderId;
         }
+
         return null;
     }
 
@@ -84,5 +79,10 @@ public class OrderService {
         }
     }
 
+    private void checkStatus(OrderPojo orderPojo) throws ApiException {
+        if (orderPojo.getStatus().equals(OrderStatus.INVOICED)) {
+            throw new ApiException("Cannot delete order");
+        }
+    }
 
 }

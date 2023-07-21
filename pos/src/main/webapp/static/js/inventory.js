@@ -11,13 +11,6 @@ function getRoleOfUser(callback){
     callback(userRole);
 }
 
-function scientificNumberReviver(value) {
-  if (typeof value === 'string' && /^[-+]?(\d+(\.\d*)?|\.\d+)(e[-+]?\d+)$/i.test(value)) {
-    return parseFloat(value); // Parse as a float to preserve scientific notation
-  }
-  return value;
-}
-
 function addInventory(event){
 	var $form = $("#inventory-form");
 	if($form[0].checkValidity()){
@@ -286,16 +279,17 @@ function uploadRows(){
     else{
         (json.length>5000)?(showErrorNotification("Cannot upload more than 5000 rows")):(showErrorNotification("Empty file uploaded"));
     }
-
 }
 
 function updateInventory(event){
-
     var $form = $("#inventory-edit-form");
 	if($form[0].checkValidity()){
 	    var id = $("#inventory-edit-form input[name=id]").val();
         var url = getInventoryUrl() + "/" + id;
         var json = toJson($form);
+        var jsonObj = JSON.parse(json);
+        jsonObj.quantity = scientificNumberReviver(jsonObj.quantity);
+        json = JSON.stringify(jsonObj);
         $.ajax({
            url: url,
            type: 'PUT',
@@ -322,7 +316,6 @@ function updateInventory(event){
          event.stopPropagation();
          $form.addClass('was-validated');
 	}
-
 	return false;
 }
 
@@ -333,6 +326,7 @@ function updateFileName(){
 	$('#inventoryFileName').html(fileName);
 	$("#process-data").prop('disabled',(fileName.length == 0));
 }
+
 function downloadErrors(){
 	writeFileData(errorData,'tsv','inventory_errors');
 }

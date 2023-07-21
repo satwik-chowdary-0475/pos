@@ -6,7 +6,7 @@ import com.increff.pos.dao.OrderItemDao;
 import com.increff.pos.pojo.DailySalesReportPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.OrderStatus;
-import lombok.extern.log4j.Log4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Log4j
 public class DailySalesReportService {
 
     @Autowired

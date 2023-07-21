@@ -28,24 +28,25 @@ function showError(message,info){
 }
 
 function validateForm(event) {
-        event.preventDefault();
+    event.preventDefault();
 
-        var email = document.getElementById("email").value;
-        var password = document.getElementById("password").value;
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
 
-        if (email.trim() === "" || password.trim() === "") {
-            showError("Please fill in the details");
-        }
-        else if(!validateEmail(email.trim())){
-            showError("Please enter a valid email","Email must contain @ and domain name.");
-        }
-        else if(!validatePassword(password.trim())) {
-            showError("Please enter a valid password","Password must be at least 8 characters long and include at least one letter, one number, and one special character");
-        }
-        else{
-            signup(event);
-        }
+    if (email.trim() === "" || password.trim() === "") {
+        showError("Please fill in the details");
+    }
+    else if(!validateEmail(email.trim())){
+        showError("Please enter a valid email","Email must contain @ and domain name.");
+    }
+    else if(!validatePassword(password.trim())) {
+        showError("Please enter a valid password","Password must be at least 8 characters long and include at least one letter, one number, and one special character");
+    }
+    else{
+        signup(event);
+    }
 }
+
 function getBaseUrl(){
     var baseUrl = $("meta[name=baseUrl]").attr("content");
     return baseUrl;
@@ -86,25 +87,24 @@ function resetFormValues(){
 }
 
 function signup(event){
-
     var url = getSignupUrl();
     var $form = $("#init-form");
     var json = toJson($form);
     $.ajax({
-               url: url,
-               type: 'POST',
-               data: json,
-               headers: {
-                   'Content-Type': 'application/json'
-               },
-               success: function(response) {
-                    resetFormValues();
-                    showSuccessNotification("User added successfully");
+           url: url,
+           type: 'POST',
+           data: json,
+           headers: {
+               'Content-Type': 'application/json'
            },
-               error:function(error){
-                    handleAjaxError(error);
-               }
-            })
+           success: function(response) {
+                resetFormValues();
+                showSuccessNotification("User added successfully");
+       },
+           error:function(error){
+                handleAjaxError(error);
+           }
+        })
 }
 
 function init(){

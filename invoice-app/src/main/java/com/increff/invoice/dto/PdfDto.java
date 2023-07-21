@@ -4,7 +4,7 @@ import com.increff.invoice.Util.ConvertToBase64EncodedString;
 import com.increff.invoice.Util.XMLCreation;
 import com.increff.invoice.model.form.OrderForm;
 import com.increff.invoice.service.ApiException;
-import lombok.extern.log4j.Log4j;
+
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.OutputStream;
 
 @Service
-@Log4j
 public class PdfDto {
     public String generatePdf(OrderForm orderForm) throws ApiException {
         XMLCreation.createOrderXml(orderForm);

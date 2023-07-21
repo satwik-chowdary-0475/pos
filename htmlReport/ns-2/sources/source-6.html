@@ -40,26 +40,26 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name">ReportDto</td>
 <td class="coverageStat">
   <span class="percent">
-    86.7%
+    100%
   </span>
   <span class="absValue">
-    (13/15)
+    (14/14)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    89.2%
+    98.4%
   </span>
   <span class="absValue">
-    (58/65)
+    (63/64)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">ReportDto$$EnhancerBySpringCGLIB$$74f99470</td>
+    <td class="name">ReportDto$$EnhancerBySpringCGLIB$$8b86e18</td>
   </tr>
   <tr>
-    <td class="name">ReportDto$$EnhancerBySpringCGLIB$$74f99470$$FastClassBySpringCGLIB$$7ec1a9e5</td>
+    <td class="name">ReportDto$$EnhancerBySpringCGLIB$$8b86e18$$FastClassBySpringCGLIB$$9140203</td>
   </tr>
   <tr>
     <td class="name">ReportDto$$FastClassBySpringCGLIB$$4ba3c8b8</td>
@@ -68,18 +68,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    86.7%
+    100%
   </span>
   <span class="absValue">
-    (13/15)
+    (14/14)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    89.2%
+    98.4%
   </span>
   <span class="absValue">
-    (58/65)
+    (63/64)
   </span>
 </td>
 </tr>
@@ -97,7 +97,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import com.increff.pos.model.form.SalesForm;
 &nbsp;import com.increff.pos.pojo.*;
 &nbsp;import com.increff.pos.service.*;
-&nbsp;import lombok.extern.log4j.Log4j;
+&nbsp;
 &nbsp;import org.springframework.beans.factory.annotation.Autowired;
 &nbsp;import org.springframework.stereotype.Service;
 &nbsp;
@@ -108,7 +108,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import java.util.stream.Collectors;
 &nbsp;
 &nbsp;@Service
-<b class="fc">&nbsp;@Log4j</b>
 <b class="fc">&nbsp;public class ReportDto {</b>
 &nbsp;
 &nbsp;    @Autowired
@@ -219,21 +218,21 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public HashMap&lt;Integer, ReportData&gt; getProductOrderItemMap(List&lt;OrderPojo&gt; orderPojoList) {
-<b class="fc">&nbsp;        List&lt;OrderItemPojo&gt; orderItemPojoList = orderItemService.getAllOrderItemsByOrderList(orderPojoList);</b>
+<b class="fc">&nbsp;        List&lt;OrderItemPojo&gt; orderItemPojoList = orderItemService.getAllByOrderList(orderPojoList);</b>
 &nbsp;
 <b class="fc">&nbsp;        HashMap&lt;Integer, ReportData&gt; productOrderItemMap = orderItemPojoList.stream()</b>
 <b class="fc">&nbsp;                .collect(Collectors.toMap(</b>
 &nbsp;                        OrderItemPojo::getProductId,
 &nbsp;                        orderItemPojo -&gt; {
-<b class="nc">&nbsp;                            Integer quantity = orderItemPojo.getQuantity();</b>
-<b class="nc">&nbsp;                            Double revenue = orderItemPojo.getQuantity() * orderItemPojo.getSellingPrice();</b>
-<b class="nc">&nbsp;                            return ReportHelperDto.convert(quantity, revenue);</b>
+<b class="fc">&nbsp;                            Integer quantity = orderItemPojo.getQuantity();</b>
+<b class="fc">&nbsp;                            Double revenue = orderItemPojo.getQuantity() * orderItemPojo.getSellingPrice();</b>
+<b class="fc">&nbsp;                            return ReportHelperDto.convert(quantity, revenue);</b>
 &nbsp;
 &nbsp;                        },
 &nbsp;                        (existingPair, newPair) -&gt; {
-<b class="nc">&nbsp;                            Integer updatedQuantity = existingPair.getQuantity() + newPair.getQuantity();</b>
-<b class="nc">&nbsp;                            Double updatedRevenue = existingPair.getRevenue() + newPair.getRevenue();</b>
-<b class="nc">&nbsp;                            return ReportHelperDto.convert(updatedQuantity, updatedRevenue);</b>
+<b class="fc">&nbsp;                            Integer updatedQuantity = existingPair.getQuantity() + newPair.getQuantity();</b>
+<b class="fc">&nbsp;                            Double updatedRevenue = existingPair.getRevenue() + newPair.getRevenue();</b>
+<b class="fc">&nbsp;                            return ReportHelperDto.convert(updatedQuantity, updatedRevenue);</b>
 &nbsp;                        },
 &nbsp;                        HashMap::new
 &nbsp;                ));
@@ -266,7 +265,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-19 16:12</div>
+    <div style="float:right;">generated on 2023-07-21 15:51</div>
 </div>
 </body>
 </html>

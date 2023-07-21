@@ -10,11 +10,11 @@ import java.util.List;
 @Repository
 public class ProductDao extends AbstractDao {
 
-    private static String SELECT_BY_ID = "select p from ProductPojo p where id=:id";
-    private static String SELECT_BY_BARCODE = "select p from ProductPojo p where barcode=:barcode";
-    private static String SELECT_ALL = "select p from ProductPojo p";
-    private static String SELECT_BY_BRAND_CATEGORY = "select p from ProductPojo p where brandCategoryId=:brandCategoryId";
-    private static String SELECT_ALL_COUNT = "select COUNT(p) from ProductPojo p";
+    private static final String SELECT_BY_ID = "select p from ProductPojo p where id=:id";
+    private static final String SELECT_BY_BARCODE = "select p from ProductPojo p where barcode=:barcode";
+    private static final String SELECT_ALL = "select p from ProductPojo p";
+    private static final String SELECT_BY_BRAND_CATEGORY = "select p from ProductPojo p where brandCategoryId=:brandCategoryId";
+    private static final String SELECT_ALL_COUNT = "select COUNT(p) from ProductPojo p";
 
     @Transactional
     public void insert(ProductPojo productPojo) {
@@ -49,9 +49,9 @@ public class ProductDao extends AbstractDao {
     }
 
     @Transactional
-    public List<ProductPojo> getAll(int page,int rowsPerPage){
+    public List<ProductPojo> getAll(int offset,int rowsPerPage){
         TypedQuery<ProductPojo> query = getQuery(SELECT_ALL, ProductPojo.class);
-        query.setFirstResult((page-1)*rowsPerPage);
+        query.setFirstResult(offset);
         query.setMaxResults(rowsPerPage);
         return query.getResultList();
     }

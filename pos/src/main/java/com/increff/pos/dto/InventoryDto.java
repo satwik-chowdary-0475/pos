@@ -31,9 +31,6 @@ public class InventoryDto {
     @Autowired
     private BrandService brandService;
 
-    public InventoryDto() {
-    }
-
     @Transactional(rollbackOn = ApiException.class)
     public int insert(InventoryForm inventoryForm) throws ApiException {
         HelperDto.validate(inventoryForm);
@@ -44,34 +41,34 @@ public class InventoryDto {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void update(int id, InventoryUpdateForm inventoryUpdateForm) throws ApiException {
+    public void update(int productId, InventoryUpdateForm inventoryUpdateForm) throws ApiException {
         HelperDto.validate(inventoryUpdateForm);
-        ProductPojo productPojo = productService.getById(id);
+        ProductPojo productPojo = productService.getById(productId);
 
         InventoryPojo inventoryPojo = HelperDto.convert(inventoryUpdateForm, productPojo.getId());
         inventoryService.update(inventoryPojo, productPojo.getBarcode());
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public InventoryData getById(int id) throws ApiException {
-        InventoryPojo inventoryPojo = inventoryService.getById(id);
+    public InventoryData getByProductId(int productId) throws ApiException {
+        InventoryPojo inventoryPojo = inventoryService.getByProductId(productId);
         ProductPojo productPojo = productService.getById(inventoryPojo.getProductId());
 
         return HelperDto.convert(inventoryPojo, productPojo.getBarcode(), productPojo.getName());
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public PaginatedData getAll(int page,int rowsPerPage) throws ApiException {
-        List<InventoryPojo> inventoryPojoList = inventoryService.getAll(page,rowsPerPage);
+    public PaginatedData getAll(int page, int rowsPerPage) throws ApiException {
+        List<InventoryPojo> inventoryPojoList = inventoryService.getAll(page, rowsPerPage);
         Integer totalCount = inventoryService.getCount();
 
-        List<InventoryData> inventoryDataList = new ArrayList<InventoryData>();
+        List<InventoryData> inventoryDataList = new ArrayList<>();
         for (InventoryPojo inventoryPojo : inventoryPojoList) {
             ProductPojo productPojo = productService.getById(inventoryPojo.getProductId());
             inventoryDataList.add(HelperDto.convert(inventoryPojo, productPojo.getBarcode(), productPojo.getName()));
         }
 
-        return new PaginatedData(inventoryDataList,totalCount);
+        return new PaginatedData(inventoryDataList, totalCount);
     }
 
     @Transactional(rollbackOn = ApiException.class)

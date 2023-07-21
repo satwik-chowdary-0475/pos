@@ -1,9 +1,7 @@
 package com.increff.pos.service;
 
 import com.increff.pos.model.data.ErrorData;
-import javafx.util.Pair;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class ApiException extends Exception {

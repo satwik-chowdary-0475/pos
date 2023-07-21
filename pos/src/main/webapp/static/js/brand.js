@@ -102,7 +102,6 @@ function uploadRows(){
 }
 
 function updateBrand(event){
-
     var $form =  $("#brand-edit-form");
     if($form[0].checkValidity()){
         var id = $("#brand-edit-form input[name=id]").val();
@@ -135,7 +134,6 @@ function updateBrand(event){
         event.stopPropagation();
         $form.addClass('was-validated');
     }
-
 	return false;
 }
 
@@ -254,12 +252,10 @@ function updatePagination() {
     pagination.html(paginationHTML);
 }
 
-
 function displayUploadData(){
  	resetUploadDialog();
 	$('#upload-brand-modal').modal('toggle');
 }
-
 
 function resetUploadDialog(){
 	var $file = $('#brandFile');
@@ -271,7 +267,6 @@ function resetUploadDialog(){
     $('#process-data').prop('disabled',true);
 	updateUploadDialog();
 }
-
 
 function resetErrorCount(){
     errorData = [];
@@ -289,7 +284,6 @@ function updateFileName(){
 	$('#brandFileName').html(fileName);
 	$("#process-data").prop('disabled',(fileName.length == 0));
 }
-
 
 function processData(){
     resetErrorCount();
@@ -342,8 +336,6 @@ function resetBrandModal(){
     $("#brand-form").removeClass("was-validated");
     toggleBrandModal();
 }
-
-
 
 function init(){
 $('#modal-add-brand').click(resetBrandModal);

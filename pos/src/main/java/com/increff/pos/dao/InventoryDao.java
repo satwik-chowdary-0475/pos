@@ -10,9 +10,9 @@ import java.util.List;
 
 @Repository
 public class InventoryDao extends AbstractDao {
-    private static String SELECT_BY_ID = "select p from InventoryPojo p where id=:id";
-    private static String SELECT_ALL = "select p from InventoryPojo p";
-    private static String SELECT_ALL_COUNT = "select COUNT(p) from InventoryPojo p";
+    private static final String SELECT_BY_PRODUCT_ID = "select p from InventoryPojo p where productId=:productId";
+    private static final String SELECT_ALL = "select p from InventoryPojo p";
+    private static final String SELECT_ALL_COUNT = "select COUNT(p) from InventoryPojo p";
 
     @Transactional
     public void insert(InventoryPojo inventoryPojo) {
@@ -20,9 +20,9 @@ public class InventoryDao extends AbstractDao {
     }
 
     @Transactional
-    public InventoryPojo getById(int id) {
-        TypedQuery<InventoryPojo> query = getQuery(SELECT_BY_ID, InventoryPojo.class);
-        query.setParameter("id", id);
+    public InventoryPojo getByProductId(int productId) {
+        TypedQuery<InventoryPojo> query = getQuery(SELECT_BY_PRODUCT_ID, InventoryPojo.class);
+        query.setParameter("productId", productId);
         return getSingle(query);
     }
 
@@ -33,15 +33,15 @@ public class InventoryDao extends AbstractDao {
     }
 
     @Transactional
-    public List<InventoryPojo> getAll(int page, int rowsPerPage) {
+    public List<InventoryPojo> getAll(int offset, int rowsPerPage) {
         TypedQuery<InventoryPojo> query = getQuery(SELECT_ALL, InventoryPojo.class);
-        query.setFirstResult((page-1)*rowsPerPage);
+        query.setFirstResult(offset);
         query.setMaxResults(rowsPerPage);
         return query.getResultList();
     }
 
     @Transactional
-    public Integer getCount(){
+    public Integer getCount() {
         TypedQuery<Number> query = getQuery(SELECT_ALL_COUNT, Number.class);
         return query.getSingleResult().intValue();
     }

@@ -2,6 +2,7 @@ package com.increff.pos.controller;
 
 
 import com.increff.pos.dto.BrandDto;
+import com.increff.pos.model.constants.PaginationConstant;
 import com.increff.pos.model.data.BrandData;
 import com.increff.pos.model.data.PaginatedData;
 import com.increff.pos.model.form.BrandForm;
@@ -32,8 +33,10 @@ public class BrandController {
 
     @ApiOperation(value = "Get list of all brands")
     @GetMapping(path = "")
-    public PaginatedData getAllBrand(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int rowsPerPage) {
-        return brandDto.getAll(page,rowsPerPage);
+    public PaginatedData getAllBrand(
+            @RequestParam(defaultValue = PaginationConstant.DEFAULT_PAGE) int page,
+            @RequestParam(defaultValue = PaginationConstant.DEFAULT_ROWS_PER_PAGE) int rowsPerPage) {
+        return brandDto.getAll(page, rowsPerPage);
     }
 
     @ApiOperation(value = "Get a brand details")

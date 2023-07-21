@@ -2,7 +2,6 @@ package com.increff.pos.util;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Random;
 import java.util.UUID;
 
 public class RandomStrGenerator {

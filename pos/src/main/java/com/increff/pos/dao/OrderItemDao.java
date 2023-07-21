@@ -10,13 +10,13 @@ import java.util.List;
 
 @Repository
 public class OrderItemDao extends AbstractDao {
-    private static String SELECT_BY_ID = "select p from OrderItemPojo p where id=:id";
-    private static String SELECT_BY_PRODUCT_ID = "select p from OrderItemPojo p where orderId=:orderId and productId=:productId";
-    private static String SELECT_ALL = "select p from OrderItemPojo p where orderId=:orderId";
-    private static String DELETE_BY_ID = "delete from OrderItemPojo p where id=:id";
-    private static String DELETE_BY_ORDER_ID = "delete from OrderItemPojo p where orderId=:orderId";
-    private static String SELECT_ALL_REPORT = "SELECT SUM(p.quantity), SUM(p.quantity * p.sellingPrice) FROM OrderItemPojo p WHERE p.orderId IN :orderIdsList";
-    private static String SELECT_BY_ORDER_LIST = "select p from OrderItemPojo p where p.orderId IN :orderIdsList";
+    private static final String SELECT_BY_ID = "select p from OrderItemPojo p where id=:id";
+    private static final String SELECT_BY_PRODUCT_ID = "select p from OrderItemPojo p where orderId=:orderId and productId=:productId";
+    private static final String SELECT_ALL = "select p from OrderItemPojo p where orderId=:orderId";
+    private static final String DELETE_BY_ID = "delete from OrderItemPojo p where id=:id";
+    private static final String DELETE_BY_ORDER_ID = "delete from OrderItemPojo p where orderId=:orderId";
+    private static final String SELECT_ALL_REPORT = "SELECT SUM(p.quantity), SUM(p.quantity * p.sellingPrice) FROM OrderItemPojo p WHERE p.orderId IN :orderIdsList";
+    private static final String SELECT_BY_ORDER_LIST = "select p from OrderItemPojo p where p.orderId IN :orderIdsList";
 
     @Transactional
     public void insert(OrderItemPojo orderItemPojo) {
@@ -42,8 +42,7 @@ public class OrderItemDao extends AbstractDao {
     public Object[] getOrderItemsReport(List<Integer> orderIdsList) {
         TypedQuery<Object[]> query = em().createQuery(SELECT_ALL_REPORT, Object[].class);
         query.setParameter("orderIdsList", orderIdsList);
-        Object[] result = query.getSingleResult();
-        return result;
+        return query.getSingleResult();
     }
 
     @Transactional

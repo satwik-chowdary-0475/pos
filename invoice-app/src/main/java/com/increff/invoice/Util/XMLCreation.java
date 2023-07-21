@@ -17,11 +17,9 @@ import javax.xml.transform.stream.StreamResult;
 import com.increff.invoice.model.form.OrderForm;
 import com.increff.invoice.model.form.OrderItemForm;
 import com.increff.invoice.service.ApiException;
-import lombok.extern.log4j.Log4j;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-@Log4j
 public class XMLCreation {
     public static void createOrderXml(OrderForm orderForm) throws ApiException {
         try{

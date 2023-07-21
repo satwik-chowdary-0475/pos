@@ -2,7 +2,7 @@ package com.increff.pos.controller;
 
 import com.increff.pos.dto.OrderDto;
 import com.increff.pos.dto.OrderItemDto;
-import com.increff.pos.model.data.OrderData;
+import com.increff.pos.model.constants.PaginationConstant;
 import com.increff.pos.model.data.OrderDetailsData;
 import com.increff.pos.model.data.OrderItemData;
 import com.increff.pos.model.data.PaginatedData;
@@ -14,8 +14,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Api
 @RestController
@@ -41,8 +39,11 @@ public class OrderController {
 
     @ApiOperation(value = "Get list of all orders")
     @GetMapping(path = "")
-    public PaginatedData getAllOrders(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int rowsPerPage) throws ApiException {
-        return orderDto.getAll(page,rowsPerPage);
+    public PaginatedData getAllOrders(
+            @RequestParam(defaultValue = PaginationConstant.DEFAULT_PAGE) int page,
+            @RequestParam(defaultValue = PaginationConstant.DEFAULT_ROWS_PER_PAGE) int rowsPerPage
+    ){
+        return orderDto.getAll(page, rowsPerPage);
     }
 
     @ApiOperation(value = "Delete an order")

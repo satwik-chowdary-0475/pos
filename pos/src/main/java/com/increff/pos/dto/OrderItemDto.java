@@ -35,10 +35,10 @@ public class OrderItemDto {
 
         ProductPojo productPojo = productService.getByBarcode(orderItemForm.getBarcode());
         OrderPojo orderPojo = orderService.getByOrderId(orderId);
-        validateStatus(orderPojo.getStatus());
+        validateOrderStatus(orderPojo.getStatus());
 
         OrderItemPojo orderItemPojo = HelperDto.convert(orderItemForm, orderId, productPojo);
-        InventoryPojo inventoryPojo = inventoryService.getById(orderItemPojo.getProductId());
+        InventoryPojo inventoryPojo = inventoryService.getByProductId(orderItemPojo.getProductId());
 
         int orderItemId = orderItemService.insert(orderItemPojo, inventoryPojo, productPojo.getBarcode());
         updateInventory(inventoryPojo, orderItemPojo.getQuantity());
@@ -49,7 +49,7 @@ public class OrderItemDto {
         orderService.getByOrderId(orderId);
         List<OrderItemPojo> orderItemPojoList = orderItemService.getAllByOrderId(orderId);
 
-        List<OrderItemData> orderItemDataList = new ArrayList<OrderItemData>();
+        List<OrderItemData> orderItemDataList = new ArrayList<>();
         for (OrderItemPojo orderItemPojo : orderItemPojoList) {
             ProductPojo productPojo = productService.getById(orderItemPojo.getProductId());
             orderItemDataList.add(HelperDto.convert(orderItemPojo, productPojo.getBarcode(), productPojo.getName()));
@@ -63,6 +63,7 @@ public class OrderItemDto {
         orderService.getByOrderId(orderId);
         OrderItemPojo orderItemPojo = orderItemService.getById(id);
         ProductPojo productPojo = productService.getById(orderItemPojo.getProductId());
+
         return HelperDto.convert(orderItemPojo, productPojo.getBarcode(), productPojo.getName());
     }
 
@@ -71,17 +72,17 @@ public class OrderItemDto {
         HelperDto.normalise(orderItemUpdateForm);
 
         OrderPojo orderPojo = orderService.getByOrderId(orderId);
-        validateStatus(orderPojo.getStatus());
+        validateOrderStatus(orderPojo.getStatus());
 
         OrderItemPojo existingOrderItemPojo = orderItemService.getById(id);
-        validateOrder(orderPojo,existingOrderItemPojo);
+        validateOrderItem(orderPojo,existingOrderItemPojo);
 
         ProductPojo productPojo = productService.getById(existingOrderItemPojo.getProductId());
         OrderItemPojo orderItemPojo = HelperDto.convert(orderItemUpdateForm, orderId);
 
         int requiredQuantity = orderItemPojo.getQuantity();
         int previousQuantity = existingOrderItemPojo.getQuantity();
-        InventoryPojo inventoryPojo = inventoryService.getById(existingOrderItemPojo.getProductId());
+        InventoryPojo inventoryPojo = inventoryService.getByProductId(existingOrderItemPojo.getProductId());
 
         orderItemService.update(id, orderItemPojo, inventoryPojo, productPojo.getBarcode());
         updateInventory(inventoryPojo, (requiredQuantity - previousQuantity));
@@ -90,24 +91,24 @@ public class OrderItemDto {
     @Transactional(rollbackOn = ApiException.class)
     public void delete(int orderId, int id) throws ApiException {
         OrderPojo orderPojo = orderService.getByOrderId(orderId);
-        validateStatus(orderPojo.getStatus());
+        validateOrderStatus(orderPojo.getStatus());
 
         OrderItemPojo orderItemPojo = orderItemService.getById(id);
-        validateOrder(orderPojo,orderItemPojo);
+        validateOrderItem(orderPojo,orderItemPojo);
 
-        InventoryPojo inventoryPojo = inventoryService.getById(orderItemPojo.getProductId());
+        InventoryPojo inventoryPojo = inventoryService.getByProductId(orderItemPojo.getProductId());
 
         orderItemService.delete(id);
         inventoryService.update(inventoryPojo, inventoryPojo.getQuantity() + orderItemPojo.getQuantity());
     }
 
-    private void validateStatus(OrderStatus orderStatus) throws ApiException {
+    private void validateOrderStatus(OrderStatus orderStatus) throws ApiException {
         if (orderStatus.equals(OrderStatus.INVOICED)) {
             throw new ApiException("Order cannot be modified");
         }
     }
 
-    private void validateOrder(OrderPojo orderPojo,OrderItemPojo orderItemPojo) throws ApiException{
+    private void validateOrderItem(OrderPojo orderPojo, OrderItemPojo orderItemPojo) throws ApiException{
         if(!orderPojo.getId().equals(orderItemPojo.getOrderId())){
             throw new ApiException("Order id provided does not match the order id associated with the order item");
         }

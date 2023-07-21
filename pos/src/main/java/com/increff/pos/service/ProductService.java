@@ -62,8 +62,8 @@ public class ProductService {
     }
 
     @Transactional
-    public List<ProductPojo> getAll(int page,int rowsPerPage) {
-        return productDao.getAll(page,rowsPerPage);
+    public List<ProductPojo> getAll(int page, int rowsPerPage) {
+        return productDao.getAll((page - 1) * rowsPerPage, rowsPerPage);
     }
 
     @Transactional
@@ -71,6 +71,7 @@ public class ProductService {
         return productDao.getByBrandCategoryId(brandCategoryId);
     }
 
+    @Transactional
     public Integer getCount() {
         return productDao.getCount();
     }

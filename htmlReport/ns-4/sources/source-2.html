@@ -56,10 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">BrandService$$EnhancerBySpringCGLIB$$d5bd1909</td>
+    <td class="name">BrandService$$EnhancerBySpringCGLIB$$697bf2b1</td>
   </tr>
   <tr>
-    <td class="name">BrandService$$EnhancerBySpringCGLIB$$d5bd1909$$FastClassBySpringCGLIB$$96486052</td>
+    <td class="name">BrandService$$EnhancerBySpringCGLIB$$697bf2b1$$FastClassBySpringCGLIB$$7606aef7</td>
   </tr>
   <tr>
     <td class="name">BrandService$$FastClassBySpringCGLIB$$45e56e4b</td>
@@ -135,6 +135,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        BrandPojo brandPojo = brandDao.getById(id);</b>
 <b class="fc">&nbsp;        if (Objects.isNull(brandPojo))</b>
 <b class="fc">&nbsp;            throw new ApiException(&quot;Brand item doesn&#39;t exist&quot;);</b>
+&nbsp;
 <b class="fc">&nbsp;        return brandPojo;</b>
 &nbsp;    }
 &nbsp;
@@ -143,21 +144,22 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        BrandPojo brandPojo = brandDao.getByBrandCategory(brand, category);</b>
 <b class="fc">&nbsp;        if (Objects.isNull(brandPojo))</b>
 <b class="fc">&nbsp;            throw new ApiException(&quot;The brand-category pair with brand name &quot; + brand + &quot; and category name &quot; + category + &quot; does not exist&quot;);</b>
+&nbsp;
 <b class="fc">&nbsp;        return brandPojo;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public List&lt;BrandPojo&gt; getAll(int page,int rowsPerPage) {
-<b class="fc">&nbsp;        return brandDao.getAll(page,rowsPerPage);</b>
+&nbsp;    public List&lt;BrandPojo&gt; getAll(int page, int rowsPerPage) {
+<b class="fc">&nbsp;        return brandDao.getAll((page - 1) * rowsPerPage, rowsPerPage);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public Integer getCount(){
+&nbsp;    public Integer getCount() {
 <b class="fc">&nbsp;        return brandDao.getCount();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public List&lt;BrandPojo&gt; getAll(){
+&nbsp;    public List&lt;BrandPojo&gt; getAll() {
 <b class="fc">&nbsp;        return brandDao.getAll();</b>
 &nbsp;    }
 &nbsp;
@@ -176,7 +178,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;            return brandDao.getByBrand(brand);</b>
 &nbsp;        }
 &nbsp;
-<b class="fc">&nbsp;        List&lt;BrandPojo&gt; brandPojoList = new ArrayList&lt;BrandPojo&gt;();</b>
+<b class="fc">&nbsp;        List&lt;BrandPojo&gt; brandPojoList = new ArrayList&lt;&gt;();</b>
 <b class="fc">&nbsp;        BrandPojo brandPojo = brandDao.getByBrandCategory(brand, category);</b>
 <b class="fc">&nbsp;        brandPojoList.add(brandPojo);</b>
 <b class="fc">&nbsp;        return brandPojoList;</b>
@@ -206,7 +208,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-19 16:12</div>
+    <div style="float:right;">generated on 2023-07-21 15:51</div>
 </div>
 </body>
 </html>

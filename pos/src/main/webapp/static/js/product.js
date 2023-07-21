@@ -21,7 +21,6 @@ function addProduct(event){
     if($form[0].checkValidity()){
         var json = toJson($form);
         var url = getProductUrl();
-        console.log('json ',json);
         $.ajax({
            url: url,
            type: 'POST',
@@ -157,17 +156,17 @@ function updatePagination() {
       </li>
     `;
 
-  let startPage = Math.max(1, currentPage - 1);
-  let endPage = Math.min(totalPages, startPage + 2);
+    let startPage = Math.max(1, currentPage - 1);
+    let endPage = Math.min(totalPages, startPage + 2);
 
-  if (endPage - startPage < 2) {
+    if (endPage - startPage < 2) {
     if (startPage === 1) {
       endPage = Math.min(totalPages, startPage + 2);
     } else {
       startPage = Math.max(1, endPage - 2);
     }
-  }
-  if (startPage > 1) {
+    }
+    if (startPage > 1) {
     paginationHTML += `
       <li class="page-item">
         <a class="page-link" href="#" data-page="1">1</a>
@@ -181,18 +180,18 @@ function updatePagination() {
         </li>
       `;
     }
-  }
+    }
 
-  for (let i = startPage; i <= endPage; i++) {
+    for (let i = startPage; i <= endPage; i++) {
     const active = currentPage === i ? 'active' : '';
     paginationHTML += `
       <li class="page-item ${active}">
         <a class="page-link" href="#" data-page="${i}">${i}</a>
       </li>
     `;
-  }
+    }
 
-  if (endPage < totalPages) {
+    if (endPage < totalPages) {
     if (endPage < totalPages - 1) {
       paginationHTML += `
         <li class="page-item disabled">
@@ -217,14 +216,14 @@ function updatePagination() {
 }
 
 function processErrorData(errorDataList){
- if(errorDataList!=null && errorDataList.length > 0){
+    if(errorDataList!=null && errorDataList.length > 0){
          showErrorNotification("Failed to upload the data");
          $.each(errorDataList, function(index) {
            var row = {"row":errorDataList[index].row,"error":errorDataList[index].errorMessage};
            errorData.push(row);
          })
      }
- updateUploadDialog();
+    updateUploadDialog();
 }
 
 function uploadRows(){
@@ -301,28 +300,28 @@ function updateProduct(event){
     var $form = $("#product-edit-form");
     if($form[0].checkValidity()){
         var id = $("#product-edit-form input[name=id]").val();
-        	var url = getProductUrl() + "/" + id;
-        	var json = toJson($form);
-        	$.ajax({
-        	   url: url,
-        	   type: 'PUT',
-        	   data: json,
-        	   headers: {
-               	'Content-Type': 'application/json'
-               },
-        	   success: function(response) {
-        	   		getProductList(currentPage);
-        	   		$('#edit-product-modal').modal('toggle');
-                    showSuccessNotification("Product updated successfully");
-        	   },
-        	   error: function(response){
-        	        if(response.status == 403){
-                       showErrorNotification("You cannot update the data");
-                    }
-        	        handleAjaxError(response);
-        	   }
-        	});
-        	$form.addClass("was-validated");
+        var url = getProductUrl() + "/" + id;
+        var json = toJson($form);
+        $.ajax({
+           url: url,
+           type: 'PUT',
+           data: json,
+           headers: {
+            'Content-Type': 'application/json'
+           },
+           success: function(response) {
+                getProductList(currentPage);
+                $('#edit-product-modal').modal('toggle');
+                showSuccessNotification("Product updated successfully");
+           },
+           error: function(response){
+                if(response.status == 403){
+                   showErrorNotification("You cannot update the data");
+                }
+                handleAjaxError(response);
+           }
+        });
+        $form.addClass("was-validated");
     }
     else{
         event.preventDefault();

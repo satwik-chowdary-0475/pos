@@ -30,51 +30,51 @@ function getDailySalesReports(){
     $("#download-daily-sales-report").prop("disabled", true).find(".fa-spinner").show();
     var url = getDailySalesUrl() + '/daily_sales';
     $.ajax({
-    	   url: url,
-    	   type: 'GET',
-    	   success: function(data) {
-    	   		downloadReports(data,'daily_sales_report');
-                showSuccessNotification("Downloaded Daily Sales Reports successfully");
-    	   },
-    	   error: handleAjaxError,
-           complete: function(){
-                $("#download-daily-sales-report").prop("disabled", false).find(".fa-spinner").hide();
-           }
-    	});
+       url: url,
+       type: 'GET',
+       success: function(data) {
+            downloadReports(data,'daily_sales_report');
+            showSuccessNotification("Downloaded Daily Sales Reports successfully");
+       },
+       error: handleAjaxError,
+       complete: function(){
+            $("#download-daily-sales-report").prop("disabled", false).find(".fa-spinner").hide();
+       }
+    });
 }
 
 function getBrandReports(){
     $("#download-brand-report").prop("disabled", true).find(".fa-spinner").show();
     var url = getBrandUrl() + '/brands';
     $.ajax({
-    	   url: url,
-    	   type: 'GET',
-    	   success: function(data) {
-    	   		downloadReports(data,'brand_report');
-    	   		showSuccessNotification("Downloaded Brand Reports successfully");
-    	   },
-    	   error: handleAjaxError,
-    	   complete: function(){
-    	        $("#download-brand-report").prop("disabled", false).find(".fa-spinner").hide();
-    	   }
-    	});
+       url: url,
+       type: 'GET',
+       success: function(data) {
+            downloadReports(data,'brand_report');
+            showSuccessNotification("Downloaded Brand Reports successfully");
+       },
+       error: handleAjaxError,
+       complete: function(){
+            $("#download-brand-report").prop("disabled", false).find(".fa-spinner").hide();
+       }
+    });
 }
 
 function getInventoryReports(){
      $("#download-inventory-report").prop("disabled", true).find(".fa-spinner").show();
     var url = getInventoryUrl() + '/inventory';
     $.ajax({
-    	   url: url,
-    	   type: 'GET',
-    	   success: function(data) {
-    	        downloadReports(data,'inventory_report');
-                showSuccessNotification("Downloaded Inventory Reports successfully");
-    	   },
-    	   error: handleAjaxError,
-           complete: function(){
-                $("#download-inventory-report").prop("disabled", false).find(".fa-spinner").hide();
-           }
-    	});
+       url: url,
+       type: 'GET',
+       success: function(data) {
+            downloadReports(data,'inventory_report');
+            showSuccessNotification("Downloaded Inventory Reports successfully");
+       },
+       error: handleAjaxError,
+       complete: function(){
+            $("#download-inventory-report").prop("disabled", false).find(".fa-spinner").hide();
+       }
+    });
 }
 
 function validateDate(){
@@ -150,6 +150,7 @@ function init(){
     $("#inputStartTime").change(validateDate);
     $("#inputEndTime").change(validateDate);
 }
+
 $(document).ready(function() {
     getRoleOfUser(function(role) {
         init();

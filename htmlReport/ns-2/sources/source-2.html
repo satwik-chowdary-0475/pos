@@ -56,10 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$cb5b624a</td>
+    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$5f1a3bf2</td>
   </tr>
   <tr>
-    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$cb5b624a$$FastClassBySpringCGLIB$$9743bbb8</td>
+    <td class="name">InventoryDto$$EnhancerBySpringCGLIB$$5f1a3bf2$$FastClassBySpringCGLIB$$b9847b9f</td>
   </tr>
   <tr>
     <td class="name">InventoryDto$$FastClassBySpringCGLIB$$d857bf16</td>
@@ -115,16 +115,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import java.util.stream.IntStream;
 &nbsp;
 &nbsp;@Service
-&nbsp;public class InventoryDto {
+<b class="fc">&nbsp;public class InventoryDto {</b>
 &nbsp;    @Autowired
 &nbsp;    private ProductService productService;
 &nbsp;    @Autowired
 &nbsp;    private InventoryService inventoryService;
 &nbsp;    @Autowired
 &nbsp;    private BrandService brandService;
-&nbsp;
-<b class="fc">&nbsp;    public InventoryDto() {</b>
-&nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public int insert(InventoryForm inventoryForm) throws ApiException {
@@ -136,34 +133,34 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public void update(int id, InventoryUpdateForm inventoryUpdateForm) throws ApiException {
+&nbsp;    public void update(int productId, InventoryUpdateForm inventoryUpdateForm) throws ApiException {
 <b class="fc">&nbsp;        HelperDto.validate(inventoryUpdateForm);</b>
-<b class="fc">&nbsp;        ProductPojo productPojo = productService.getById(id);</b>
+<b class="fc">&nbsp;        ProductPojo productPojo = productService.getById(productId);</b>
 &nbsp;
 <b class="fc">&nbsp;        InventoryPojo inventoryPojo = HelperDto.convert(inventoryUpdateForm, productPojo.getId());</b>
 <b class="fc">&nbsp;        inventoryService.update(inventoryPojo, productPojo.getBarcode());</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public InventoryData getById(int id) throws ApiException {
-<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryService.getById(id);</b>
+&nbsp;    public InventoryData getByProductId(int productId) throws ApiException {
+<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryService.getByProductId(productId);</b>
 <b class="fc">&nbsp;        ProductPojo productPojo = productService.getById(inventoryPojo.getProductId());</b>
 &nbsp;
 <b class="fc">&nbsp;        return HelperDto.convert(inventoryPojo, productPojo.getBarcode(), productPojo.getName());</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public PaginatedData getAll(int page,int rowsPerPage) throws ApiException {
-<b class="fc">&nbsp;        List&lt;InventoryPojo&gt; inventoryPojoList = inventoryService.getAll(page,rowsPerPage);</b>
+&nbsp;    public PaginatedData getAll(int page, int rowsPerPage) throws ApiException {
+<b class="fc">&nbsp;        List&lt;InventoryPojo&gt; inventoryPojoList = inventoryService.getAll(page, rowsPerPage);</b>
 <b class="fc">&nbsp;        Integer totalCount = inventoryService.getCount();</b>
 &nbsp;
-<b class="fc">&nbsp;        List&lt;InventoryData&gt; inventoryDataList = new ArrayList&lt;InventoryData&gt;();</b>
+<b class="fc">&nbsp;        List&lt;InventoryData&gt; inventoryDataList = new ArrayList&lt;&gt;();</b>
 <b class="fc">&nbsp;        for (InventoryPojo inventoryPojo : inventoryPojoList) {</b>
 <b class="fc">&nbsp;            ProductPojo productPojo = productService.getById(inventoryPojo.getProductId());</b>
 <b class="fc">&nbsp;            inventoryDataList.add(HelperDto.convert(inventoryPojo, productPojo.getBarcode(), productPojo.getName()));</b>
 <b class="fc">&nbsp;        }</b>
 &nbsp;
-<b class="fc">&nbsp;        return new PaginatedData(inventoryDataList,totalCount);</b>
+<b class="fc">&nbsp;        return new PaginatedData(inventoryDataList, totalCount);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
@@ -209,7 +206,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-19 16:12</div>
+    <div style="float:right;">generated on 2023-07-21 15:51</div>
 </div>
 </body>
 </html>

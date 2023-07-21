@@ -3,8 +3,6 @@ package com.increff.pos.model.form;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Id;
-
 @Setter
 @Getter
 public class ProductForm {

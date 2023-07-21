@@ -12,16 +12,14 @@ import com.increff.pos.pojo.UserPojo;
 @Repository
 public class UserDao extends AbstractDao {
 
-    private static String SELECT_BY_ID = "select p from UserPojo p where id=:id";
-    private static String SELECT_BY_EMAIL = "select p from UserPojo p where email=:email";
-    private static String SELECT_ALL = "select p from UserPojo p";
-
+    private static final String SELECT_BY_ID = "select p from UserPojo p where id=:id";
+    private static final String SELECT_BY_EMAIL = "select p from UserPojo p where email=:email";
+    private static final String SELECT_ALL = "select p from UserPojo p";
 
     @Transactional
     public void insertUser(UserPojo userPojo) {
         em().persist(userPojo);
     }
-
 
     @Transactional
     public UserPojo getUserByEmail(String email) {

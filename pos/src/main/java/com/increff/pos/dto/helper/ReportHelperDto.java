@@ -4,10 +4,8 @@ import com.increff.pos.model.data.*;
 import com.increff.pos.model.form.SalesForm;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.DailySalesReportPojo;
-import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.util.StringUtil;
-import javafx.util.Pair;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;

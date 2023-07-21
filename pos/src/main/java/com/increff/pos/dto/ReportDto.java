@@ -5,7 +5,7 @@ import com.increff.pos.model.data.*;
 import com.increff.pos.model.form.SalesForm;
 import com.increff.pos.pojo.*;
 import com.increff.pos.service.*;
-import lombok.extern.log4j.Log4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Log4j
 public class ReportDto {
 
     @Autowired
@@ -127,7 +126,7 @@ public class ReportDto {
     }
 
     public HashMap<Integer, ReportData> getProductOrderItemMap(List<OrderPojo> orderPojoList) {
-        List<OrderItemPojo> orderItemPojoList = orderItemService.getAllOrderItemsByOrderList(orderPojoList);
+        List<OrderItemPojo> orderItemPojoList = orderItemService.getAllByOrderList(orderPojoList);
 
         HashMap<Integer, ReportData> productOrderItemMap = orderItemPojoList.stream()
                 .collect(Collectors.toMap(

@@ -43,7 +43,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (9/9)
+    (8/8)
   </span>
 </td>
 <td class="coverageStat">
@@ -51,15 +51,15 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (24/24)
+    (19/19)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">ProductDao$$EnhancerBySpringCGLIB$$5d5f65b1</td>
+    <td class="name">ProductDao$$EnhancerBySpringCGLIB$$f11e3f59</td>
   </tr>
   <tr>
-    <td class="name">ProductDao$$EnhancerBySpringCGLIB$$5d5f65b1$$FastClassBySpringCGLIB$$a89e2004</td>
+    <td class="name">ProductDao$$EnhancerBySpringCGLIB$$f11e3f59$$FastClassBySpringCGLIB$$f9f7c42c</td>
   </tr>
   <tr>
     <td class="name">ProductDao$$FastClassBySpringCGLIB$$6a80f183</td>
@@ -71,7 +71,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (9/9)
+    (8/8)
   </span>
 </td>
 <td class="coverageStat">
@@ -79,7 +79,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (24/24)
+    (19/19)
   </span>
 </td>
 </tr>
@@ -102,11 +102,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;@Repository
 <b class="fc">&nbsp;public class ProductDao extends AbstractDao {</b>
 &nbsp;
-<b class="fc">&nbsp;    private static String SELECT_BY_ID = &quot;select p from ProductPojo p where id=:id&quot;;</b>
-<b class="fc">&nbsp;    private static String SELECT_BY_BARCODE = &quot;select p from ProductPojo p where barcode=:barcode&quot;;</b>
-<b class="fc">&nbsp;    private static String SELECT_ALL = &quot;select p from ProductPojo p&quot;;</b>
-<b class="fc">&nbsp;    private static String SELECT_BY_BRAND_CATEGORY = &quot;select p from ProductPojo p where brandCategoryId=:brandCategoryId&quot;;</b>
-<b class="fc">&nbsp;    private static String SELECT_ALL_COUNT = &quot;select COUNT(p) from ProductPojo p&quot;;</b>
+&nbsp;    private static final String SELECT_BY_ID = &quot;select p from ProductPojo p where id=:id&quot;;
+&nbsp;    private static final String SELECT_BY_BARCODE = &quot;select p from ProductPojo p where barcode=:barcode&quot;;
+&nbsp;    private static final String SELECT_ALL = &quot;select p from ProductPojo p&quot;;
+&nbsp;    private static final String SELECT_BY_BRAND_CATEGORY = &quot;select p from ProductPojo p where brandCategoryId=:brandCategoryId&quot;;
+&nbsp;    private static final String SELECT_ALL_COUNT = &quot;select COUNT(p) from ProductPojo p&quot;;
 &nbsp;
 &nbsp;    @Transactional
 &nbsp;    public void insert(ProductPojo productPojo) {
@@ -141,9 +141,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public List&lt;ProductPojo&gt; getAll(int page,int rowsPerPage){
+&nbsp;    public List&lt;ProductPojo&gt; getAll(int offset,int rowsPerPage){
 <b class="fc">&nbsp;        TypedQuery&lt;ProductPojo&gt; query = getQuery(SELECT_ALL, ProductPojo.class);</b>
-<b class="fc">&nbsp;        query.setFirstResult((page-1)*rowsPerPage);</b>
+<b class="fc">&nbsp;        query.setFirstResult(offset);</b>
 <b class="fc">&nbsp;        query.setMaxResults(rowsPerPage);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
@@ -180,7 +180,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-19 16:12</div>
+    <div style="float:right;">generated on 2023-07-21 15:51</div>
 </div>
 </body>
 </html>

@@ -1,6 +1,5 @@
 package com.increff.pos.pojo;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 

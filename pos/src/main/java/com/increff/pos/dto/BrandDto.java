@@ -65,7 +65,8 @@ public class BrandDto {
                     } catch (ApiException e) {
                         return HelperDto.convert(row + 1, e.getMessage());
                     }
-                }).filter(Objects::nonNull)
+                })
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         if (!errorDataList.isEmpty()) {

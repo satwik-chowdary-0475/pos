@@ -2,6 +2,7 @@ package com.increff.pos.controller;
 
 
 import com.increff.pos.dto.ProductDto;
+import com.increff.pos.model.constants.PaginationConstant;
 import com.increff.pos.model.data.PaginatedData;
 import com.increff.pos.model.data.ProductData;
 import com.increff.pos.model.form.ProductForm;
@@ -37,8 +38,11 @@ public class ProductController {
 
     @ApiOperation(value = "Get list of all products")
     @GetMapping(path = "")
-    public PaginatedData getAllProduct(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int rowsPerPage) throws ApiException {
-        return productDto.getAll(page,rowsPerPage);
+    public PaginatedData getAllProduct(
+            @RequestParam(defaultValue = PaginationConstant.DEFAULT_PAGE) int page,
+            @RequestParam(defaultValue = PaginationConstant.DEFAULT_ROWS_PER_PAGE) int rowsPerPage
+    ) throws ApiException {
+        return productDto.getAll(page, rowsPerPage);
     }
 
     @ApiOperation(value = "Get a product details")
@@ -52,6 +56,5 @@ public class ProductController {
     public void insertProductList(@RequestBody List<ProductForm> productFormList) throws ApiException {
         productDto.insertList(productFormList);
     }
-
 
 }

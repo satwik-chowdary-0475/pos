@@ -15,12 +15,10 @@ import com.increff.pos.service.ProductService;
 import com.increff.pos.spring.AbstractUnitTest;
 import com.increff.pos.pojo.OrderStatus;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +104,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         orderItemDto.insert(orderPojo.getId(),orderItemForm);
         ProductPojo productPojo = productService.getByBarcode("barcode 1");
         // Optional.ofNullable checks if the object is not null
-        assertEquals(Optional.ofNullable((inventoryService.getById(productPojo.getId()).getQuantity())),Optional.ofNullable(100));
+        assertEquals(Optional.ofNullable((inventoryService.getByProductId(productPojo.getId()).getQuantity())),Optional.ofNullable(100));
         List<OrderItemData>orderItemDataList = orderItemDto.getAllByOrderId(orderPojo.getId());
         OrderDetailsData actualOrderDetailsData = Helper.createOrderDetailsData(orderPojo,orderItemDataList);
         OrderDetailsData expectedOrderDetailsData = orderDto.getAllOrderDetails(orderCode);
@@ -135,19 +133,19 @@ public class OrderDtoTest extends AbstractUnitTest {
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1",100,100.12);
         orderItemDto.insert(orderPojo.getId(),orderItemForm);
         ProductPojo productPojo = productService.getByBarcode("barcode 1");
-        assertEquals(Optional.ofNullable(inventoryService.getById(productPojo.getId()).getQuantity()),Optional.ofNullable(100));
+        assertEquals(Optional.ofNullable(inventoryService.getByProductId(productPojo.getId()).getQuantity()),Optional.ofNullable(100));
         //check order delete
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Order doesn't exist");
         orderDto.delete(orderCode);
-        OrderPojo deletedOrderPojo = orderService.getByOrderCode(orderCode);
+        orderService.getByOrderCode(orderCode);
 
         //check order item delete
         List<OrderItemData>orderItemDataList = orderItemDto.getAllByOrderId(orderPojo.getId());
         assertEquals(orderItemDataList.size() , 0);
 
         //check inventory update
-        assertEquals(Optional.ofNullable(inventoryService.getById(productPojo.getId()).getQuantity()),Optional.ofNullable(200));
+        assertEquals(Optional.ofNullable(inventoryService.getByProductId(productPojo.getId()).getQuantity()),Optional.ofNullable(200));
     }
 
 

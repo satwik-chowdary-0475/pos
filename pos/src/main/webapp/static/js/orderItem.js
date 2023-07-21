@@ -22,17 +22,18 @@ function getPdfUrl(){
     var url = "http://0.0.0.0:8081/invoice/api/generate-pdf";
     return url;
 }
+
 function getOrderUrl(){
    var baseUrl = $("meta[name=baseUrl]").attr("content")
    return baseUrl + "/api/orders";
 }
+
 function getOrderItemUrl(){
     var baseUrl = $("meta[name=baseUrl]").attr("content")
     return baseUrl + "/api/orders/"+orderId+"/order-items";
 }
 
 function getOrderDetails(){
-
     var url = getOrderUrl()+"/"+getOrderCode();
     $.ajax({
         url:url,
@@ -104,56 +105,49 @@ function displayOrderItem(data){
 function deleteOrderItem(id){
     var url = getOrderItemUrl()+"/"+id;
     $.ajax({
-    	   url: url,
-    	   type: 'DELETE',
-    	   success: function() {
-    	   		getOrderItemList();
-    	   },
-    	   error: handleAjaxError
-    	});
+       url: url,
+       type: 'DELETE',
+       success: function() {
+            getOrderItemList();
+       },
+       error: handleAjaxError
+    });
 }
 
 function displayOrderItemList(data){
     var $tbody = $('#orderItem-table').find('tbody');
-    	$tbody.empty();
-    	totalPrice = 0;
-    	for(var i in data){
-    		var e = data[i];
-    		var editHtml = '<button class="btn btn-primary" onclick="displayEditOrderItem('+e.id+')" ';
-    		editHtml += ((orderStatus != 'CREATED')?'disabled':'') + '><div class="d-flex gap-2 align-items-center"><i class="fas fa-pen" style="font-size: 15px; margin-right: 10px;"></i>Edit</div></button>';
-    		var deleteHtml ='<button class="btn btn-danger" onclick="deleteOrderItem('+e.id+')" ';
-    		deleteHtml += ((orderStatus != 'CREATED')?'disabled':'') + '><div class="d-flex gap-2 align-items-center"><i class="fas fa-trash" style="font-size: 15px; margin-right: 10px;"></i>Delete</div></button>';
-    		var buttonHtml = editHtml + '&nbsp' + deleteHtml;
-    		i = parseInt(i)+1;
-    		var row = '<tr>'
-    		+ '<td>' + i + '</td>'
-    		+ '<td>' + e.barcode + '</td>'
-    		+ '<td>' + e.productName + '</td>'
-    		+ '<td>' + e.quantity + '</td>'
-    		+ '<td>' + e.sellingPrice.toFixed(2) + '</td>'
-    		+ '<td>' + e.totalPrice.toFixed(2) + '</td>';
-    		row += (orderStatus!=null && orderStatus == 'CREATED')?('<td>' + buttonHtml + '</td>'):'';
-    		row += '</tr>';
-            $tbody.append(row);
-            totalPrice+=(parseFloat(e.sellingPrice.toFixed(2))*parseInt(e.quantity));
-    	}
+    $tbody.empty();
+    totalPrice = 0;
+    for(var i in data){
+        var e = data[i];
+        var editHtml = '<button class="btn btn-primary" onclick="displayEditOrderItem('+e.id+')" ';
+        editHtml += ((orderStatus != 'CREATED')?'disabled':'') + '><div class="d-flex gap-2 align-items-center"><i class="fas fa-pen" style="font-size: 15px; margin-right: 10px;"></i>Edit</div></button>';
+        var deleteHtml ='<button class="btn btn-danger" onclick="deleteOrderItem('+e.id+')" ';
+        deleteHtml += ((orderStatus != 'CREATED')?'disabled':'') + '><div class="d-flex gap-2 align-items-center"><i class="fas fa-trash" style="font-size: 15px; margin-right: 10px;"></i>Delete</div></button>';
+        var buttonHtml = editHtml + '&nbsp' + deleteHtml;
+        i = parseInt(i)+1;
+        var row = '<tr>'
+        + '<td>' + i + '</td>'
+        + '<td>' + e.barcode + '</td>'
+        + '<td>' + e.productName + '</td>'
+        + '<td>' + e.quantity + '</td>'
+        + '<td>' + e.sellingPrice.toFixed(2) + '</td>'
+        + '<td>' + e.totalPrice.toFixed(2) + '</td>';
+        row += (orderStatus!=null && orderStatus == 'CREATED')?('<td>' + buttonHtml + '</td>'):'';
+        row += '</tr>';
+        $tbody.append(row);
+        totalPrice+=(parseFloat(e.sellingPrice.toFixed(2))*parseInt(e.quantity));
+    }
 
-        var totalPriceRow = '<tr class="no-border">'
-    	+'<td colspan="5" style="font-weight:600">Total Price</td>'
-    	+'<td colspan="1" style="font-weight: 600">'+totalPrice.toFixed(2)+'</td>';
+    var totalPriceRow = '<tr class="no-border">'
+    +'<td colspan="5" style="font-weight:600">Total Price</td>'
+    +'<td colspan="1" style="font-weight: 600">'+totalPrice.toFixed(2)+'</td>';
 
-    	totalPriceRow += (orderStatus!=null && orderStatus == 'CREATED')?('<td>'):'';
-    	totalPriceRow += '</tr>';
-        $tbody.append(totalPriceRow);
-
+    totalPriceRow += (orderStatus!=null && orderStatus == 'CREATED')?('<td>'):'';
+    totalPriceRow += '</tr>';
+    $tbody.append(totalPriceRow);
 }
 
-function scientificNumberReviver(value) {
-  if (typeof value === 'string' && /^[-+]?(\d+(\.\d*)?|\.\d+)(e[-+]?\d+)$/i.test(value)) {
-    return parseFloat(value); // Parse as a float to preserve scientific notation
-  }
-  return value;
-}
 
 function addOrderItem(event){
 	var $form = $("#orderItem-form");
@@ -198,6 +192,9 @@ function updateOrderItem(event){
 	var $form = $("#orderItem-edit-form");
 	if($form[0].checkValidity()){
 	    var json = toJson($form);
+	    var jsonObj = JSON.parse(json);
+        jsonObj.quantity = scientificNumberReviver(jsonObj.quantity);
+        json = JSON.stringify(jsonObj);
         $.ajax({
         	   url: url,
         	   type: 'PUT',

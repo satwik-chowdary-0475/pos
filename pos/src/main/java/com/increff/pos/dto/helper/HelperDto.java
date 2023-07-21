@@ -90,8 +90,8 @@ public class HelperDto {
         if (Objects.isNull(field) || field.trim().isEmpty()) {
             throw new ApiException("Invalid " + fieldName.toLowerCase() + ". " + fieldName + " is required.");
         }
-        if (field.length() > 30) {
-            throw new ApiException(fieldName + " cannot be more than 30 characters.");
+        if (field.length() > 255) {
+            throw new ApiException(fieldName + " cannot be more than 255 characters.");
         }
     }
 

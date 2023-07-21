@@ -2,7 +2,7 @@ package com.increff.pos.service;
 
 import com.increff.pos.dao.BrandDao;
 import com.increff.pos.pojo.BrandPojo;
-import lombok.extern.log4j.Log4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-@Log4j
 public class BrandService {
     @Autowired
     private BrandDao brandDao;
@@ -43,6 +42,7 @@ public class BrandService {
         BrandPojo brandPojo = brandDao.getById(id);
         if (Objects.isNull(brandPojo))
             throw new ApiException("Brand item doesn't exist");
+
         return brandPojo;
     }
 
@@ -51,21 +51,22 @@ public class BrandService {
         BrandPojo brandPojo = brandDao.getByBrandCategory(brand, category);
         if (Objects.isNull(brandPojo))
             throw new ApiException("The brand-category pair with brand name " + brand + " and category name " + category + " does not exist");
+
         return brandPojo;
     }
 
     @Transactional
-    public List<BrandPojo> getAll(int page,int rowsPerPage) {
-        return brandDao.getAll(page,rowsPerPage);
+    public List<BrandPojo> getAll(int page, int rowsPerPage) {
+        return brandDao.getAll((page - 1) * rowsPerPage, rowsPerPage);
     }
 
     @Transactional
-    public Integer getCount(){
+    public Integer getCount() {
         return brandDao.getCount();
     }
 
     @Transactional
-    public List<BrandPojo> getAll(){
+    public List<BrandPojo> getAll() {
         return brandDao.getAll();
     }
 
@@ -84,7 +85,7 @@ public class BrandService {
             return brandDao.getByBrand(brand);
         }
 
-        List<BrandPojo> brandPojoList = new ArrayList<BrandPojo>();
+        List<BrandPojo> brandPojoList = new ArrayList<>();
         BrandPojo brandPojo = brandDao.getByBrandCategory(brand, category);
         brandPojoList.add(brandPojo);
         return brandPojoList;

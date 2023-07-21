@@ -2,7 +2,7 @@ package com.increff.pos.dao;
 
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.OrderStatus;
-import lombok.extern.log4j.Log4j;
+
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
@@ -11,7 +11,6 @@ import java.sql.Date;
 import java.util.List;
 
 @Repository
-@Log4j
 public class OrderDao extends AbstractDao {
 
     private static String SELECT_BY_ID = "select p from OrderPojo p where id=:id";
@@ -50,15 +49,9 @@ public class OrderDao extends AbstractDao {
     }
 
     @Transactional
-    public List<OrderPojo> getAll() {
+    public List<OrderPojo> getAll(int offset,int rowsPerPage) {
         TypedQuery<OrderPojo> query = getQuery(SELECT_ALL, OrderPojo.class);
-        return query.getResultList();
-    }
-
-    @Transactional
-    public List<OrderPojo> getAll(int page,int rowsPerPage) {
-        TypedQuery<OrderPojo> query = getQuery(SELECT_ALL, OrderPojo.class);
-        query.setFirstResult((page-1)*rowsPerPage);
+        query.setFirstResult(offset);
         query.setMaxResults(rowsPerPage);
         return query.getResultList();
     }

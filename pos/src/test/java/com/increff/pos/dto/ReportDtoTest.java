@@ -13,8 +13,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.ZonedDateTime;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -58,6 +60,12 @@ public class ReportDtoTest extends AbstractUnitTest {
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1", 10, 120.12);
         orderItemDto.insert(orderPojo.getId(), orderItemForm);
         orderDto.changeStatus(orderCode);
+        OrderForm orderForm1 = Helper.createOrderForm("customer 2");
+        String orderCode1 = orderDto.insert(orderForm1);
+        OrderPojo orderPojo1 = orderService.getByOrderCode(orderCode1);
+        OrderItemForm orderItemForm1 = Helper.createOrderItemForm("barcode 1", 10, 120.12);
+        orderItemDto.insert(orderPojo1.getId(), orderItemForm1);
+        orderDto.changeStatus(orderCode1);
     }
 
     @Test
@@ -70,6 +78,9 @@ public class ReportDtoTest extends AbstractUnitTest {
     public void TestInventoryReport() throws ApiException {
         List<InventoryReportData> inventoryReportDataList = reportDto.getInventoryReport();
         assertEquals(inventoryReportDataList.size(), 3);
+        assertEquals(Optional.ofNullable(inventoryReportDataList.get(0).getQuantity()),Optional.ofNullable(180));
+        assertEquals(Optional.ofNullable(inventoryReportDataList.get(1).getQuantity()),Optional.ofNullable(0));
+        assertEquals(Optional.ofNullable(inventoryReportDataList.get(2).getQuantity()),Optional.ofNullable(0));
     }
 
 
@@ -82,38 +93,57 @@ public class ReportDtoTest extends AbstractUnitTest {
 
     @Test
     public void TestGetSalesReport() throws ApiException {
-        ZonedDateTime startTime = ZonedDateTime.parse("2022-06-22T10:15:30+01:00[Asia/Kolkata]");
-        ZonedDateTime endTime = ZonedDateTime.parse("2022-06-30T10:15:30+01:00[Asia/Kolkata]");
-        SalesForm salesForm = Helper.createSalesForm("brand 1", "category 1", startTime, endTime);
+        Date startTime = Date.valueOf(LocalDate.now().minusDays(1));
+        Date endTime = Date.valueOf(LocalDate.now());
+        SalesForm salesForm = Helper.createSalesForm("brand 1", "category 1", startTime.toString(), endTime.toString());
         List<SalesData> salesDataList = reportDto.getSalesReport(salesForm);
         assertEquals(salesDataList.size(), 1);
+        assertEquals(salesDataList.get(0).getRevenue(),2402.4);
+        assertEquals(Optional.ofNullable(salesDataList.get(0).getQuantity()),Optional.ofNullable(20));
     }
 
     @Test
     public void TestGetSalesReportEmptyBrand() throws ApiException {
-        ZonedDateTime startTime = ZonedDateTime.parse("2022-06-22T10:15:30+01:00[Asia/Kolkata]");
-        ZonedDateTime endTime = ZonedDateTime.parse("2022-06-30T10:15:30+01:00[Asia/Kolkata]");
-        SalesForm salesForm = Helper.createSalesForm("", "category 1", startTime, endTime);
+        Date startTime = Date.valueOf(LocalDate.now().minusDays(1));
+        Date endTime = Date.valueOf(LocalDate.now());
+        SalesForm salesForm = Helper.createSalesForm("", "category 1", startTime.toString(), endTime.toString());
         List<SalesData> salesDataList = reportDto.getSalesReport(salesForm);
         assertEquals(salesDataList.size(), 2);
+        assertEquals(salesDataList.get(0).getRevenue(),2402.4);
+        assertEquals(Optional.ofNullable(salesDataList.get(0).getQuantity()),Optional.ofNullable(20));
+        assertEquals(salesDataList.get(1).getRevenue(),0.0);
+        assertEquals(Optional.ofNullable(salesDataList.get(1).getQuantity()),Optional.ofNullable(0));
     }
+
+
 
     @Test
     public void TestGetSalesReportEmptyCategory() throws ApiException {
-        ZonedDateTime startTime = ZonedDateTime.parse("2022-06-22T10:15:30+01:00[Asia/Kolkata]");
-        ZonedDateTime endTime = ZonedDateTime.parse("2022-06-30T10:15:30+01:00[Asia/Kolkata]");
-        SalesForm salesForm = Helper.createSalesForm("brand 1", "", startTime, endTime);
+        Date startTime = Date.valueOf(LocalDate.now().minusDays(1));
+        Date endTime = Date.valueOf(LocalDate.now());
+        SalesForm salesForm = Helper.createSalesForm("brand 1", "", startTime.toString(), endTime.toString());
         List<SalesData> salesDataList = reportDto.getSalesReport(salesForm);
         assertEquals(salesDataList.size(), 2);
+        assertEquals(salesDataList.get(0).getRevenue(),2402.4);
+        assertEquals(Optional.ofNullable(salesDataList.get(0).getQuantity()),Optional.ofNullable(20));
+        assertEquals(salesDataList.get(1).getRevenue(),0.0);
+        assertEquals(Optional.ofNullable(salesDataList.get(1).getQuantity()),Optional.ofNullable(0));
     }
 
     @Test
     public void TestGetSalesReportBothEmpty() throws ApiException {
-        ZonedDateTime startTime = ZonedDateTime.parse("2022-06-22T10:15:30+01:00[Asia/Kolkata]");
-        ZonedDateTime endTime = ZonedDateTime.parse("2022-06-30T10:15:30+01:00[Asia/Kolkata]");
-        SalesForm salesForm = Helper.createSalesForm("", "", startTime, endTime);
+        Date startTime = Date.valueOf(LocalDate.now().minusDays(1));
+        Date endTime = Date.valueOf(LocalDate.now());
+        SalesForm salesForm = Helper.createSalesForm("", "", startTime.toString(), endTime.toString());
         List<SalesData> salesDataList = reportDto.getSalesReport(salesForm);
         assertEquals(salesDataList.size(), 3);
+        assertEquals(salesDataList.get(0).getRevenue(),2402.4);
+        assertEquals(Optional.ofNullable(salesDataList.get(0).getQuantity()),Optional.ofNullable(20));
+        assertEquals(salesDataList.get(1).getRevenue(),0.0);
+        assertEquals(Optional.ofNullable(salesDataList.get(1).getQuantity()),Optional.ofNullable(0));
+        assertEquals(salesDataList.get(2).getRevenue(),0.0);
+        assertEquals(Optional.ofNullable(salesDataList.get(2).getQuantity()),Optional.ofNullable(0));
+
     }
 
 

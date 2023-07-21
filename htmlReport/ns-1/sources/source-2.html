@@ -43,7 +43,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (10/10)
+    (9/9)
   </span>
 </td>
 <td class="coverageStat">
@@ -51,15 +51,15 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (29/29)
+    (23/23)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">BrandDao$$EnhancerBySpringCGLIB$$66f93de9</td>
+    <td class="name">BrandDao$$EnhancerBySpringCGLIB$$fab81791</td>
   </tr>
   <tr>
-    <td class="name">BrandDao$$EnhancerBySpringCGLIB$$66f93de9$$FastClassBySpringCGLIB$$d1658a46</td>
+    <td class="name">BrandDao$$EnhancerBySpringCGLIB$$fab81791$$FastClassBySpringCGLIB$$2766d6fd</td>
   </tr>
   <tr>
     <td class="name">BrandDao$$FastClassBySpringCGLIB$$8104a3eb</td>
@@ -71,7 +71,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (10/10)
+    (9/9)
   </span>
 </td>
 <td class="coverageStat">
@@ -79,7 +79,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (29/29)
+    (23/23)
   </span>
 </td>
 </tr>
@@ -92,7 +92,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.dao;
 &nbsp;
-&nbsp;
 &nbsp;import com.increff.pos.pojo.BrandPojo;
 &nbsp;import org.springframework.stereotype.Repository;
 &nbsp;
@@ -102,12 +101,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;@Repository
 <b class="fc">&nbsp;public class BrandDao extends AbstractDao {</b>
-<b class="fc">&nbsp;    private static String SELECT_BY_ID = &quot;select p from BrandPojo p where id=:id&quot;;</b>
-<b class="fc">&nbsp;    private static String SELECT_ALL = &quot;select p from BrandPojo p&quot;;</b>
-<b class="fc">&nbsp;    private static String SELECT_BY_BRAND_CATEGORY = &quot;select p from BrandPojo p where brand=:brand and category=:category&quot;;</b>
-<b class="fc">&nbsp;    private static String SELECT_BY_BRAND = &quot;select p from BrandPojo p where brand=:brand&quot;;</b>
-<b class="fc">&nbsp;    private static String SELECT_BY_CATEGORY = &quot;select p from BrandPojo p where category=:category&quot;;</b>
-<b class="fc">&nbsp;    private static String SELECT_ALL_COUNT = &quot;select COUNT(p) from BrandPojo p&quot;;</b>
+&nbsp;    private static final String SELECT_BY_ID = &quot;select p from BrandPojo p where id=:id&quot;;
+&nbsp;    private static final String SELECT_ALL = &quot;select p from BrandPojo p&quot;;
+&nbsp;    private static final String SELECT_BY_BRAND_CATEGORY = &quot;select p from BrandPojo p where brand=:brand and category=:category&quot;;
+&nbsp;    private static final String SELECT_BY_BRAND = &quot;select p from BrandPojo p where brand=:brand&quot;;
+&nbsp;    private static final String SELECT_BY_CATEGORY = &quot;select p from BrandPojo p where category=:category&quot;;
+&nbsp;    private static final String SELECT_ALL_COUNT = &quot;select COUNT(p) from BrandPojo p&quot;;
 &nbsp;
 &nbsp;    @Transactional
 &nbsp;    public void insert(BrandPojo brandPojo) {
@@ -144,25 +143,24 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public List&lt;BrandPojo&gt; getAll(int page,int rowsPerPage) {
+&nbsp;    public List&lt;BrandPojo&gt; getAll(int offset, int rowsPerPage) {
 <b class="fc">&nbsp;        TypedQuery&lt;BrandPojo&gt; query = getQuery(SELECT_ALL, BrandPojo.class);</b>
-<b class="fc">&nbsp;        query.setFirstResult((page-1)*rowsPerPage);</b>
+<b class="fc">&nbsp;        query.setFirstResult(offset);</b>
 <b class="fc">&nbsp;        query.setMaxResults(rowsPerPage);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public List&lt;BrandPojo&gt; getAll(){
+&nbsp;    public List&lt;BrandPojo&gt; getAll() {
 <b class="fc">&nbsp;        TypedQuery&lt;BrandPojo&gt; query = getQuery(SELECT_ALL, BrandPojo.class);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional
-&nbsp;    public Integer getCount(){
+&nbsp;    public Integer getCount() {
 <b class="fc">&nbsp;        TypedQuery&lt;Number&gt; query = getQuery(SELECT_ALL_COUNT, Number.class);</b>
 <b class="fc">&nbsp;        return query.getSingleResult().intValue();</b>
 &nbsp;    }
-&nbsp;
 &nbsp;
 &nbsp;}
 </code>
@@ -188,7 +186,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-19 16:12</div>
+    <div style="float:right;">generated on 2023-07-21 15:51</div>
 </div>
 </body>
 </html>

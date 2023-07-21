@@ -8,9 +8,6 @@
 <link rel="stylesheet" th:href="@{/static/css/login.css}">
 <body>
 
-<!--<nav th:replace="snippets.html :: name_site_navbar"></nav>-->
-
-
 <div class="container" id="container">
     <div class="form-container sign-up-container">
         <form class="form" id="init-form" >
@@ -27,19 +24,9 @@
     <div class="form-container sign-in-container" >
         <form id="login-form">
             <h1>Login</h1>
-<!--            <div class="social-container">-->
-<!--                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>-->
-<!--                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>-->
-<!--                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>-->
-<!--            </div>-->
-<!--            <span>or use your account</span>-->
             <input  name="email" id="email" type="email" placeholder="Email" />
             <input name="password" id="password" type="password" placeholder="Password" />
             <button type="button" id="login">Login</button>
-<!--            <div class="my-2 text-success">-->
-<!--                [[${info.getMessage()}]]-->
-<!--            </div>-->
-
         </form>
     </div>
     <div class="overlay-container">

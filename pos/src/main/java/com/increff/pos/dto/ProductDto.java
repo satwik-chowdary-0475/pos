@@ -31,42 +31,42 @@ public class ProductDto {
     @Transactional(rollbackOn = ApiException.class)
     public int insert(ProductForm form) throws ApiException {
         HelperDto.normalise(form);
-        BrandPojo brandPojo = brandService.getByBrandCategory(form.getBrand(),form.getCategory());
-        ProductPojo productPojo = HelperDto.convert(form,brandPojo.getId());
+        BrandPojo brandPojo = brandService.getByBrandCategory(form.getBrand(), form.getCategory());
+        ProductPojo productPojo = HelperDto.convert(form, brandPojo.getId());
         return productService.insert(productPojo);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void update(int id, ProductUpdateForm productUpdateForm) throws ApiException{
+    public void update(int id, ProductUpdateForm productUpdateForm) throws ApiException {
         HelperDto.normalise(productUpdateForm);
-        ProductPojo productPojo = HelperDto.convert(productUpdateForm);
         productService.getById(id);
-        productService.update(id,productPojo);
+        ProductPojo productPojo = HelperDto.convert(productUpdateForm);
+        productService.update(id, productPojo);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public ProductData getById(int id) throws ApiException{
+    public ProductData getById(int id) throws ApiException {
         ProductPojo productPojo = productService.getById(id);
         BrandPojo brandPojo = brandService.getById(productPojo.getBrandCategoryId());
-        return HelperDto.convert(productPojo,brandPojo.getBrand(),brandPojo.getCategory());
+        return HelperDto.convert(productPojo, brandPojo.getBrand(), brandPojo.getCategory());
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public PaginatedData getAll(int page,int rowsPerPage) throws ApiException{
-        List<ProductPojo> productPojoList = productService.getAll(page,rowsPerPage);
+    public PaginatedData getAll(int page, int rowsPerPage) throws ApiException {
+        List<ProductPojo> productPojoList = productService.getAll(page, rowsPerPage);
         Integer totalCount = productService.getCount();
 
-        List<ProductData> productDataList = new ArrayList<ProductData>();
-        for(ProductPojo productPojo : productPojoList){
+        List<ProductData> productDataList = new ArrayList<>();
+        for (ProductPojo productPojo : productPojoList) {
             BrandPojo brandPojo = brandService.getById(productPojo.getBrandCategoryId());
-            productDataList.add(HelperDto.convert(productPojo,brandPojo.getBrand(), brandPojo.getCategory()));
+            productDataList.add(HelperDto.convert(productPojo, brandPojo.getBrand(), brandPojo.getCategory()));
         }
 
-        return new PaginatedData(productDataList,totalCount);
+        return new PaginatedData(productDataList, totalCount);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void insertList(List<ProductForm>productFormList) throws ApiException {
+    public void insertList(List<ProductForm> productFormList) throws ApiException {
         List<ErrorData> errorDataList = IntStream.range(0, productFormList.size())
                 .mapToObj(row -> {
                     ProductForm productForm = productFormList.get(row);

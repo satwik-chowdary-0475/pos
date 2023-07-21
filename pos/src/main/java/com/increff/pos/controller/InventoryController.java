@@ -2,6 +2,7 @@ package com.increff.pos.controller;
 
 
 import com.increff.pos.dto.InventoryDto;
+import com.increff.pos.model.constants.PaginationConstant;
 import com.increff.pos.model.data.InventoryData;
 import com.increff.pos.model.data.PaginatedData;
 import com.increff.pos.model.form.InventoryForm;
@@ -29,21 +30,24 @@ public class InventoryController {
     }
 
     @ApiOperation(value = "Updates a product in inventory")
-    @PutMapping(path = "/{id}")
-    public void updateProductInInventory(@PathVariable int id, @RequestBody InventoryUpdateForm inventoryUpdateForm) throws ApiException {
-        inventoryDto.update(id, inventoryUpdateForm);
+    @PutMapping(path = "/{productId}")
+    public void updateProductInInventory(@PathVariable int productId, @RequestBody InventoryUpdateForm inventoryUpdateForm) throws ApiException {
+        inventoryDto.update(productId, inventoryUpdateForm);
     }
 
     @ApiOperation(value = "Get list of all products in inventory")
     @GetMapping(path = "")
-    public PaginatedData getAllProducts(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int rowsPerPage) throws ApiException {
-        return inventoryDto.getAll(page,rowsPerPage);
+    public PaginatedData getAllProducts(
+            @RequestParam(defaultValue = PaginationConstant.DEFAULT_PAGE) int page,
+            @RequestParam(defaultValue = PaginationConstant.DEFAULT_ROWS_PER_PAGE) int rowsPerPage
+    ) throws ApiException {
+        return inventoryDto.getAll(page, rowsPerPage);
     }
 
     @ApiOperation(value = "Get a product from inventory")
-    @GetMapping(path = "/{id}")
-    public InventoryData getProduct(@PathVariable int id) throws ApiException {
-        return inventoryDto.getById(id);
+    @GetMapping(path = "/{productId}")
+    public InventoryData getProduct(@PathVariable int productId) throws ApiException {
+        return inventoryDto.getByProductId(productId);
     }
 
     @ApiOperation(value = "Add list of inventory")

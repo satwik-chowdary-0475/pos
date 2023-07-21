@@ -56,10 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$2df98b51</td>
+    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$c1b864f9</td>
   </tr>
   <tr>
-    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$2df98b51$$FastClassBySpringCGLIB$$28153881</td>
+    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$c1b864f9$$FastClassBySpringCGLIB$$796df7cb</td>
   </tr>
   <tr>
     <td class="name">ProductDto$$FastClassBySpringCGLIB$$1e3a6f63</td>
@@ -123,42 +123,42 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public int insert(ProductForm form) throws ApiException {
 <b class="fc">&nbsp;        HelperDto.normalise(form);</b>
-<b class="fc">&nbsp;        BrandPojo brandPojo = brandService.getByBrandCategory(form.getBrand(),form.getCategory());</b>
-<b class="fc">&nbsp;        ProductPojo productPojo = HelperDto.convert(form,brandPojo.getId());</b>
+<b class="fc">&nbsp;        BrandPojo brandPojo = brandService.getByBrandCategory(form.getBrand(), form.getCategory());</b>
+<b class="fc">&nbsp;        ProductPojo productPojo = HelperDto.convert(form, brandPojo.getId());</b>
 <b class="fc">&nbsp;        return productService.insert(productPojo);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public void update(int id, ProductUpdateForm productUpdateForm) throws ApiException{
+&nbsp;    public void update(int id, ProductUpdateForm productUpdateForm) throws ApiException {
 <b class="fc">&nbsp;        HelperDto.normalise(productUpdateForm);</b>
-<b class="fc">&nbsp;        ProductPojo productPojo = HelperDto.convert(productUpdateForm);</b>
 <b class="fc">&nbsp;        productService.getById(id);</b>
-<b class="fc">&nbsp;        productService.update(id,productPojo);</b>
+<b class="fc">&nbsp;        ProductPojo productPojo = HelperDto.convert(productUpdateForm);</b>
+<b class="fc">&nbsp;        productService.update(id, productPojo);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public ProductData getById(int id) throws ApiException{
+&nbsp;    public ProductData getById(int id) throws ApiException {
 <b class="fc">&nbsp;        ProductPojo productPojo = productService.getById(id);</b>
 <b class="fc">&nbsp;        BrandPojo brandPojo = brandService.getById(productPojo.getBrandCategoryId());</b>
-<b class="fc">&nbsp;        return HelperDto.convert(productPojo,brandPojo.getBrand(),brandPojo.getCategory());</b>
+<b class="fc">&nbsp;        return HelperDto.convert(productPojo, brandPojo.getBrand(), brandPojo.getCategory());</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public PaginatedData getAll(int page,int rowsPerPage) throws ApiException{
-<b class="fc">&nbsp;        List&lt;ProductPojo&gt; productPojoList = productService.getAll(page,rowsPerPage);</b>
+&nbsp;    public PaginatedData getAll(int page, int rowsPerPage) throws ApiException {
+<b class="fc">&nbsp;        List&lt;ProductPojo&gt; productPojoList = productService.getAll(page, rowsPerPage);</b>
 <b class="fc">&nbsp;        Integer totalCount = productService.getCount();</b>
 &nbsp;
-<b class="fc">&nbsp;        List&lt;ProductData&gt; productDataList = new ArrayList&lt;ProductData&gt;();</b>
-<b class="fc">&nbsp;        for(ProductPojo productPojo : productPojoList){</b>
+<b class="fc">&nbsp;        List&lt;ProductData&gt; productDataList = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (ProductPojo productPojo : productPojoList) {</b>
 <b class="fc">&nbsp;            BrandPojo brandPojo = brandService.getById(productPojo.getBrandCategoryId());</b>
-<b class="fc">&nbsp;            productDataList.add(HelperDto.convert(productPojo,brandPojo.getBrand(), brandPojo.getCategory()));</b>
+<b class="fc">&nbsp;            productDataList.add(HelperDto.convert(productPojo, brandPojo.getBrand(), brandPojo.getCategory()));</b>
 <b class="fc">&nbsp;        }</b>
 &nbsp;
-<b class="fc">&nbsp;        return new PaginatedData(productDataList,totalCount);</b>
+<b class="fc">&nbsp;        return new PaginatedData(productDataList, totalCount);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public void insertList(List&lt;ProductForm&gt;productFormList) throws ApiException {
+&nbsp;    public void insertList(List&lt;ProductForm&gt; productFormList) throws ApiException {
 <b class="fc">&nbsp;        List&lt;ErrorData&gt; errorDataList = IntStream.range(0, productFormList.size())</b>
 <b class="fc">&nbsp;                .mapToObj(row -&gt; {</b>
 <b class="fc">&nbsp;                    ProductForm productForm = productFormList.get(row);</b>
@@ -200,7 +200,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-19 16:12</div>
+    <div style="float:right;">generated on 2023-07-21 15:51</div>
 </div>
 </body>
 </html>

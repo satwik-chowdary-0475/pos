@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Version;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,12 +35,11 @@ public class AdminUtil {
         principal.setEmail(userPojo.getEmail());
         principal.setId(userPojo.getId());
 
-        ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+        ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(userPojo.getRole().name()));
 
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, null,
+        return new UsernamePasswordAuthenticationToken(principal, null,
                 authorities);
-        return token;
     }
 
     public static String getRole() {

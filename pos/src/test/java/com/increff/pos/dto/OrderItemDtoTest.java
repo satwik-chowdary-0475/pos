@@ -73,7 +73,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         assertEquals(orderItemPojo.getOrderId(), orderPojo.getId());
 
         // Check inventory
-        assertEquals(Optional.ofNullable(inventoryService.getById(orderItemPojo.getProductId()).getQuantity()), Optional.ofNullable(190));
+        assertEquals(Optional.ofNullable(inventoryService.getByProductId(orderItemPojo.getProductId()).getQuantity()), Optional.ofNullable(190));
     }
 
     @Test
@@ -125,7 +125,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         assertEquals(Optional.ofNullable(orderItemPojo.getQuantity()), Optional.ofNullable(30));
 
         // Check inventory reduce
-        assertEquals(Optional.ofNullable(inventoryService.getById(orderItemPojo.getProductId()).getQuantity()), Optional.ofNullable(170));
+        assertEquals(Optional.ofNullable(inventoryService.getByProductId(orderItemPojo.getProductId()).getQuantity()), Optional.ofNullable(170));
     }
 
     @Test
@@ -149,7 +149,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         int id = orderItemDto.insert(orderPojo.getId(), orderItemForm);
         OrderItemPojo orderItemPojo = orderItemService.getById(id);
         assertNotNull(orderItemPojo);
-        assertEquals(Optional.ofNullable(inventoryService.getById(orderItemPojo.getProductId()).getQuantity()), Optional.ofNullable(190));
+        assertEquals(Optional.ofNullable(inventoryService.getByProductId(orderItemPojo.getProductId()).getQuantity()), Optional.ofNullable(190));
         //Check delete
         orderItemDto.delete(orderPojo.getId(), id);
         exceptionRule.expect(ApiException.class);
@@ -157,7 +157,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderItemPojo checkOrderItemPojo = orderItemService.getById(id);
 
         // Check updated Inventory
-        assertEquals(Optional.ofNullable(inventoryService.getById(orderItemPojo.getProductId()).getQuantity()), Optional.ofNullable(200));
+        assertEquals(Optional.ofNullable(inventoryService.getByProductId(orderItemPojo.getProductId()).getQuantity()), Optional.ofNullable(200));
     }
 
     @Test
@@ -244,7 +244,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         assertEquals(orderItemPojo.getSellingPrice(), 100.23);
 
         //Check for inventory change
-        InventoryPojo inventoryPojo = inventoryService.getById(productPojo.getId());
+        InventoryPojo inventoryPojo = inventoryService.getByProductId(productPojo.getId());
         assertEquals(Optional.ofNullable(inventoryPojo.getQuantity()), Optional.ofNullable(180));
     }
 
@@ -318,5 +318,4 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         exceptionRule.expectMessage("Order id provided does not match the order id associated with the order item");
         orderItemDto.delete(orderPojo1.getId(),id);
     }
-
 }

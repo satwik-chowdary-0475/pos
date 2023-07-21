@@ -1,5 +1,4 @@
 
-//HELPER METHOD
 function toJson($form){
     var serialized = $form.serializeArray();
     var s = '';
@@ -76,11 +75,9 @@ function writeFileData(arr, format, fileName) {
 
 
 function convertBase64ToPDF(base64String,name) {
-  // Remove data URL prefix
   const dataUrlPrefix = 'data:application/pdf;base64,';
   const base64Data = base64String.replace(dataUrlPrefix, '');
 
-  // Convert Base64 to Uint8Array
   const byteCharacters = atob(base64Data);
   const byteNumbers = new Array(byteCharacters.length);
   for (let i = 0; i < byteCharacters.length; i++) {
@@ -88,20 +85,25 @@ function convertBase64ToPDF(base64String,name) {
   }
   const byteArray = new Uint8Array(byteNumbers);
 
-  // Create Blob from Uint8Array
   const blob = new Blob([byteArray], { type: 'application/pdf' });
 
-  // Create a temporary link element
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
   link.download = 'invoice_'+name+'.pdf';
-  // Trigger the download
+
   link.click();
 
-  // Clean up
   URL.revokeObjectURL(link.href);
 }
 
 function removeFakePath(path){
     return path.substring(path.lastIndexOf("\\") + 1, path.length);
+}
+
+function scientificNumberReviver(value) {
+  if (typeof value === 'string' && /^[-+]?(\d+(\.\d*)?|\.\d+)(e[-+]?\d+)$/i.test(value)) {
+    return parseFloat(value);
+  }
+  value = parseInt(value);
+  return value;
 }

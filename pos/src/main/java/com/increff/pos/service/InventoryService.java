@@ -19,31 +19,24 @@ public class InventoryService {
     public Integer insert(InventoryPojo inventoryPojo) throws ApiException {
         int productId = inventoryPojo.getProductId();
         int quantity = inventoryPojo.getQuantity();
-        InventoryPojo existingInventoryPojo = inventoryDao.getById(productId);
+        InventoryPojo existingInventoryPojo = inventoryDao.getByProductId(productId);
 
         if (Objects.isNull(existingInventoryPojo)) {
-            return insert(productId, quantity);
+            inventoryDao.insert(inventoryPojo);
+            return productId;
         }
+
         update(existingInventoryPojo, (quantity + existingInventoryPojo.getQuantity()));
         return existingInventoryPojo.getProductId();
-
-    }
-
-    @Transactional
-    public Integer insert(Integer productId, Integer quantity) {
-        InventoryPojo newInventoryPojo = new InventoryPojo();
-        newInventoryPojo.setProductId(productId);
-        newInventoryPojo.setQuantity(quantity);
-        inventoryDao.insert(newInventoryPojo);
-        return productId;
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public InventoryPojo getById(int id) throws ApiException {
-        InventoryPojo inventoryPojo = inventoryDao.getById(id);
+    public InventoryPojo getByProductId(int productId) throws ApiException {
+        InventoryPojo inventoryPojo = inventoryDao.getByProductId(productId);
         if (Objects.isNull(inventoryPojo)) {
             throw new ApiException("Product not present in inventory");
         }
+
         return inventoryPojo;
     }
 
@@ -54,7 +47,7 @@ public class InventoryService {
 
     @Transactional
     public List<InventoryPojo> getAll(int page, int rowsPerPage) {
-        return inventoryDao.getAll(page, rowsPerPage);
+        return inventoryDao.getAll((page - 1) * rowsPerPage, rowsPerPage);
     }
 
     @Transactional
@@ -63,13 +56,13 @@ public class InventoryService {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void update(InventoryPojo updatedInventoryPojo, String barcode) throws ApiException {
-        InventoryPojo existingInventoryPojo = inventoryDao.getById(updatedInventoryPojo.getProductId());
+    public void update(InventoryPojo inventoryPojo, String barcode) throws ApiException {
+        InventoryPojo existingInventoryPojo = inventoryDao.getByProductId(inventoryPojo.getProductId());
         if (Objects.isNull(existingInventoryPojo)) {
             throw new ApiException("Product with barcode " + barcode + " not present in inventory");
         }
 
-        existingInventoryPojo.setQuantity(updatedInventoryPojo.getQuantity());
+        existingInventoryPojo.setQuantity(inventoryPojo.getQuantity());
     }
 
     @Transactional
