@@ -56,10 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">BrandDao$$EnhancerBySpringCGLIB$$fab81791</td>
+    <td class="name">BrandDao$$EnhancerBySpringCGLIB$$658b3cf8</td>
   </tr>
   <tr>
-    <td class="name">BrandDao$$EnhancerBySpringCGLIB$$fab81791$$FastClassBySpringCGLIB$$2766d6fd</td>
+    <td class="name">BrandDao$$EnhancerBySpringCGLIB$$658b3cf8$$FastClassBySpringCGLIB$$50422279</td>
   </tr>
   <tr>
     <td class="name">BrandDao$$FastClassBySpringCGLIB$$8104a3eb</td>
@@ -100,6 +100,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import java.util.List;
 &nbsp;
 &nbsp;@Repository
+&nbsp;@Transactional
 <b class="fc">&nbsp;public class BrandDao extends AbstractDao {</b>
 &nbsp;    private static final String SELECT_BY_ID = &quot;select p from BrandPojo p where id=:id&quot;;
 &nbsp;    private static final String SELECT_ALL = &quot;select p from BrandPojo p&quot;;
@@ -108,19 +109,16 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    private static final String SELECT_BY_CATEGORY = &quot;select p from BrandPojo p where category=:category&quot;;
 &nbsp;    private static final String SELECT_ALL_COUNT = &quot;select COUNT(p) from BrandPojo p&quot;;
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public void insert(BrandPojo brandPojo) {
 <b class="fc">&nbsp;        em().persist(brandPojo);</b>
 &nbsp;    }
-&nbsp;
-&nbsp;    @Transactional
+&nbsp;    
 &nbsp;    public BrandPojo getById(int id) {
 <b class="fc">&nbsp;        TypedQuery&lt;BrandPojo&gt; query = getQuery(SELECT_BY_ID, BrandPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;id&quot;, id);</b>
 <b class="fc">&nbsp;        return getSingle(query);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public BrandPojo getByBrandCategory(String brand, String category) {
 <b class="fc">&nbsp;        TypedQuery&lt;BrandPojo&gt; query = getQuery(SELECT_BY_BRAND_CATEGORY, BrandPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;brand&quot;, brand);</b>
@@ -128,21 +126,19 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return getSingle(query);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;BrandPojo&gt; getByBrand(String brand) {
 <b class="fc">&nbsp;        TypedQuery&lt;BrandPojo&gt; query = getQuery(SELECT_BY_BRAND, BrandPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;brand&quot;, brand);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;BrandPojo&gt; getByCategory(String category) {
 <b class="fc">&nbsp;        TypedQuery&lt;BrandPojo&gt; query = getQuery(SELECT_BY_CATEGORY, BrandPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;category&quot;, category);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
+&nbsp;    
 &nbsp;    public List&lt;BrandPojo&gt; getAll(int offset, int rowsPerPage) {
 <b class="fc">&nbsp;        TypedQuery&lt;BrandPojo&gt; query = getQuery(SELECT_ALL, BrandPojo.class);</b>
 <b class="fc">&nbsp;        query.setFirstResult(offset);</b>
@@ -150,13 +146,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;BrandPojo&gt; getAll() {
 <b class="fc">&nbsp;        TypedQuery&lt;BrandPojo&gt; query = getQuery(SELECT_ALL, BrandPojo.class);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public Integer getCount() {
 <b class="fc">&nbsp;        TypedQuery&lt;Number&gt; query = getQuery(SELECT_ALL_COUNT, Number.class);</b>
 <b class="fc">&nbsp;        return query.getSingleResult().intValue();</b>
@@ -186,7 +180,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:55</div>
 </div>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > RoundUtil</title>
+  <title>Coverage Report > InventoryService</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -18,18 +18,15 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">com.increff.pos.util</a>
+    <a href="../index.html">com.increff.pos.service</a>
 </div>
 
-<h1>Coverage Summary for Class: RoundUtil (com.increff.pos.util)</h1>
+<h1>Coverage Summary for Class: InventoryService (com.increff.pos.service)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
-<th class="coverageStat 
-">
-  Class, %
-</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -40,33 +37,52 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">RoundUtil</td>
+  <td class="name">InventoryService</td>
 <td class="coverageStat">
   <span class="percent">
     100%
   </span>
   <span class="absValue">
-    (1/1)
+    (8/8)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    50%
+    100%
   </span>
   <span class="absValue">
-    (1/2)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    60%
-  </span>
-  <span class="absValue">
-    (3/5)
+    (21/21)
   </span>
 </td>
 </tr>
-
+  <tr>
+    <td class="name">InventoryService$$EnhancerBySpringCGLIB$$12d6d19</td>
+  </tr>
+  <tr>
+    <td class="name">InventoryService$$EnhancerBySpringCGLIB$$12d6d19$$FastClassBySpringCGLIB$$a9738b76</td>
+  </tr>
+  <tr>
+    <td class="name">InventoryService$$FastClassBySpringCGLIB$$7f418056</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (21/21)
+  </span>
+</td>
+</tr>
 </table>
 
 <br/>
@@ -74,19 +90,70 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.util;
+<code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.service;
 &nbsp;
-&nbsp;import java.math.BigDecimal;
-&nbsp;import java.math.RoundingMode;
+&nbsp;
+&nbsp;import com.increff.pos.dao.InventoryDao;
+&nbsp;import com.increff.pos.pojo.InventoryPojo;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import javax.transaction.Transactional;
+&nbsp;import java.util.List;
 &nbsp;import java.util.Objects;
 &nbsp;
-<b class="nc">&nbsp;public class RoundUtil {</b>
-&nbsp;    public static Double round(Double dbl) {
-<b class="fc">&nbsp;        if (Objects.isNull(dbl)) {</b>
-<b class="nc">&nbsp;            return null;</b>
+&nbsp;@Service
+&nbsp;@Transactional(rollbackOn = ApiException.class)
+<b class="fc">&nbsp;public class InventoryService {</b>
+&nbsp;    @Autowired
+&nbsp;    private InventoryDao inventoryDao;
+&nbsp;
+&nbsp;    public Integer insert(InventoryPojo inventoryPojo) throws ApiException {
+<b class="fc">&nbsp;        int productId = inventoryPojo.getProductId();</b>
+<b class="fc">&nbsp;        int quantity = inventoryPojo.getQuantity();</b>
+<b class="fc">&nbsp;        InventoryPojo existingInventoryPojo = inventoryDao.getByProductId(productId);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (Objects.isNull(existingInventoryPojo)) {</b>
+<b class="fc">&nbsp;            inventoryDao.insert(inventoryPojo);</b>
+<b class="fc">&nbsp;            return productId;</b>
 &nbsp;        }
-<b class="fc">&nbsp;        BigDecimal roundedValue = BigDecimal.valueOf(dbl).setScale(2, RoundingMode.DOWN);</b>
-<b class="fc">&nbsp;        return roundedValue.doubleValue();</b>
+&nbsp;
+<b class="fc">&nbsp;        update(existingInventoryPojo, (quantity + existingInventoryPojo.getQuantity()));</b>
+<b class="fc">&nbsp;        return existingInventoryPojo.getProductId();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public InventoryPojo getByProductId(int productId) throws ApiException {
+<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryDao.getByProductId(productId);</b>
+<b class="fc">&nbsp;        if (Objects.isNull(inventoryPojo)) {</b>
+<b class="fc">&nbsp;            throw new ApiException(&quot;Product not present in inventory&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return inventoryPojo;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;InventoryPojo&gt; getAll() {
+<b class="fc">&nbsp;        return inventoryDao.getAll();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;InventoryPojo&gt; getAll(int page, int rowsPerPage) {
+<b class="fc">&nbsp;        return inventoryDao.getAll((page - 1) * rowsPerPage, rowsPerPage);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Integer getCount() {
+<b class="fc">&nbsp;        return inventoryDao.getCount();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void update(InventoryPojo inventoryPojo, String barcode) throws ApiException {
+<b class="fc">&nbsp;        InventoryPojo existingInventoryPojo = inventoryDao.getByProductId(inventoryPojo.getProductId());</b>
+<b class="fc">&nbsp;        if (Objects.isNull(existingInventoryPojo)) {</b>
+<b class="fc">&nbsp;            throw new ApiException(&quot;Product with barcode &quot; + barcode + &quot; not present in inventory&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        existingInventoryPojo.setQuantity(inventoryPojo.getQuantity());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void update(InventoryPojo inventoryPojo, int quantity) {
+<b class="fc">&nbsp;        inventoryPojo.setQuantity(quantity);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;}
@@ -113,7 +180,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:55</div>
 </div>
 </body>
 </html>

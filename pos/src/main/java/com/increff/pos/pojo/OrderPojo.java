@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 @Setter
 @Getter
 @Entity
-@Table(name = "orders")
+@Table(name = "orders",indexes = @Index(columnList = "orderCode"))
 public class OrderPojo extends AbstractPojo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

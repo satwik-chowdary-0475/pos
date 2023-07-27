@@ -56,10 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">OrderItemDao$$EnhancerBySpringCGLIB$$c31828a3</td>
+    <td class="name">OrderItemDao$$EnhancerBySpringCGLIB$$2deb4e0a</td>
   </tr>
   <tr>
-    <td class="name">OrderItemDao$$EnhancerBySpringCGLIB$$c31828a3$$FastClassBySpringCGLIB$$19044037</td>
+    <td class="name">OrderItemDao$$EnhancerBySpringCGLIB$$2deb4e0a$$FastClassBySpringCGLIB$$b2096859</td>
   </tr>
   <tr>
     <td class="name">OrderItemDao$$FastClassBySpringCGLIB$$4645e5b1</td>
@@ -101,6 +101,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import java.util.List;
 &nbsp;
 &nbsp;@Repository
+&nbsp;@Transactional
 <b class="fc">&nbsp;public class OrderItemDao extends AbstractDao {</b>
 &nbsp;    private static final String SELECT_BY_ID = &quot;select p from OrderItemPojo p where id=:id&quot;;
 &nbsp;    private static final String SELECT_BY_PRODUCT_ID = &quot;select p from OrderItemPojo p where orderId=:orderId and productId=:productId&quot;;
@@ -110,19 +111,16 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    private static final String SELECT_ALL_REPORT = &quot;SELECT SUM(p.quantity), SUM(p.quantity * p.sellingPrice) FROM OrderItemPojo p WHERE p.orderId IN :orderIdsList&quot;;
 &nbsp;    private static final String SELECT_BY_ORDER_LIST = &quot;select p from OrderItemPojo p where p.orderId IN :orderIdsList&quot;;
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public void insert(OrderItemPojo orderItemPojo) {
 <b class="fc">&nbsp;        em().persist(orderItemPojo);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public OrderItemPojo getById(int id) {
 <b class="fc">&nbsp;        TypedQuery&lt;OrderItemPojo&gt; query = getQuery(SELECT_BY_ID, OrderItemPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;id&quot;, id);</b>
 <b class="fc">&nbsp;        return getSingle(query);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public OrderItemPojo getByProductId(int orderId, int productId) {
 <b class="fc">&nbsp;        TypedQuery&lt;OrderItemPojo&gt; query = getQuery(SELECT_BY_PRODUCT_ID, OrderItemPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;orderId&quot;, orderId);</b>
@@ -130,35 +128,30 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return getSingle(query);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public Object[] getOrderItemsReport(List&lt;Integer&gt; orderIdsList) {
 <b class="fc">&nbsp;        TypedQuery&lt;Object[]&gt; query = em().createQuery(SELECT_ALL_REPORT, Object[].class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;orderIdsList&quot;, orderIdsList);</b>
 <b class="fc">&nbsp;        return query.getSingleResult();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;OrderItemPojo&gt; getAllByOrderId(int orderId) {
 <b class="fc">&nbsp;        TypedQuery&lt;OrderItemPojo&gt; query = getQuery(SELECT_ALL, OrderItemPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;orderId&quot;, orderId);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public int delete(int id) {
 <b class="fc">&nbsp;        Query query = em().createQuery(DELETE_BY_ID);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;id&quot;, id);</b>
 <b class="fc">&nbsp;        return query.executeUpdate();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public int deleteByOrderId(int orderId) {
 <b class="fc">&nbsp;        Query query = em().createQuery(DELETE_BY_ORDER_ID);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;orderId&quot;, orderId);</b>
 <b class="fc">&nbsp;        return query.executeUpdate();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;OrderItemPojo&gt; getAllByOrderList(List&lt;Integer&gt; orderIdsList) {
 <b class="fc">&nbsp;        TypedQuery&lt;OrderItemPojo&gt; query = getQuery(SELECT_BY_ORDER_LIST, OrderItemPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;orderIdsList&quot;, orderIdsList);</b>
@@ -189,7 +182,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:55</div>
 </div>
 </body>
 </html>

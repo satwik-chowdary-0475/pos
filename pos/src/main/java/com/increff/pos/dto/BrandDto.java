@@ -9,6 +9,7 @@ import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,32 +18,28 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Service
+@Component
 public class BrandDto {
     @Autowired
     private BrandService brandService;
 
-    @Transactional(rollbackOn = ApiException.class)
     public int insert(BrandForm brandForm) throws ApiException {
         HelperDto.normalise(brandForm);
         BrandPojo brandPojo = HelperDto.convert(brandForm);
         return brandService.insert(brandPojo);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void update(int id, BrandForm brandForm) throws ApiException {
         HelperDto.normalise(brandForm);
         BrandPojo brandPojo = HelperDto.convert(brandForm);
         brandService.update(id, brandPojo);
     }
-
-    @Transactional(rollbackOn = ApiException.class)
+    
     public BrandData getById(int id) throws ApiException {
         BrandPojo brandPojo = brandService.getById(id);
         return HelperDto.convert(brandPojo);
     }
 
-    @Transactional
     public PaginatedData getAll(int page, int rowsPerPage) {
         List<BrandPojo> brandPojoList = brandService.getAll(page,rowsPerPage);
         Integer totalCount = brandService.getCount();
@@ -53,8 +50,7 @@ public class BrandDto {
 
         return new PaginatedData(brandDataList,totalCount);
     }
-
-    @Transactional(rollbackOn = ApiException.class)
+    
     public void insertList(List<BrandForm> brandFormList) throws ApiException {
         List<ErrorData> errorDataList = IntStream.range(0, brandFormList.size())
                 .mapToObj(row -> {

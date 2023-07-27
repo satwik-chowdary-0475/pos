@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Transactional(rollbackOn = ApiException.class)
 public class InventoryService {
     @Autowired
     private InventoryDao inventoryDao;
 
-    @Transactional(rollbackOn = ApiException.class)
     public Integer insert(InventoryPojo inventoryPojo) throws ApiException {
         int productId = inventoryPojo.getProductId();
         int quantity = inventoryPojo.getQuantity();
@@ -30,7 +30,6 @@ public class InventoryService {
         return existingInventoryPojo.getProductId();
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public InventoryPojo getByProductId(int productId) throws ApiException {
         InventoryPojo inventoryPojo = inventoryDao.getByProductId(productId);
         if (Objects.isNull(inventoryPojo)) {
@@ -40,22 +39,18 @@ public class InventoryService {
         return inventoryPojo;
     }
 
-    @Transactional
     public List<InventoryPojo> getAll() {
         return inventoryDao.getAll();
     }
 
-    @Transactional
     public List<InventoryPojo> getAll(int page, int rowsPerPage) {
         return inventoryDao.getAll((page - 1) * rowsPerPage, rowsPerPage);
     }
 
-    @Transactional
     public Integer getCount() {
         return inventoryDao.getCount();
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void update(InventoryPojo inventoryPojo, String barcode) throws ApiException {
         InventoryPojo existingInventoryPojo = inventoryDao.getByProductId(inventoryPojo.getProductId());
         if (Objects.isNull(existingInventoryPojo)) {
@@ -65,7 +60,6 @@ public class InventoryService {
         existingInventoryPojo.setQuantity(inventoryPojo.getQuantity());
     }
 
-    @Transactional
     public void update(InventoryPojo inventoryPojo, int quantity) {
         inventoryPojo.setQuantity(quantity);
     }

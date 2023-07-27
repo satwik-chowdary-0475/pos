@@ -56,10 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">ProductService$$EnhancerBySpringCGLIB$$9549fcb9</td>
+    <td class="name">ProductService$$EnhancerBySpringCGLIB$$1d2220</td>
   </tr>
   <tr>
-    <td class="name">ProductService$$EnhancerBySpringCGLIB$$9549fcb9$$FastClassBySpringCGLIB$$9b6a17ab</td>
+    <td class="name">ProductService$$EnhancerBySpringCGLIB$$1d2220$$FastClassBySpringCGLIB$$8ce62c7</td>
   </tr>
   <tr>
     <td class="name">ProductService$$FastClassBySpringCGLIB$$662934a3</td>
@@ -102,11 +102,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import java.util.Objects;
 &nbsp;
 &nbsp;@Service
+&nbsp;@Transactional(rollbackOn = ApiException.class)
 <b class="fc">&nbsp;public class ProductService {</b>
 &nbsp;    @Autowired
 &nbsp;    private ProductDao productDao;
 &nbsp;
-&nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public int insert(ProductPojo productPojo) throws ApiException {
 <b class="fc">&nbsp;        ProductPojo existingProductPojo = productDao.getByBarcode(productPojo.getBarcode());</b>
 <b class="fc">&nbsp;        if (Objects.nonNull(existingProductPojo)) {</b>
@@ -117,7 +117,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return productPojo.getId();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public void update(int id, ProductPojo updatedProductPojo) throws ApiException {
 <b class="fc">&nbsp;        ProductPojo existingProductPojo = productDao.getById(id);</b>
 <b class="fc">&nbsp;        ProductPojo productPojoCheck = productDao.getByBarcode(updatedProductPojo.getBarcode());</b>
@@ -129,8 +128,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        existingProductPojo.setMrp(updatedProductPojo.getMrp());</b>
 &nbsp;    }
 &nbsp;
-&nbsp;
-&nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public ProductPojo getById(int id) throws ApiException {
 <b class="fc">&nbsp;        ProductPojo productPojo = productDao.getById(id);</b>
 <b class="fc">&nbsp;        if (Objects.isNull(productPojo)) {</b>
@@ -139,7 +136,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return productPojo;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public ProductPojo getByBarcode(String barcode) throws ApiException {
 <b class="fc">&nbsp;        ProductPojo productPojo = productDao.getByBarcode(barcode);</b>
 <b class="fc">&nbsp;        if (Objects.isNull(productPojo)) {</b>
@@ -148,22 +144,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return productPojo;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;ProductPojo&gt; getAll() {
 <b class="fc">&nbsp;        return productDao.getAll();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;ProductPojo&gt; getAll(int page, int rowsPerPage) {
 <b class="fc">&nbsp;        return productDao.getAll((page - 1) * rowsPerPage, rowsPerPage);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;ProductPojo&gt; getByBrandCategoryId(int brandCategoryId) {
 <b class="fc">&nbsp;        return productDao.getByBrandCategoryId(brandCategoryId);</b>
 &nbsp;    }
-&nbsp;
-&nbsp;    @Transactional
+&nbsp;    
 &nbsp;    public Integer getCount() {
 <b class="fc">&nbsp;        return productDao.getCount();</b>
 &nbsp;    }
@@ -191,7 +183,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:48</div>
 </div>
 </body>
 </html>

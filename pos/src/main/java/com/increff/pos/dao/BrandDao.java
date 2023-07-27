@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
+@Transactional
 public class BrandDao extends AbstractDao {
     private static final String SELECT_BY_ID = "select p from BrandPojo p where id=:id";
     private static final String SELECT_ALL = "select p from BrandPojo p";
@@ -16,19 +17,16 @@ public class BrandDao extends AbstractDao {
     private static final String SELECT_BY_CATEGORY = "select p from BrandPojo p where category=:category";
     private static final String SELECT_ALL_COUNT = "select COUNT(p) from BrandPojo p";
 
-    @Transactional
     public void insert(BrandPojo brandPojo) {
         em().persist(brandPojo);
     }
-
-    @Transactional
+    
     public BrandPojo getById(int id) {
         TypedQuery<BrandPojo> query = getQuery(SELECT_BY_ID, BrandPojo.class);
         query.setParameter("id", id);
         return getSingle(query);
     }
 
-    @Transactional
     public BrandPojo getByBrandCategory(String brand, String category) {
         TypedQuery<BrandPojo> query = getQuery(SELECT_BY_BRAND_CATEGORY, BrandPojo.class);
         query.setParameter("brand", brand);
@@ -36,21 +34,19 @@ public class BrandDao extends AbstractDao {
         return getSingle(query);
     }
 
-    @Transactional
     public List<BrandPojo> getByBrand(String brand) {
         TypedQuery<BrandPojo> query = getQuery(SELECT_BY_BRAND, BrandPojo.class);
         query.setParameter("brand", brand);
         return query.getResultList();
     }
 
-    @Transactional
     public List<BrandPojo> getByCategory(String category) {
         TypedQuery<BrandPojo> query = getQuery(SELECT_BY_CATEGORY, BrandPojo.class);
         query.setParameter("category", category);
         return query.getResultList();
     }
 
-    @Transactional
+    
     public List<BrandPojo> getAll(int offset, int rowsPerPage) {
         TypedQuery<BrandPojo> query = getQuery(SELECT_ALL, BrandPojo.class);
         query.setFirstResult(offset);
@@ -58,13 +54,11 @@ public class BrandDao extends AbstractDao {
         return query.getResultList();
     }
 
-    @Transactional
     public List<BrandPojo> getAll() {
         TypedQuery<BrandPojo> query = getQuery(SELECT_ALL, BrandPojo.class);
         return query.getResultList();
     }
 
-    @Transactional
     public Integer getCount() {
         TypedQuery<Number> query = getQuery(SELECT_ALL_COUNT, Number.class);
         return query.getSingleResult().intValue();

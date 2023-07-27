@@ -31,7 +31,9 @@ public class InventoryController {
 
     @ApiOperation(value = "Updates a product in inventory")
     @PutMapping(path = "/{productId}")
-    public void updateProductInInventory(@PathVariable int productId, @RequestBody InventoryUpdateForm inventoryUpdateForm) throws ApiException {
+    public void updateProductInInventory(@PathVariable int productId,
+                                         @RequestBody InventoryUpdateForm inventoryUpdateForm
+    ) throws ApiException {
         inventoryDto.update(productId, inventoryUpdateForm);
     }
 

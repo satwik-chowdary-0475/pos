@@ -56,10 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$c1b864f9</td>
+    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$2c8b8a60</td>
   </tr>
   <tr>
-    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$c1b864f9$$FastClassBySpringCGLIB$$796df7cb</td>
+    <td class="name">ProductDto$$EnhancerBySpringCGLIB$$2c8b8a60$$FastClassBySpringCGLIB$$a6f1d0b4</td>
   </tr>
   <tr>
     <td class="name">ProductDto$$FastClassBySpringCGLIB$$1e3a6f63</td>
@@ -121,10 +121,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    private ProductService productService;
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public int insert(ProductForm form) throws ApiException {
-<b class="fc">&nbsp;        HelperDto.normalise(form);</b>
-<b class="fc">&nbsp;        BrandPojo brandPojo = brandService.getByBrandCategory(form.getBrand(), form.getCategory());</b>
-<b class="fc">&nbsp;        ProductPojo productPojo = HelperDto.convert(form, brandPojo.getId());</b>
+&nbsp;    public int insert(ProductForm productForm) throws ApiException {
+<b class="fc">&nbsp;        HelperDto.normalise(productForm);</b>
+<b class="fc">&nbsp;        BrandPojo brandPojo = brandService.getByBrandCategory(productForm.getBrand(), productForm.getCategory());</b>
+&nbsp;
+<b class="fc">&nbsp;        ProductPojo productPojo = HelperDto.convert(productForm, brandPojo.getId());</b>
 <b class="fc">&nbsp;        return productService.insert(productPojo);</b>
 &nbsp;    }
 &nbsp;
@@ -132,6 +133,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    public void update(int id, ProductUpdateForm productUpdateForm) throws ApiException {
 <b class="fc">&nbsp;        HelperDto.normalise(productUpdateForm);</b>
 <b class="fc">&nbsp;        productService.getById(id);</b>
+&nbsp;
 <b class="fc">&nbsp;        ProductPojo productPojo = HelperDto.convert(productUpdateForm);</b>
 <b class="fc">&nbsp;        productService.update(id, productPojo);</b>
 &nbsp;    }
@@ -140,6 +142,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    public ProductData getById(int id) throws ApiException {
 <b class="fc">&nbsp;        ProductPojo productPojo = productService.getById(id);</b>
 <b class="fc">&nbsp;        BrandPojo brandPojo = brandService.getById(productPojo.getBrandCategoryId());</b>
+&nbsp;
 <b class="fc">&nbsp;        return HelperDto.convert(productPojo, brandPojo.getBrand(), brandPojo.getCategory());</b>
 &nbsp;    }
 &nbsp;
@@ -200,7 +203,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:55</div>
 </div>
 </body>
 </html>

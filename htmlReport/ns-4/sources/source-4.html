@@ -56,10 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">InventoryService$$EnhancerBySpringCGLIB$$965a47b2</td>
+    <td class="name">InventoryService$$EnhancerBySpringCGLIB$$12d6d19</td>
   </tr>
   <tr>
-    <td class="name">InventoryService$$EnhancerBySpringCGLIB$$965a47b2$$FastClassBySpringCGLIB$$49b4ae9f</td>
+    <td class="name">InventoryService$$EnhancerBySpringCGLIB$$12d6d19$$FastClassBySpringCGLIB$$a9738b76</td>
   </tr>
   <tr>
     <td class="name">InventoryService$$FastClassBySpringCGLIB$$7f418056</td>
@@ -103,11 +103,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import java.util.Objects;
 &nbsp;
 &nbsp;@Service
+&nbsp;@Transactional(rollbackOn = ApiException.class)
 <b class="fc">&nbsp;public class InventoryService {</b>
 &nbsp;    @Autowired
 &nbsp;    private InventoryDao inventoryDao;
 &nbsp;
-&nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public Integer insert(InventoryPojo inventoryPojo) throws ApiException {
 <b class="fc">&nbsp;        int productId = inventoryPojo.getProductId();</b>
 <b class="fc">&nbsp;        int quantity = inventoryPojo.getQuantity();</b>
@@ -122,7 +122,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return existingInventoryPojo.getProductId();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public InventoryPojo getByProductId(int productId) throws ApiException {
 <b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryDao.getByProductId(productId);</b>
 <b class="fc">&nbsp;        if (Objects.isNull(inventoryPojo)) {</b>
@@ -132,22 +131,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return inventoryPojo;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;InventoryPojo&gt; getAll() {
 <b class="fc">&nbsp;        return inventoryDao.getAll();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;InventoryPojo&gt; getAll(int page, int rowsPerPage) {
 <b class="fc">&nbsp;        return inventoryDao.getAll((page - 1) * rowsPerPage, rowsPerPage);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public Integer getCount() {
 <b class="fc">&nbsp;        return inventoryDao.getCount();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public void update(InventoryPojo inventoryPojo, String barcode) throws ApiException {
 <b class="fc">&nbsp;        InventoryPojo existingInventoryPojo = inventoryDao.getByProductId(inventoryPojo.getProductId());</b>
 <b class="fc">&nbsp;        if (Objects.isNull(existingInventoryPojo)) {</b>
@@ -157,7 +152,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        existingInventoryPojo.setQuantity(inventoryPojo.getQuantity());</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public void update(InventoryPojo inventoryPojo, int quantity) {
 <b class="fc">&nbsp;        inventoryPojo.setQuantity(quantity);</b>
 &nbsp;    }
@@ -186,7 +180,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:48</div>
 </div>
 </body>
 </html>

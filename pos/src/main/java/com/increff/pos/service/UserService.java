@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Transactional(rollbackOn = ApiException.class)
 public class UserService {
     @Autowired
     private UserDao userDao;
 
-    @Transactional(rollbackOn = ApiException.class)
     public void insertUser(UserPojo userPojo) throws ApiException {
         UserPojo existingUserPojo = userDao.getUserByEmail(userPojo.getEmail());
         if (Objects.nonNull(existingUserPojo)) {
@@ -24,12 +24,10 @@ public class UserService {
         userDao.insertUser(userPojo);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public UserPojo getUserByEmail(String email) {
         return userDao.getUserByEmail(email);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public List<UserPojo> getAllUsers() {
         return userDao.getAllUsers();
     }

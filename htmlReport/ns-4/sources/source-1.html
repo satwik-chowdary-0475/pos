@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > ApiException</title>
+  <title>Coverage Report > OrderFlow</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -18,18 +18,15 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">com.increff.pos.service</a>
+    <a href="../index.html">com.increff.pos.flow</a>
 </div>
 
-<h1>Coverage Summary for Class: ApiException (com.increff.pos.service)</h1>
+<h1>Coverage Summary for Class: OrderFlow (com.increff.pos.flow)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
-<th class="coverageStat 
-">
-  Class, %
-</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -40,15 +37,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">ApiException</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (1/1)
-  </span>
-</td>
+  <td class="name">OrderFlow</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -62,11 +51,38 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (4/4)
+    (9/9)
   </span>
 </td>
 </tr>
-
+  <tr>
+    <td class="name">OrderFlow$$EnhancerBySpringCGLIB$$f545b4b7</td>
+  </tr>
+  <tr>
+    <td class="name">OrderFlow$$EnhancerBySpringCGLIB$$f545b4b7$$FastClassBySpringCGLIB$$c7539510</td>
+  </tr>
+  <tr>
+    <td class="name">OrderFlow$$FastClassBySpringCGLIB$$490d9e20</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+</tr>
 </table>
 
 <br/>
@@ -74,25 +90,49 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.service;
+<code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.flow;
 &nbsp;
-&nbsp;import com.increff.pos.model.data.ErrorData;
+&nbsp;import com.increff.pos.dto.helper.HelperDto;
+&nbsp;import com.increff.pos.model.data.OrderItemData;
+&nbsp;import com.increff.pos.pojo.InventoryPojo;
+&nbsp;import com.increff.pos.pojo.OrderItemPojo;
+&nbsp;import com.increff.pos.pojo.OrderPojo;
+&nbsp;import com.increff.pos.pojo.ProductPojo;
+&nbsp;import com.increff.pos.service.ApiException;
+&nbsp;import com.increff.pos.service.InventoryService;
+&nbsp;import com.increff.pos.service.OrderItemService;
+&nbsp;import com.increff.pos.service.ProductService;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
 &nbsp;
+&nbsp;import javax.transaction.Transactional;
 &nbsp;import java.util.List;
 &nbsp;
-&nbsp;public class ApiException extends Exception {
-&nbsp;    private static final long serialVersionUID = 1L;
-&nbsp;    private static List&lt;ErrorData&gt; errorDataList;
+&nbsp;@Service
+&nbsp;@Transactional(rollbackOn = ApiException.class)
+<b class="fc">&nbsp;public class OrderFlow {</b>
 &nbsp;
-&nbsp;    public ApiException(String string) {
-<b class="fc">&nbsp;        super(string);</b>
+&nbsp;    @Autowired
+&nbsp;    private OrderItemService orderItemService;
+&nbsp;    @Autowired
+&nbsp;    private InventoryService inventoryService;
+&nbsp;    @Autowired
+&nbsp;    private ProductService productService;
+&nbsp;
+&nbsp;    public void delete(Integer orderId) throws ApiException {
+<b class="fc">&nbsp;        List&lt;OrderItemPojo&gt; orderItemPojoList = orderItemService.getAllByOrderId(orderId);</b>
+<b class="fc">&nbsp;        for (OrderItemPojo orderItemPojo : orderItemPojoList) {</b>
+<b class="fc">&nbsp;            updateInventory(orderItemPojo);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        orderItemService.deleteByOrderId(orderId);</b>
 &nbsp;    }
 &nbsp;
-<b class="fc">&nbsp;    public ApiException(List&lt;ErrorData&gt; errorDataList) {</b>
-<b class="fc">&nbsp;        this.errorDataList = errorDataList;</b>
-&nbsp;    }
-&nbsp;    public List&lt;ErrorData&gt; getErrorDataList() {
-<b class="fc">&nbsp;        return errorDataList;</b>
+&nbsp;    private void updateInventory(OrderItemPojo orderItemPojo) throws ApiException {
+<b class="fc">&nbsp;        InventoryPojo inventoryPojo = inventoryService.getByProductId(orderItemPojo.getProductId());</b>
+<b class="fc">&nbsp;        int updatedQuantity = inventoryPojo.getQuantity() + orderItemPojo.getQuantity();</b>
+&nbsp;
+<b class="fc">&nbsp;        inventoryService.update(inventoryPojo, updatedQuantity);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;}
@@ -119,7 +159,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:55</div>
 </div>
 </body>
 </html>

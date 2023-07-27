@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Transactional(rollbackOn = ApiException.class)
 public class BrandService {
     @Autowired
     private BrandDao brandDao;
 
-    @Transactional(rollbackOn = ApiException.class)
     public int insert(BrandPojo brandPojo) throws ApiException {
         BrandPojo existingBrandPojo = brandDao.getByBrandCategory(brandPojo.getBrand(), brandPojo.getCategory());
         if (Objects.nonNull(existingBrandPojo))
@@ -26,7 +26,6 @@ public class BrandService {
         return brandPojo.getId();
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void update(int id, BrandPojo brandPojo) throws ApiException {
         BrandPojo existingBrandPojo = getById(id);
         BrandPojo brandPojoCheck = brandDao.getByBrandCategory(brandPojo.getBrand(), brandPojo.getCategory());
@@ -37,7 +36,7 @@ public class BrandService {
         existingBrandPojo.setCategory(brandPojo.getCategory());
     }
 
-    @Transactional(rollbackOn = ApiException.class)
+
     public BrandPojo getById(int id) throws ApiException {
         BrandPojo brandPojo = brandDao.getById(id);
         if (Objects.isNull(brandPojo))
@@ -46,7 +45,6 @@ public class BrandService {
         return brandPojo;
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public BrandPojo getByBrandCategory(String brand, String category) throws ApiException {
         BrandPojo brandPojo = brandDao.getByBrandCategory(brand, category);
         if (Objects.isNull(brandPojo))
@@ -55,22 +53,18 @@ public class BrandService {
         return brandPojo;
     }
 
-    @Transactional
     public List<BrandPojo> getAll(int page, int rowsPerPage) {
         return brandDao.getAll((page - 1) * rowsPerPage, rowsPerPage);
     }
 
-    @Transactional
     public Integer getCount() {
         return brandDao.getCount();
     }
 
-    @Transactional
     public List<BrandPojo> getAll() {
         return brandDao.getAll();
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public List<BrandPojo> getListByBrandCategory(String brand, String category) {
         boolean brandNotExists = Objects.isNull(brand) || brand.equals("");
         boolean categoryNotExists = Objects.isNull(category) || category.equals("");

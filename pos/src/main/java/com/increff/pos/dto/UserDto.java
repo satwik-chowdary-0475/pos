@@ -11,6 +11,7 @@ import com.increff.pos.util.AdminUtil;
 import com.increff.pos.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.Objects;
 
-@Service
+@Component
 public class UserDto {
     @Autowired
     private UserService userService;

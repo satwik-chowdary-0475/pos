@@ -19,31 +19,16 @@ public class DbConfig {
 
     public static final String PACKAGE_POJO = "com.increff.pos.pojo";
 
-    @Value("${jdbc.driverClassName}")
-    private String jdbcDriver;
-    @Value("${jdbc.url}")
-    private String jdbcUrl;
-    @Value("${jdbc.username}")
-    private String jdbcUsername;
-    @Value("${jdbc.password}")
-    private String jdbcPassword;
-    @Value("${hibernate.dialect}")
-    private String hibernateDialect;
-    @Value("${hibernate.show_sql}")
-    private String hibernateShowSql;
-    @Value("${hibernate.hbm2ddl.auto}")
-    private String hibernateHbm2ddl;
-    @Value("${hibernate.physical_naming_strategy}")
-    private String hibernatePhysicalNamingStrategy;
-
+    @Autowired
+    private ApplicationProperties applicationProperties;
 
     @Bean(name = "dataSource")
     public DataSource getDataSource() {
         BasicDataSource bean = new BasicDataSource();
-        bean.setDriverClassName(jdbcDriver);
-        bean.setUrl(jdbcUrl);
-        bean.setUsername(jdbcUsername);
-        bean.setPassword(jdbcPassword);
+        bean.setDriverClassName(applicationProperties.jdbcDriver);
+        bean.setUrl(applicationProperties.jdbcUrl);
+        bean.setUsername(applicationProperties.jdbcUsername);
+        bean.setPassword(applicationProperties.jdbcPassword);
         bean.setInitialSize(2);
         bean.setDefaultAutoCommit(false);
         //bean.setMaxTotal(10);
@@ -63,11 +48,11 @@ public class DbConfig {
         HibernateJpaVendorAdapter jpaAdapter = new HibernateJpaVendorAdapter();
         bean.setJpaVendorAdapter(jpaAdapter);
         Properties jpaProperties = new Properties();
-        jpaProperties.put("hibernate.dialect", hibernateDialect);
-        jpaProperties.put("hibernate.show_sql", hibernateShowSql);
-        jpaProperties.put("hibernate.hbm2ddl.auto", hibernateHbm2ddl);
-        jpaProperties.put("hibernate.hbm2ddl.auto", hibernateHbm2ddl);
-        jpaProperties.put("hibernate.physical_naming_strategy",hibernatePhysicalNamingStrategy);
+        jpaProperties.put("hibernate.dialect", applicationProperties.hibernateDialect);
+        jpaProperties.put("hibernate.show_sql", applicationProperties.hibernateShowSql);
+        jpaProperties.put("hibernate.hbm2ddl.auto", applicationProperties.hibernateHbm2ddl);
+        jpaProperties.put("hibernate.hbm2ddl.auto", applicationProperties.hibernateHbm2ddl);
+        jpaProperties.put("hibernate.physical_naming_strategy", applicationProperties.hibernatePhysicalNamingStrategy);
         bean.setJpaProperties(jpaProperties);
         return bean;
     }

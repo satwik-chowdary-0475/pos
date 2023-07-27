@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > SecurityUtil</title>
+  <title>Coverage Report > OrderItemService</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -18,18 +18,15 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">com.increff.pos.util</a>
+    <a href="../index.html">com.increff.pos.service</a>
 </div>
 
-<h1>Coverage Summary for Class: SecurityUtil (com.increff.pos.util)</h1>
+<h1>Coverage Summary for Class: OrderItemService (com.increff.pos.service)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
-<th class="coverageStat 
-">
-  Class, %
-</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -40,33 +37,52 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">SecurityUtil</td>
+  <td class="name">OrderItemService</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (12/12)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    97.1%
   </span>
   <span class="absValue">
-    (0/5)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    0%
-  </span>
-  <span class="absValue">
-    (0/7)
+    (34/35)
   </span>
 </td>
 </tr>
-
+  <tr>
+    <td class="name">OrderItemService$$EnhancerBySpringCGLIB$$fcb5ccaa</td>
+  </tr>
+  <tr>
+    <td class="name">OrderItemService$$EnhancerBySpringCGLIB$$fcb5ccaa$$FastClassBySpringCGLIB$$f47245d8</td>
+  </tr>
+  <tr>
+    <td class="name">OrderItemService$$FastClassBySpringCGLIB$$ca463691</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.1%
+  </span>
+  <span class="absValue">
+    (34/35)
+  </span>
+</td>
+</tr>
 </table>
 
 <br/>
@@ -74,37 +90,114 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.util;
+<code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.service;
 &nbsp;
-&nbsp;import javax.servlet.http.HttpSession;
+&nbsp;import com.increff.pos.dao.OrderItemDao;
+&nbsp;import com.increff.pos.pojo.InventoryPojo;
+&nbsp;import com.increff.pos.pojo.OrderItemPojo;
+&nbsp;import com.increff.pos.pojo.OrderPojo;
 &nbsp;
-&nbsp;import org.springframework.security.core.Authentication;
-&nbsp;import org.springframework.security.core.context.SecurityContext;
-&nbsp;import org.springframework.security.core.context.SecurityContextHolder;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
 &nbsp;
-&nbsp;/*
-&nbsp;https://stackoverflow.com/questions/4664893/how-to-manually-set-an-authenticated-user-in-spring-security-springmvc
-&nbsp;*/
-<b class="nc">&nbsp;public class SecurityUtil {</b>
+&nbsp;import javax.transaction.Transactional;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;import java.util.stream.Collectors;
 &nbsp;
-&nbsp;    public static void createContext(HttpSession session) {
-<b class="nc">&nbsp;        SecurityContext securityContext = SecurityContextHolder.getContext();</b>
-<b class="nc">&nbsp;        session.setAttribute(&quot;SPRING_SECURITY_CONTEXT&quot;, securityContext);</b>
+&nbsp;@Service
+<b class="fc">&nbsp;public class OrderItemService {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private OrderItemDao orderItemDao;
+&nbsp;    @Autowired
+&nbsp;    private InventoryService inventoryService;
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public int insert(OrderItemPojo orderItemPojo, InventoryPojo inventoryPojo, String barcode) throws ApiException {
+<b class="fc">&nbsp;        int requiredQuantity = orderItemPojo.getQuantity();</b>
+<b class="fc">&nbsp;        int inventoryQuantity = inventoryPojo.getQuantity();</b>
+<b class="fc">&nbsp;        checkInventory(requiredQuantity, inventoryQuantity, barcode);</b>
+&nbsp;
+<b class="fc">&nbsp;        OrderItemPojo existingOrderItemPojo = orderItemDao.getByProductId(orderItemPojo.getOrderId(), orderItemPojo.getProductId());</b>
+<b class="fc">&nbsp;        if (Objects.nonNull(existingOrderItemPojo)) {</b>
+<b class="fc">&nbsp;            return update(existingOrderItemPojo, orderItemPojo);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return insert(orderItemPojo);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public static void setAuthentication(Authentication token) {
-<b class="nc">&nbsp;        SecurityContextHolder.getContext().setAuthentication(token);</b>
+&nbsp;    @Transactional
+&nbsp;    private Integer insert(OrderItemPojo orderItemPojo) {
+<b class="fc">&nbsp;        orderItemDao.insert(orderItemPojo);</b>
+<b class="fc">&nbsp;        return orderItemPojo.getId();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public static Authentication getAuthentication() {
-<b class="nc">&nbsp;        return SecurityContextHolder.getContext().getAuthentication();</b>
+&nbsp;    @Transactional
+&nbsp;    private Integer update(OrderItemPojo existingOrderItemPojo, OrderItemPojo orderItemPojo) {
+<b class="fc">&nbsp;        existingOrderItemPojo.setSellingPrice(orderItemPojo.getSellingPrice());</b>
+<b class="fc">&nbsp;        existingOrderItemPojo.setQuantity(orderItemPojo.getQuantity() + existingOrderItemPojo.getQuantity());</b>
+<b class="fc">&nbsp;        return existingOrderItemPojo.getId();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public static UserPrincipal getPrincipal() {
-<b class="nc">&nbsp;        Authentication token = getAuthentication();</b>
-<b class="nc">&nbsp;        return token == null ? null : (UserPrincipal) getAuthentication().getPrincipal();</b>
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public OrderItemPojo getById(int id) throws ApiException {
+<b class="fc">&nbsp;        OrderItemPojo orderItemPojo = orderItemDao.getById(id);</b>
+<b class="fc">&nbsp;        checkOrderItem(orderItemPojo);</b>
+&nbsp;
+<b class="fc">&nbsp;        return orderItemPojo;</b>
 &nbsp;    }
 &nbsp;
+&nbsp;    @Transactional
+&nbsp;    public List&lt;OrderItemPojo&gt; getAllByOrderId(int orderId) {
+<b class="fc">&nbsp;        return orderItemDao.getAllByOrderId(orderId);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public void update(int id, OrderItemPojo updatedOrderItemPojo, InventoryPojo inventoryPojo, String barcode) throws ApiException {
+<b class="fc">&nbsp;        OrderItemPojo existingOrderItemPojo = orderItemDao.getById(id);</b>
+&nbsp;
+<b class="fc">&nbsp;        int requiredQuantity = updatedOrderItemPojo.getQuantity();</b>
+<b class="fc">&nbsp;        int inventoryQuantity = inventoryPojo.getQuantity() + existingOrderItemPojo.getQuantity();</b>
+<b class="fc">&nbsp;        checkInventory(requiredQuantity, inventoryQuantity, barcode);</b>
+&nbsp;
+<b class="fc">&nbsp;        existingOrderItemPojo.setQuantity(requiredQuantity);</b>
+<b class="fc">&nbsp;        existingOrderItemPojo.setSellingPrice(updatedOrderItemPojo.getSellingPrice());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional(rollbackOn = ApiException.class)
+&nbsp;    public void delete(int id) throws ApiException {
+<b class="fc">&nbsp;        OrderItemPojo orderItemPojo = orderItemDao.getById(id);</b>
+<b class="fc">&nbsp;        checkOrderItem(orderItemPojo);</b>
+<b class="fc">&nbsp;        orderItemDao.delete(id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public void deleteByOrderId(int orderId) {
+<b class="fc">&nbsp;        orderItemDao.deleteByOrderId(orderId);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public List&lt;OrderItemPojo&gt; getAllByOrderList(List&lt;OrderPojo&gt; orderPojoList) {
+<b class="fc">&nbsp;        if (!orderPojoList.isEmpty()) {</b>
+<b class="fc">&nbsp;            List&lt;Integer&gt; orderIdsList = orderPojoList.stream().map(OrderPojo::getId).collect(Collectors.toList());</b>
+<b class="fc">&nbsp;            return orderItemDao.getAllByOrderList(orderIdsList);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return new ArrayList&lt;&gt;();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void checkInventory(int requiredQuantity, int inventoryQuantity, String barcode) throws ApiException {
+<b class="fc">&nbsp;        if (requiredQuantity &gt; inventoryQuantity) {</b>
+<b class="fc">&nbsp;            throw new ApiException(&quot;Insufficient inventory for the product with barcode &quot; + barcode);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void checkOrderItem(OrderItemPojo orderItemPojo) throws ApiException {
+<b class="fc">&nbsp;        if (Objects.isNull(orderItemPojo)) {</b>
+<b class="fc">&nbsp;            throw new ApiException(&quot;Order item doesn&#39;t exist&quot;);</b>
+&nbsp;        }
+&nbsp;    }
 &nbsp;}
 </code>
 </pre>
@@ -129,7 +222,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:55</div>
 </div>
 </body>
 </html>

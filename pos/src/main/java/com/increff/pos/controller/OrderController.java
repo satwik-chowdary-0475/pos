@@ -72,7 +72,9 @@ public class OrderController {
 
     @ApiOperation(value = "Update an order-item")
     @PutMapping(path = "/{orderId}/order-items/{id}")
-    public void updateOrderItem(@PathVariable int orderId, @PathVariable int id, @RequestBody OrderItemUpdateForm orderItemUpdateForm) throws ApiException {
+    public void updateOrderItem(@PathVariable int orderId, @PathVariable int id,
+                                @RequestBody OrderItemUpdateForm orderItemUpdateForm
+    ) throws ApiException {
         orderItemDto.update(orderId, id, orderItemUpdateForm);
     }
 

@@ -24,9 +24,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 <h1>Coverage Summary for Class: ProductDao (com.increff.pos.dao)</h1>
 
 <table class="coverageStats">
-
 <tr>
   <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -43,29 +46,9 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (8/8)
+    (1/1)
   </span>
 </td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (19/19)
-  </span>
-</td>
-</tr>
-  <tr>
-    <td class="name">ProductDao$$EnhancerBySpringCGLIB$$f11e3f59</td>
-  </tr>
-  <tr>
-    <td class="name">ProductDao$$EnhancerBySpringCGLIB$$f11e3f59$$FastClassBySpringCGLIB$$f9f7c42c</td>
-  </tr>
-  <tr>
-    <td class="name">ProductDao$$FastClassBySpringCGLIB$$6a80f183</td>
-  </tr>
-<tr>
-  <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -83,6 +66,7 @@ Current scope:     <a href="../../index.html">all classes</a>
   </span>
 </td>
 </tr>
+
 </table>
 
 <br/>
@@ -108,47 +92,40 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    private static final String SELECT_BY_BRAND_CATEGORY = &quot;select p from ProductPojo p where brandCategoryId=:brandCategoryId&quot;;
 &nbsp;    private static final String SELECT_ALL_COUNT = &quot;select COUNT(p) from ProductPojo p&quot;;
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public void insert(ProductPojo productPojo) {
 <b class="fc">&nbsp;        em().persist(productPojo);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public ProductPojo getById(int id) {
 <b class="fc">&nbsp;        TypedQuery&lt;ProductPojo&gt; query = getQuery(SELECT_BY_ID, ProductPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;id&quot;, id);</b>
 <b class="fc">&nbsp;        return getSingle(query);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;ProductPojo&gt; getByBrandCategoryId(int brandCategoryId) {
 <b class="fc">&nbsp;        TypedQuery&lt;ProductPojo&gt; query = getQuery(SELECT_BY_BRAND_CATEGORY, ProductPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;brandCategoryId&quot;, brandCategoryId);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public ProductPojo getByBarcode(String barcode) {
 <b class="fc">&nbsp;        TypedQuery&lt;ProductPojo&gt; query = getQuery(SELECT_BY_BARCODE, ProductPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;barcode&quot;, barcode);</b>
 <b class="fc">&nbsp;        return getSingle(query);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;ProductPojo&gt; getAll() {
 <b class="fc">&nbsp;        TypedQuery&lt;ProductPojo&gt; query = getQuery(SELECT_ALL, ProductPojo.class);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;ProductPojo&gt; getAll(int offset,int rowsPerPage){
 <b class="fc">&nbsp;        TypedQuery&lt;ProductPojo&gt; query = getQuery(SELECT_ALL, ProductPojo.class);</b>
 <b class="fc">&nbsp;        query.setFirstResult(offset);</b>
 <b class="fc">&nbsp;        query.setMaxResults(rowsPerPage);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
-&nbsp;
-&nbsp;    @Transactional
+&nbsp;    
 &nbsp;    public Integer getCount(){
 <b class="fc">&nbsp;        TypedQuery&lt;Number&gt; query = getQuery(SELECT_ALL_COUNT, Number.class);</b>
 <b class="fc">&nbsp;        return query.getSingleResult().intValue();</b>
@@ -180,7 +157,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:55</div>
 </div>
 </body>
 </html>

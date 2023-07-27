@@ -9,7 +9,8 @@ import javax.persistence.*;
 @Setter
 @Getter
 @Table(
-        name = "users"
+        name = "users",
+        indexes = @Index(columnList = "email")
 )
 public class UserPojo extends AbstractPojo{
     @Id

@@ -56,10 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">ReportDto$$EnhancerBySpringCGLIB$$8b86e18</td>
+    <td class="name">ReportDto$$EnhancerBySpringCGLIB$$738b937f</td>
   </tr>
   <tr>
-    <td class="name">ReportDto$$EnhancerBySpringCGLIB$$8b86e18$$FastClassBySpringCGLIB$$9140203</td>
+    <td class="name">ReportDto$$EnhancerBySpringCGLIB$$738b937f$$FastClassBySpringCGLIB$$fd9e4230</td>
   </tr>
   <tr>
     <td class="name">ReportDto$$FastClassBySpringCGLIB$$4ba3c8b8</td>
@@ -126,18 +126,22 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public List&lt;BrandReportData&gt; getBrandCategoryReport() {
 <b class="fc">&nbsp;        List&lt;BrandPojo&gt; brandPojoList = brandService.getAll();</b>
+&nbsp;
 <b class="fc">&nbsp;        List&lt;BrandReportData&gt; brandReportDataList = brandPojoList.stream()</b>
 <b class="fc">&nbsp;                .map(ReportHelperDto::convert)</b>
 <b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;
 <b class="fc">&nbsp;        return brandReportDataList;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
 &nbsp;    public List&lt;DailySalesData&gt; getDailySalesReport() {
 <b class="fc">&nbsp;        List&lt;DailySalesReportPojo&gt; dailySalesReportPojoList = dailySalesReportService.getAll();</b>
+&nbsp;
 <b class="fc">&nbsp;        List&lt;DailySalesData&gt; dailySalesData = dailySalesReportPojoList.stream()</b>
 <b class="fc">&nbsp;                .map(ReportHelperDto::convert)</b>
 <b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;
 <b class="fc">&nbsp;        return dailySalesData;</b>
 &nbsp;    }
 &nbsp;
@@ -217,7 +221,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;                .sum();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public HashMap&lt;Integer, ReportData&gt; getProductOrderItemMap(List&lt;OrderPojo&gt; orderPojoList) {
+&nbsp;    private HashMap&lt;Integer, ReportData&gt; getProductOrderItemMap(List&lt;OrderPojo&gt; orderPojoList) {
 <b class="fc">&nbsp;        List&lt;OrderItemPojo&gt; orderItemPojoList = orderItemService.getAllByOrderList(orderPojoList);</b>
 &nbsp;
 <b class="fc">&nbsp;        HashMap&lt;Integer, ReportData&gt; productOrderItemMap = orderItemPojoList.stream()</b>
@@ -265,7 +269,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:55</div>
 </div>
 </body>
 </html>

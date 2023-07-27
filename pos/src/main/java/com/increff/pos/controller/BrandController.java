@@ -21,8 +21,8 @@ public class BrandController {
 
     @ApiOperation(value = "Inserts a brand")
     @PostMapping(path = "")
-    public void insertBrand(@RequestBody BrandForm form) throws ApiException {
-        brandDto.insert(form);
+    public void insertBrand(@RequestBody BrandForm brandForm) throws ApiException {
+        brandDto.insert(brandForm);
     }
 
     @ApiOperation(value = "Updates a brand details")

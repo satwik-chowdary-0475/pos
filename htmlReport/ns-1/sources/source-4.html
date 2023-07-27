@@ -56,10 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">InventoryDao$$EnhancerBySpringCGLIB$$7b975892</td>
+    <td class="name">InventoryDao$$EnhancerBySpringCGLIB$$e66a7df9</td>
   </tr>
   <tr>
-    <td class="name">InventoryDao$$EnhancerBySpringCGLIB$$7b975892$$FastClassBySpringCGLIB$$d4e4d8e8</td>
+    <td class="name">InventoryDao$$EnhancerBySpringCGLIB$$e66a7df9$$FastClassBySpringCGLIB$$64fb9e7f</td>
   </tr>
   <tr>
     <td class="name">InventoryDao$$FastClassBySpringCGLIB$$2d0ed9f6</td>
@@ -101,30 +101,27 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;
 &nbsp;@Repository
+&nbsp;@Transactional
 <b class="fc">&nbsp;public class InventoryDao extends AbstractDao {</b>
 &nbsp;    private static final String SELECT_BY_PRODUCT_ID = &quot;select p from InventoryPojo p where productId=:productId&quot;;
 &nbsp;    private static final String SELECT_ALL = &quot;select p from InventoryPojo p&quot;;
 &nbsp;    private static final String SELECT_ALL_COUNT = &quot;select COUNT(p) from InventoryPojo p&quot;;
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public void insert(InventoryPojo inventoryPojo) {
 <b class="fc">&nbsp;        em().persist(inventoryPojo);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public InventoryPojo getByProductId(int productId) {
 <b class="fc">&nbsp;        TypedQuery&lt;InventoryPojo&gt; query = getQuery(SELECT_BY_PRODUCT_ID, InventoryPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;productId&quot;, productId);</b>
 <b class="fc">&nbsp;        return getSingle(query);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;InventoryPojo&gt; getAll() {
 <b class="fc">&nbsp;        TypedQuery&lt;InventoryPojo&gt; query = getQuery(SELECT_ALL, InventoryPojo.class);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;InventoryPojo&gt; getAll(int offset, int rowsPerPage) {
 <b class="fc">&nbsp;        TypedQuery&lt;InventoryPojo&gt; query = getQuery(SELECT_ALL, InventoryPojo.class);</b>
 <b class="fc">&nbsp;        query.setFirstResult(offset);</b>
@@ -132,7 +129,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public Integer getCount() {
 <b class="fc">&nbsp;        TypedQuery&lt;Number&gt; query = getQuery(SELECT_ALL_COUNT, Number.class);</b>
 <b class="fc">&nbsp;        return query.getSingleResult().intValue();</b>
@@ -162,7 +158,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:55</div>
 </div>
 </body>
 </html>

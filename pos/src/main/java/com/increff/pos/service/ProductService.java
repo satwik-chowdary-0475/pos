@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Transactional(rollbackOn = ApiException.class)
 public class ProductService {
     @Autowired
     private ProductDao productDao;
 
-    @Transactional(rollbackOn = ApiException.class)
     public int insert(ProductPojo productPojo) throws ApiException {
         ProductPojo existingProductPojo = productDao.getByBarcode(productPojo.getBarcode());
         if (Objects.nonNull(existingProductPojo)) {
@@ -25,7 +25,6 @@ public class ProductService {
         return productPojo.getId();
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void update(int id, ProductPojo updatedProductPojo) throws ApiException {
         ProductPojo existingProductPojo = productDao.getById(id);
         ProductPojo productPojoCheck = productDao.getByBarcode(updatedProductPojo.getBarcode());
@@ -37,8 +36,6 @@ public class ProductService {
         existingProductPojo.setMrp(updatedProductPojo.getMrp());
     }
 
-
-    @Transactional(rollbackOn = ApiException.class)
     public ProductPojo getById(int id) throws ApiException {
         ProductPojo productPojo = productDao.getById(id);
         if (Objects.isNull(productPojo)) {
@@ -47,7 +44,6 @@ public class ProductService {
         return productPojo;
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public ProductPojo getByBarcode(String barcode) throws ApiException {
         ProductPojo productPojo = productDao.getByBarcode(barcode);
         if (Objects.isNull(productPojo)) {
@@ -56,22 +52,18 @@ public class ProductService {
         return productPojo;
     }
 
-    @Transactional
     public List<ProductPojo> getAll() {
         return productDao.getAll();
     }
 
-    @Transactional
     public List<ProductPojo> getAll(int page, int rowsPerPage) {
         return productDao.getAll((page - 1) * rowsPerPage, rowsPerPage);
     }
 
-    @Transactional
     public List<ProductPojo> getByBrandCategoryId(int brandCategoryId) {
         return productDao.getByBrandCategoryId(brandCategoryId);
     }
-
-    @Transactional
+    
     public Integer getCount() {
         return productDao.getCount();
     }

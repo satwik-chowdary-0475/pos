@@ -48,18 +48,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    92%
+    96.2%
   </span>
   <span class="absValue">
-    (23/25)
+    (25/26)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">OrderService$$EnhancerBySpringCGLIB$$ba89055c</td>
+    <td class="name">OrderService$$EnhancerBySpringCGLIB$$255c2ac3</td>
   </tr>
   <tr>
-    <td class="name">OrderService$$EnhancerBySpringCGLIB$$ba89055c$$FastClassBySpringCGLIB$$8c2fdf28</td>
+    <td class="name">OrderService$$EnhancerBySpringCGLIB$$255c2ac3$$FastClassBySpringCGLIB$$f7982ac5</td>
   </tr>
   <tr>
     <td class="name">OrderService$$FastClassBySpringCGLIB$$feafb4a4</td>
@@ -76,10 +76,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    92%
+    96.2%
   </span>
   <span class="absValue">
-    (23/25)
+    (25/26)
   </span>
 </td>
 </tr>
@@ -126,6 +126,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    public OrderPojo getByOrderId(int orderId) throws ApiException {
 <b class="fc">&nbsp;        OrderPojo orderPojo = orderDao.getByOrderId(orderId);</b>
 <b class="fc">&nbsp;        checkOrder(orderPojo);</b>
+<b class="fc">&nbsp;        checkStatus(orderPojo);</b>
 <b class="fc">&nbsp;        return orderPojo;</b>
 &nbsp;    }
 &nbsp;
@@ -154,9 +155,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Transactional(rollbackOn = ApiException.class)
-&nbsp;    public void changeStatus(String orderCode, OrderStatus status) throws ApiException {
-<b class="fc">&nbsp;        OrderPojo orderPojo = orderDao.getByOrderCode(orderCode);</b>
+&nbsp;    public void changeStatus(OrderPojo orderPojo, OrderStatus status) throws ApiException {
 <b class="fc">&nbsp;        checkOrder(orderPojo);</b>
+<b class="fc">&nbsp;        checkStatus(orderPojo);</b>
 <b class="fc">&nbsp;        orderPojo.setStatus(status);</b>
 &nbsp;    }
 &nbsp;
@@ -173,7 +174,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    private void checkStatus(OrderPojo orderPojo) throws ApiException {
 <b class="fc">&nbsp;        if (orderPojo.getStatus().equals(OrderStatus.INVOICED)) {</b>
-<b class="nc">&nbsp;            throw new ApiException(&quot;Cannot delete order&quot;);</b>
+<b class="fc">&nbsp;            throw new ApiException(&quot;Cannot modify order&quot;);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
@@ -201,7 +202,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:48</div>
 </div>
 </body>
 </html>

@@ -9,7 +9,8 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(
-        name = "order_items"
+        name = "order_items",
+        indexes = @Index(columnList = "orderId")
 )
 public class OrderItemPojo extends AbstractPojo {
     @Id

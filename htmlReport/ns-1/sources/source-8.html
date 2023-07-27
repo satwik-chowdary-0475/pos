@@ -56,10 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">UserDao$$EnhancerBySpringCGLIB$$85c37c85</td>
+    <td class="name">UserDao$$EnhancerBySpringCGLIB$$f096a1ec</td>
   </tr>
   <tr>
-    <td class="name">UserDao$$EnhancerBySpringCGLIB$$85c37c85$$FastClassBySpringCGLIB$$ae0a4728</td>
+    <td class="name">UserDao$$EnhancerBySpringCGLIB$$f096a1ec$$FastClassBySpringCGLIB$$8924ce7</td>
   </tr>
   <tr>
     <td class="name">UserDao$$FastClassBySpringCGLIB$$b95ff667</td>
@@ -102,25 +102,23 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import com.increff.pos.pojo.UserPojo;
 &nbsp;
 &nbsp;@Repository
+&nbsp;@Transactional
 <b class="fc">&nbsp;public class UserDao extends AbstractDao {</b>
 &nbsp;
-&nbsp;    private static final String SELECT_BY_ID = &quot;select p from UserPojo p where id=:id&quot;;
 &nbsp;    private static final String SELECT_BY_EMAIL = &quot;select p from UserPojo p where email=:email&quot;;
 &nbsp;    private static final String SELECT_ALL = &quot;select p from UserPojo p&quot;;
 &nbsp;
-&nbsp;    @Transactional
+&nbsp;
 &nbsp;    public void insertUser(UserPojo userPojo) {
 <b class="fc">&nbsp;        em().persist(userPojo);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public UserPojo getUserByEmail(String email) {
 <b class="fc">&nbsp;        TypedQuery&lt;UserPojo&gt; query = getQuery(SELECT_BY_EMAIL, UserPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;email&quot;, email);</b>
 <b class="fc">&nbsp;        return getSingle(query);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;UserPojo&gt; getAllUsers() {
 <b class="fc">&nbsp;        TypedQuery&lt;UserPojo&gt; query = getQuery(SELECT_ALL, UserPojo.class);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
@@ -150,7 +148,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:55</div>
 </div>
 </body>
 </html>

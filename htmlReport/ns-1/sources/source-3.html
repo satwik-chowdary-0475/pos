@@ -43,7 +43,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (4/4)
+    (3/3)
   </span>
 </td>
 <td class="coverageStat">
@@ -51,15 +51,15 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (5/5)
+    (4/4)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">DailySalesReportDao$$EnhancerBySpringCGLIB$$c0ddc951</td>
+    <td class="name">DailySalesReportDao$$EnhancerBySpringCGLIB$$2bb0eeb8</td>
   </tr>
   <tr>
-    <td class="name">DailySalesReportDao$$EnhancerBySpringCGLIB$$c0ddc951$$FastClassBySpringCGLIB$$6dfaad</td>
+    <td class="name">DailySalesReportDao$$EnhancerBySpringCGLIB$$2bb0eeb8$$FastClassBySpringCGLIB$$6d0712a2</td>
   </tr>
   <tr>
     <td class="name">DailySalesReportDao$$FastClassBySpringCGLIB$$522e872b</td>
@@ -71,7 +71,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (4/4)
+    (3/3)
   </span>
 </td>
 <td class="coverageStat">
@@ -79,7 +79,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (5/5)
+    (4/4)
   </span>
 </td>
 </tr>
@@ -93,7 +93,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.increff.pos.dao;
 &nbsp;
 &nbsp;import com.increff.pos.pojo.DailySalesReportPojo;
-&nbsp;import lombok.extern.log4j.Log4j;
 &nbsp;import org.springframework.stereotype.Repository;
 &nbsp;
 &nbsp;import javax.persistence.TypedQuery;
@@ -101,16 +100,14 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import java.util.List;
 &nbsp;
 &nbsp;@Repository
-<b class="fc">&nbsp;@Log4j</b>
+&nbsp;@Transactional
 <b class="fc">&nbsp;public class DailySalesReportDao extends AbstractDao {</b>
 &nbsp;    private static final String SELECT_ALL = &quot;select p from DailySalesReportPojo p&quot;;
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public void insert(DailySalesReportPojo dailySalesReportPojo) {
 <b class="fc">&nbsp;        em().persist(dailySalesReportPojo);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;DailySalesReportPojo&gt; getAll() {
 <b class="fc">&nbsp;        TypedQuery&lt;DailySalesReportPojo&gt; query = getQuery(SELECT_ALL, DailySalesReportPojo.class);</b>
 <b class="fc">&nbsp;        return query.getResultList();</b>
@@ -139,7 +136,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:55</div>
 </div>
 </body>
 </html>

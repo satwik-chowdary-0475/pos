@@ -46,11 +46,5 @@ public class ReportsController {
     public List<InventoryReportData> getInventoryReport() throws ApiException {
         return reportDto.getInventoryReport();
     }
-    //TODO: should remove before presentation
-    @ApiOperation(value = "insert daily sales report")
-    @PostMapping(path = "/daily_sales")
-    public void insertDailySaleReport() {
-        reportDto.insertDailySalesReport();
-    }
 
 }

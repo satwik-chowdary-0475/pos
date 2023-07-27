@@ -1,6 +1,7 @@
 package com.increff.pos.dto;
 
 import com.increff.pos.dto.helper.HelperDto;
+import com.increff.pos.flow.OrderFlow;
 import com.increff.pos.model.data.OrderData;
 import com.increff.pos.model.data.OrderDetailsData;
 import com.increff.pos.model.data.OrderItemData;
@@ -14,25 +15,25 @@ import com.increff.pos.service.*;
 import com.increff.pos.pojo.OrderStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class OrderDto {
 
     @Autowired
-    private OrderService orderService;
+    private OrderFlow orderFlow;
     @Autowired
-    private InventoryService inventoryService;
+    private OrderService orderService;
     @Autowired
     private OrderItemService orderItemService;
     @Autowired
     private ProductService productService;
 
-    @Transactional(rollbackOn = ApiException.class)
     public String insert(OrderForm orderForm) throws ApiException {
         HelperDto.normalise(orderForm);
         OrderPojo orderPojo = HelperDto.convert(orderForm);
@@ -41,7 +42,6 @@ public class OrderDto {
         return orderPojo.getOrderCode();
     }
 
-    @Transactional
     public PaginatedData getAll(int page, int rowsPerPage) {
         List<OrderPojo> orderPojoList = orderService.getAll(page,rowsPerPage);
         Integer totalCount = orderService.getCount();
@@ -57,24 +57,15 @@ public class OrderDto {
     public void delete(String orderCode) throws ApiException {
         Integer orderId = orderService.delete(orderCode);
 
-        List<OrderItemPojo> orderItemPojoList = orderItemService.getAllByOrderId(orderId);
-        for (OrderItemPojo orderItemPojo : orderItemPojoList) {
-            updateInventory(orderItemPojo);
-        }
-
-        orderItemService.deleteByOrderId(orderId);
+        orderFlow.delete(orderId);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void changeStatus(String orderCode) throws ApiException {
         OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
 
-        if (orderPojo.getStatus().equals(OrderStatus.CREATED)) {
-            orderService.changeStatus(orderCode,OrderStatus.INVOICED);
-        }
+        orderService.changeStatus(orderPojo,OrderStatus.INVOICED);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public OrderDetailsData getAllOrderDetails(String orderCode) throws ApiException {
         OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
         List<OrderItemPojo> orderItemPojoList = orderItemService.getAllByOrderId(orderPojo.getId());
@@ -88,12 +79,6 @@ public class OrderDto {
         return HelperDto.convert(orderPojo, orderItemDataList);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
-    private void updateInventory(OrderItemPojo orderItemPojo) throws ApiException {
-        InventoryPojo inventoryPojo = inventoryService.getByProductId(orderItemPojo.getProductId());
-        int updatedQuantity = inventoryPojo.getQuantity() + orderItemPojo.getQuantity();
 
-        inventoryService.update(inventoryPojo, updatedQuantity);
-    }
 
 }

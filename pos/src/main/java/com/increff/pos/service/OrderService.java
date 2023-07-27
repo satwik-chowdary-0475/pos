@@ -34,6 +34,7 @@ public class OrderService {
     public OrderPojo getByOrderId(int orderId) throws ApiException {
         OrderPojo orderPojo = orderDao.getByOrderId(orderId);
         checkOrder(orderPojo);
+        checkStatus(orderPojo);
         return orderPojo;
     }
 
@@ -62,9 +63,9 @@ public class OrderService {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void changeStatus(String orderCode, OrderStatus status) throws ApiException {
-        OrderPojo orderPojo = orderDao.getByOrderCode(orderCode);
+    public void changeStatus(OrderPojo orderPojo, OrderStatus status) throws ApiException {
         checkOrder(orderPojo);
+        checkStatus(orderPojo);
         orderPojo.setStatus(status);
     }
 
@@ -81,7 +82,7 @@ public class OrderService {
 
     private void checkStatus(OrderPojo orderPojo) throws ApiException {
         if (orderPojo.getStatus().equals(OrderStatus.INVOICED)) {
-            throw new ApiException("Cannot delete order");
+            throw new ApiException("Cannot modify order");
         }
     }
 

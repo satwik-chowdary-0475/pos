@@ -7,6 +7,7 @@ import com.increff.pos.pojo.*;
 import com.increff.pos.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class ReportDto {
 
     @Autowired
@@ -31,30 +32,30 @@ public class ReportDto {
     @Autowired
     private OrderService orderService;
 
-    @Transactional(rollbackOn = ApiException.class)
     public List<BrandReportData> getBrandCategoryReport() {
         List<BrandPojo> brandPojoList = brandService.getAll();
+
         List<BrandReportData> brandReportDataList = brandPojoList.stream()
                 .map(ReportHelperDto::convert)
                 .collect(Collectors.toList());
+
         return brandReportDataList;
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public List<DailySalesData> getDailySalesReport() {
         List<DailySalesReportPojo> dailySalesReportPojoList = dailySalesReportService.getAll();
+
         List<DailySalesData> dailySalesData = dailySalesReportPojoList.stream()
                 .map(ReportHelperDto::convert)
                 .collect(Collectors.toList());
+
         return dailySalesData;
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void insertDailySalesReport() {
         dailySalesReportService.insert();
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public List<InventoryReportData> getInventoryReport() throws ApiException {
         List<BrandPojo> brandPojoList = brandService.getAll();
         List<InventoryPojo> inventoryPojoList = inventoryService.getAll();
@@ -86,8 +87,7 @@ public class ReportDto {
         }
         return brandCategoryMap;
     }
-
-    @Transactional(rollbackOn = ApiException.class)
+    
     public List<SalesData> getSalesReport(SalesForm salesForm) throws ApiException {
         ReportHelperDto.normalise(salesForm);
         Date startTime = Date.valueOf(LocalDate.parse(salesForm.getStartTime()));
@@ -125,7 +125,7 @@ public class ReportDto {
                 .sum();
     }
 
-    public HashMap<Integer, ReportData> getProductOrderItemMap(List<OrderPojo> orderPojoList) {
+    private HashMap<Integer, ReportData> getProductOrderItemMap(List<OrderPojo> orderPojoList) {
         List<OrderItemPojo> orderItemPojoList = orderItemService.getAllByOrderList(orderPojoList);
 
         HashMap<Integer, ReportData> productOrderItemMap = orderItemPojoList.stream()

@@ -74,8 +74,6 @@ public class OrderItemService {
         existingOrderItemPojo.setSellingPrice(updatedOrderItemPojo.getSellingPrice());
     }
 
-    //TODO: think about orders
-
     @Transactional(rollbackOn = ApiException.class)
     public void delete(int id) throws ApiException {
         OrderItemPojo orderItemPojo = orderItemDao.getById(id);

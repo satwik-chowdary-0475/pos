@@ -13,6 +13,7 @@ import com.increff.pos.service.BrandService;
 import com.increff.pos.service.InventoryService;
 import com.increff.pos.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,7 +23,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Service
+@Component
 public class InventoryDto {
     @Autowired
     private ProductService productService;
@@ -31,7 +32,6 @@ public class InventoryDto {
     @Autowired
     private BrandService brandService;
 
-    @Transactional(rollbackOn = ApiException.class)
     public int insert(InventoryForm inventoryForm) throws ApiException {
         HelperDto.validate(inventoryForm);
         ProductPojo productPojo = productService.getByBarcode(inventoryForm.getBarcode());
@@ -40,7 +40,6 @@ public class InventoryDto {
         return inventoryService.insert(inventoryPojo);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void update(int productId, InventoryUpdateForm inventoryUpdateForm) throws ApiException {
         HelperDto.validate(inventoryUpdateForm);
         ProductPojo productPojo = productService.getById(productId);
@@ -48,8 +47,7 @@ public class InventoryDto {
         InventoryPojo inventoryPojo = HelperDto.convert(inventoryUpdateForm, productPojo.getId());
         inventoryService.update(inventoryPojo, productPojo.getBarcode());
     }
-
-    @Transactional(rollbackOn = ApiException.class)
+    
     public InventoryData getByProductId(int productId) throws ApiException {
         InventoryPojo inventoryPojo = inventoryService.getByProductId(productId);
         ProductPojo productPojo = productService.getById(inventoryPojo.getProductId());
@@ -57,7 +55,6 @@ public class InventoryDto {
         return HelperDto.convert(inventoryPojo, productPojo.getBarcode(), productPojo.getName());
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public PaginatedData getAll(int page, int rowsPerPage) throws ApiException {
         List<InventoryPojo> inventoryPojoList = inventoryService.getAll(page, rowsPerPage);
         Integer totalCount = inventoryService.getCount();
@@ -71,7 +68,6 @@ public class InventoryDto {
         return new PaginatedData(inventoryDataList, totalCount);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void insertList(List<InventoryForm> inventoryFormList) throws ApiException {
         List<ErrorData> errorDataList = IntStream.range(0, inventoryFormList.size())
                 .mapToObj(row -> {

@@ -51,15 +51,15 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (30/30)
+    (29/29)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">OrderDao$$EnhancerBySpringCGLIB$$3df737bc</td>
+    <td class="name">OrderDao$$EnhancerBySpringCGLIB$$a8ca5d23</td>
   </tr>
   <tr>
-    <td class="name">OrderDao$$EnhancerBySpringCGLIB$$3df737bc$$FastClassBySpringCGLIB$$416ef57c</td>
+    <td class="name">OrderDao$$EnhancerBySpringCGLIB$$a8ca5d23$$FastClassBySpringCGLIB$$d185b35a</td>
   </tr>
   <tr>
     <td class="name">OrderDao$$FastClassBySpringCGLIB$$cc19fec4</td>
@@ -79,7 +79,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (30/30)
+    (29/29)
   </span>
 </td>
 </tr>
@@ -94,7 +94,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;import com.increff.pos.pojo.OrderPojo;
 &nbsp;import com.increff.pos.pojo.OrderStatus;
-&nbsp;import lombok.extern.log4j.Log4j;
+&nbsp;
 &nbsp;import org.springframework.stereotype.Repository;
 &nbsp;
 &nbsp;import javax.persistence.*;
@@ -103,7 +103,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import java.util.List;
 &nbsp;
 &nbsp;@Repository
-<b class="fc">&nbsp;@Log4j</b>
+&nbsp;@Transactional
 <b class="fc">&nbsp;public class OrderDao extends AbstractDao {</b>
 &nbsp;
 <b class="fc">&nbsp;    private static String SELECT_BY_ID = &quot;select p from OrderPojo p where id=:id&quot;;</b>
@@ -113,12 +113,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;    private static String SELECT_BY_DATE = &quot;select p from OrderPojo p where p.status =:status and DAY(p.updatedAt) &gt;= DAY(:startTime) and DAY(p.updatedAt) &lt;= DAY(:endTime)&quot;;</b>
 <b class="fc">&nbsp;    private static String SELECT_ALL_COUNT = &quot;select COUNT(p) from OrderPojo p&quot;;</b>
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public void insert(OrderPojo orderPojo) {
 <b class="fc">&nbsp;        em().persist(orderPojo);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;OrderPojo&gt; getByDate(Date startTime, Date endTime, OrderStatus status) {
 <b class="fc">&nbsp;        Query query = em().createQuery(SELECT_BY_DATE);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;startTime&quot;, startTime, TemporalType.TIMESTAMP);</b>
@@ -127,21 +125,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public OrderPojo getByOrderCode(String orderCode) {
 <b class="fc">&nbsp;        TypedQuery&lt;OrderPojo&gt; query = getQuery(SELECT_BY_ORDER_CODE, OrderPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;orderCode&quot;, orderCode);</b>
 <b class="fc">&nbsp;        return getSingle(query);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public OrderPojo getByOrderId(int id) {
 <b class="fc">&nbsp;        TypedQuery&lt;OrderPojo&gt; query = getQuery(SELECT_BY_ID, OrderPojo.class);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;id&quot;, id);</b>
 <b class="fc">&nbsp;        return getSingle(query);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public List&lt;OrderPojo&gt; getAll(int offset,int rowsPerPage) {
 <b class="fc">&nbsp;        TypedQuery&lt;OrderPojo&gt; query = getQuery(SELECT_ALL, OrderPojo.class);</b>
 <b class="fc">&nbsp;        query.setFirstResult(offset);</b>
@@ -149,7 +144,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return query.getResultList();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public int delete(String orderCode) {
 <b class="fc">&nbsp;        Query query = em().createQuery(DELETE_BY_ORDER_CODE);</b>
 <b class="fc">&nbsp;        query.setParameter(&quot;orderCode&quot;, orderCode);</b>
@@ -157,7 +151,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return query.executeUpdate();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Transactional
 &nbsp;    public Integer getCount() {
 <b class="fc">&nbsp;        TypedQuery&lt;Number&gt; query = em().createQuery(SELECT_ALL_COUNT,Number.class);</b>
 <b class="fc">&nbsp;        return query.getSingleResult().intValue();</b>
@@ -186,7 +179,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-07-21 15:51</div>
+    <div style="float:right;">generated on 2023-07-26 10:55</div>
 </div>
 </body>
 </html>

@@ -12,6 +12,7 @@ import com.increff.pos.service.ApiException;
 import com.increff.pos.service.BrandService;
 import com.increff.pos.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,37 +22,36 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Service
+@Component
 public class ProductDto {
     @Autowired
     private BrandService brandService;
     @Autowired
     private ProductService productService;
 
-    @Transactional(rollbackOn = ApiException.class)
-    public int insert(ProductForm form) throws ApiException {
-        HelperDto.normalise(form);
-        BrandPojo brandPojo = brandService.getByBrandCategory(form.getBrand(), form.getCategory());
-        ProductPojo productPojo = HelperDto.convert(form, brandPojo.getId());
+    public int insert(ProductForm productForm) throws ApiException {
+        HelperDto.normalise(productForm);
+        BrandPojo brandPojo = brandService.getByBrandCategory(productForm.getBrand(), productForm.getCategory());
+
+        ProductPojo productPojo = HelperDto.convert(productForm, brandPojo.getId());
         return productService.insert(productPojo);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void update(int id, ProductUpdateForm productUpdateForm) throws ApiException {
         HelperDto.normalise(productUpdateForm);
         productService.getById(id);
+
         ProductPojo productPojo = HelperDto.convert(productUpdateForm);
         productService.update(id, productPojo);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public ProductData getById(int id) throws ApiException {
         ProductPojo productPojo = productService.getById(id);
         BrandPojo brandPojo = brandService.getById(productPojo.getBrandCategoryId());
+
         return HelperDto.convert(productPojo, brandPojo.getBrand(), brandPojo.getCategory());
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public PaginatedData getAll(int page, int rowsPerPage) throws ApiException {
         List<ProductPojo> productPojoList = productService.getAll(page, rowsPerPage);
         Integer totalCount = productService.getCount();
@@ -65,7 +65,6 @@ public class ProductDto {
         return new PaginatedData(productDataList, totalCount);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void insertList(List<ProductForm> productFormList) throws ApiException {
         List<ErrorData> errorDataList = IntStream.range(0, productFormList.size())
                 .mapToObj(row -> {

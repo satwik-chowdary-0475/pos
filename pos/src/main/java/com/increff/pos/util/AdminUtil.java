@@ -2,6 +2,7 @@ package com.increff.pos.util;
 
 import com.increff.pos.pojo.UserPojo;
 import com.increff.pos.pojo.UserRole;
+import com.increff.pos.spring.ApplicationProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,18 +19,11 @@ import java.util.stream.Collectors;
 @Component
 public class AdminUtil {
 
-    private static List<String> adminsList;
-
-    @Value("${admins}")
-    private void setAdmins(String admins) {
-        adminsList = Arrays.asList(admins.split(","));
-    }
-
     public static Boolean checkAdmin(String email) {
-        return adminsList.contains(email);
+        return ApplicationProperties.adminsList.contains(email);
     }
 
-    public static Authentication convert(UserPojo userPojo) {
+    public static Authentication  convert(UserPojo userPojo) {
 
         UserPrincipal principal = new UserPrincipal();
         principal.setEmail(userPojo.getEmail());
@@ -38,8 +32,7 @@ public class AdminUtil {
         ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(userPojo.getRole().name()));
 
-        return new UsernamePasswordAuthenticationToken(principal, null,
-                authorities);
+        return new UsernamePasswordAuthenticationToken(principal, null, authorities);
     }
 
     public static String getRole() {

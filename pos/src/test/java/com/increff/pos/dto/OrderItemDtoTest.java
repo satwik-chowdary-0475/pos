@@ -135,7 +135,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         OrderPojo orderPojo = orderService.getByOrderCode(orderCode);
         orderDto.changeStatus(orderCode);
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Order cannot be modified");
+        exceptionRule.expectMessage("Cannot modify order");
         OrderItemForm orderItemForm = Helper.createOrderItemForm("barcode 1", 10, 120.12);
         orderItemDto.insert(orderPojo.getId(), orderItemForm);
     }
